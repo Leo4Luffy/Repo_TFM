@@ -1,0 +1,96 @@
+---
+title: "Titulo"
+subtitle: "Subtitulo"
+output:
+  xaringan::moon_reader:
+    css: [default, css/Fuente.css, css/cc-fonts.css, css/Cajitas.css]
+    lib_dir: libs
+    seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%<br>"
+---
+name: title-slide
+class: primary
+
+```{r Paquetes usados y general, eval = TRUE, echo = FALSE}
+
+pacman::p_load(metathis, xaringanExtra, fontawesome)
+
+workshop_day <- format(as.Date("2022-06-01"), format = "%B/%d/%Y")
+
+# Habilita la capacidad de mostrar todas las diapositivas en una vista general de mosaico presionando "o"
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_share_again()
+xaringanExtra::style_share_again(share_buttons = "all")
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = FALSE
+)
+```
+
+```{r metathis, eval = TRUE, echo = FALSE}
+
+meta() %>%
+  meta_general(
+    description = "Presentación TFM",
+    generator = "xaringan and remark.js"
+  ) %>%
+  meta_name('github-repo' = 'Leo4Luffy/Presentacion_TFM') %>% 
+  meta_social(
+    title = "Presentación del trabajo de fin de máster",
+    url = "https://leo-tfm.netlify.app/",
+    og_type = "website",
+    og_author = "Jorge Leonardo López Martínez",
+    twitter_card_type = "summary_large_image",
+    twitter_creator = "@leo4luffy"
+  )
+```
+
+```{r xaringanExtra-share-again, eval = TRUE, echo = FALSE}
+
+xaringanExtra::use_share_again()
+```
+
+#.fancy[`r rmarkdown::metadata$title`] 
+
+###.fancy[`r rmarkdown::metadata$subtitle`]
+
+<br>
+<br>
+<br>
+<br>
+
+Jorge Leonardo López Martínez
+
+[`r fa(name = "github", fill = "black")` Leo4Luffy](https://github.com/Leo4Luffy)<br>
+
+`r workshop_day`
+
+<br>
+<br>
+
+.fifty[Acceso al repositorio de la presentación [aquí](https://github.com/Leo4Luffy/Presentacion_TFM)]
+
+---
+
+
+
+---
+
+
+
+---
+
+class: center, middle, inverse
+
+<span class = "cc">
+<!-- Key: a: SA, b: BY, c: CC Circle, d: ND, n: NC, m: Sampling, s: Share, r: Remix, C: CC Full Logo -->
+C bn
+</span>
+
+[Licencia CC BY-NC](https://creativecommons.org/licenses/by-nc/4.0/)
