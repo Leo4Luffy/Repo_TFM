@@ -25,3 +25,7 @@ layout: default
 Particularmente interesado por la genética animal, la bioestadística y la programación, [Jorge Leonardo](leo4luffy.github.io) tiene total interés por continuar complementando su formación y adquirir mayores conocimientos en estas áreas.
 
 Su proyecto de vida consiste en ser parte de un grupo de personas con conocimientos variados, que se apoyen mutuamente en miras de alcanzar un objetivo común, la conservación de los recursos genéticos en especies animales.
+
+## Director
+
+<img src="logo/Miguel.png" align = "right" width = "200px">
