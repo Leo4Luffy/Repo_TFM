@@ -15775,7 +15775,7 @@ $ echo $?
 
 ```{r Carga del paquete reticulate para usar Python en R y de otros paquetes de interés}
 
-pacman::p_load(reticulate, dplyr, qqman)
+pacman::p_load(reticulate, dplyr, qqman, here, readr, tibble, tidyr)
 
 use_condaenv(conda = '/home/leo/anaconda3/bin/python') # Se uso el entorno conda (indicando la ruta donde reside la carpeta de Python), como la versión de Python que se quiere usar.
 
@@ -15818,7 +15818,7 @@ dir_tr = os.getcwd() + '/SeqBreed' # Se indica aquí la ubicación del que sera 
 5. Usando el comando gg.GFounder(), se genera a continuación un archivo que contiene la posición de los SNPs de la población base de IND.
 -->
 
-```{python Se crea el archivo con la posición de los SNPs de la población base}
+```{python Creación del archivo con la posición de los SNPs de la población base}
 
 vcf_IND = dir_ar + '/vcf_IND.vcf'
 print(vcf_IND) # Se indica aquí el nombre del archivo en formato VCF (el cual se encuentra en el objeto dir_ar anteriormente especificado), con el fin de que a continuación el comando gg.GFounder() realice el análisis sobre este archivo.
@@ -15836,19 +15836,109 @@ pickle.dump(Gen_Pob_base, open('Gen_Pob_base', 'wb')) # El archivo generado ante
 6.
 -->
 
+```{python Creación de QTNs}
+
+os.chdir(dir_tr)
+
+SNPs_pos = 'SNPs_pos'
+
+gfeatures = gg.Genome(snpFile = SNPs_pos, ploidy = Gen_Pob_base.ploidy,  XChr = 'X', YChr = 'Y', MTChr = 'MT')
+
+#gfeatures.print()
+
+qtn = gg.QTNs(h2 = [0.60], genome = gfeatures, nqtn = 10)
+
+qtn.get_var(gfeatures, Gen_Pob_base)
+qtn.print(gfeatures)
+qtn.plot(plotFile = 'qtn.png')
+```
+
+<!--
+7. Se genera un pedigrí especificando el número de individuos de la generación 0 (o población base) que se quisieran cruzar y el número de hijos en la generación 2 que cada individuo por autofecundación tendría.
+-->
+
+```{r Generación del pedigrí}
+
+# Población fundadora (F0) ----
+
+Pob_fun <- tibble(
+  id = 1:451,
+  Prog1 = rep(x = 0, times = 451),
+  Prog2 = rep(x = 0, times = 451)#,
+  #Gen = 0
+  )
+
+# Generación F1 ----
+
+fun_F1 <- function(x){
+  Pob_fun %>%
+    select(id) %>%
+    sample_n(2) %>%
+    mutate(Relacion = c('Prog1', 'Prog2')) %>%
+    pivot_wider(
+      names_from = Relacion,
+      values_from = id
+    )
+  }
+
+F1 <- replicate(n = 40, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1 <- plyr::ldply(F1, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:491#,
+    #Gen = 1
+    )
+  
+# Generación F2 ----
+
+F2 <- F1 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 3) %>% # Se indica aquí la frecuencia con la que se debe repetir una fila (al ser 3, cada fila se repetiria 3 veces, sin embargo también es posible indica por ejemplo c(2, 3), es decir, la fila 1 repetedia 2 veces y la fila 2 repetida 3 veces).
+  uncount(count) %>%
+  mutate(
+    id = 492:611#,
+    #Gen = 2
+  )
+
+# Generación F3 ----
+
+F3 <- F2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 612:731#,
+    #Gen = 3
+    )
+
+# Población total ----
+
+Pob <- bind_rows(Pob_fun, F1, F2, F3) %>%
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri.txt'), delim = ' ', col_names = FALSE) # Este sería la población en su totalidad.
+```
+
+<!--
+8. 
+-->
+
 ```{python}
 
-os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo que es donde esta guardado el archivo pickle creado anteriormente.
-Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se importa el archivo que contiene los genotipos de la población base.
+os.chdir(dir_tr)
 
-# Se verifica a continuación si se importo el archivo de genotipos de la población base indicando el número de individuos y su ploidia.
-print(Gen_Pob_base.nbase) # 451 indiviuos de la población base.
-print(Gen_Pob_base.ploidy) # Ploidia igual a 2.
+#Pedigri = 'Pedigri.txt'
+
+#pop = gg.Population(gfeatures, pedFile = Pedigri, generation = None, qtns = qtn, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(pop.inds)))
+
+pop.print('pop.out')
+
 ```
 
 
 <!--
-7. GWAS
+9.
 -->
 
 ```{r Se hace un GWAS usando GCTA}
