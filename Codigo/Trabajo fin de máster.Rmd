@@ -15735,7 +15735,7 @@ Ref_cruz %>%
 
 ```{r Ajuste de modelos con lme4GS para distintos pedigríes y diferentes densidades de SNPs}
 
-#### Población de arroz IND (10.000 SNPs) ----
+#### Población de arroz IND (100.000 SNPs) ----
 
 dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS') # Se crea una carpeta donde se guardaran los resultados de los modelos que se ajustaran para las distintas subpoblaciones de individuos genotipados con distintos pedigríes, con una desnidad de SNPs de 100.000.
 
@@ -15889,39 +15889,1843 @@ mH_IND_1 <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_1', '
 
 Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
 
-Fen_IND$id<-rownames(mH_IND_1)
+Fen_IND$id <- rownames(mH_IND_1)
 
 # b) Se ajusta el modelo ----
 
 dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_1/mod_lme4GS_1/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 148 indiviuos genotipados.
 
-mod_IND_1 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_1))) # con la función lmerUvcov, se ajusta el modelo lineal mixto con una matriz de varianza-covarianza proporcionada (aquí la matriz H). Esta función toma como entrada una fórmula para especificar la respuesta (Fen_escalado), los efectos fijos (aquí no los hay) y los efectos aleatorios (los individuos), un data.frame y una lista (Uvcov) para especificar la matriz de varianza-covarianza para los efectos aleatorios.
+mod_IND_1 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_1))) # Con la función lmerUvcov, se ajusta el modelo lineal mixto con una matriz de varianza-covarianza proporcionada (aquí la matriz H). Esta función toma como entrada una fórmula para especificar la respuesta (Fen_escalado), los efectos fijos (aquí no los hay) y los efectos aleatorios (los individuos), un data.frame y una lista (Uvcov) para especificar la matriz de varianza-covarianza para los efectos aleatorios.
 
 save(mod_IND_1, file = '../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_1/mod_lme4GS_1/mod_lme4GS_1.RData')
 
+## 2. Subpoblación con 298 individuos genotipados
 
-#BLUP for individuals in the testing set
+# a) Se preparan los datos de entrada ----
 
-blup_tst <- ranefUvcovNew(mod_IND_1, Uvcov = list(id = list(K = mH_IND_1)))
-blup_tst<-blup_tst$id[, 1]
+mH_IND_2 <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_1', 'mH_2', 'mH_2.RDS')) %>% # Se carga la matriz H de los 298 individuos genotipados de la población IND.
+  as.matrix()
 
-yHat_tst <- fixef(mod_IND_1)[1] + blup_tst
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
 
-yHat_tst_2 <- yHat_tst %>%
+Fen_IND$id <- rownames(mH_IND_2)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_1/mod_lme4GS_2/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_2 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_2)))
+
+save(mod_IND_2, file = '../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_1/mod_lme4GS_2/mod_lme4GS_2.RData')
+
+## 3. Subpoblación con 451 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_3 <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_1', 'mH_3', 'mH_3.RDS')) %>% # Se carga la matriz H de los 451 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_3)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_1/mod_lme4GS_3/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_3 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_3)))
+
+save(mod_IND_3, file = '../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_1/mod_lme4GS_3/mod_lme4GS_3.RData')
+
+## 4. Subpoblación con ningún individuo genotipado
+
+# a) Se preparan los datos de entrada ----
+
+mA_IND <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_1', 'mA', 'mA.RDS')) %>% # Se carga la matriz A de los individuos de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mA_IND)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_1/mod_lme4GS_4/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
+
+save(mod_IND_4, file = '../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_1/mod_lme4GS_4/mod_lme4GS_4.RData')
+
+########################################################
+# Pedigrí 3: 1210 individuos simulados en 7 generaciones
+########################################################
+
+# 4. Se importa el archivo .fam obtenido usando plink y que posteriomente se uso para crear la hoja de parámetros para ejecutar el software molcoanc.
+
+famsnps_IND <- read_fam(here('Datos', 'Datos_IND', 'Soft_Molcoanc', 'nSNPs_IND.fam')) %>% 
+  select(fam) %>%
+  mutate(id = 1211:1661) %>%
+  rename(Variety = fam)
+
+# 5. Se unen en un solo conjuntos de datos los individuos mejorados y no mejorados.
+
+Pob_IND_3 <- Pob_IND_2 %>%
+  left_join(y = famsnps_IND, by = 'Variety') # Se unen al conjunto de datos anterior (famsnps_IND) debido a que aquí esta la identificación numérica como esta en el pedigrí.
+
+Pob_IND_4 <- Pob_IND %>%
+  left_join(y = famsnps_IND, by = 'Variety') %>% # Se unen al conjunto de datos famsnps_IND debido a que aquí esta la identificación numérica como esta en el pedigrí.
+  bind_rows(Pob_IND_3) %>% # Se une por filas al conjunto de datos de individuos no mejorados anterior Pob_IND_3.
+  select(-Variety) %>%
+  relocate(
+    Fen_escalado,
+    .after = id
+    )
+
+# 6. Se crea un conjunto de datos donde estaran los fenotipos de los individuos con pedigrí simulado mediante el software molcoanc, y se une posteriormente con el conjunto de datos anterior.
+
+Pob_IND_5 <- tibble(
+  id = seq(from = 1, to = 1210, by = 1),
+  Fen_escalado = rep(x = NA, times = 1210)
+  ) %>%
+  bind_rows(Pob_IND_4) %>%
+  arrange(id)
+
+##########################################
+# Uso del paquete lme4GS para el pedigrí 3
+##########################################
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_3') # Se crea una carpeta donde se guardaran los resultados del pedigríe 3.
+
+## 1. Subpoblación con 148 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_1 <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_3', 'mH_1', 'mH_1.RDS')) %>% # Se carga la matriz H de los 148 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_1)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_3/mod_lme4GS_1/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 148 indiviuos genotipados.
+
+mod_IND_1 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_1)))
+
+save(mod_IND_1, file = '../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_3/mod_lme4GS_1/mod_lme4GS_1.RData')
+
+## 2. Subpoblación con 298 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_2 <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_3', 'mH_2', 'mH_2.RDS')) %>% # Se carga la matriz H de los 298 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_2)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_3/mod_lme4GS_2/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_2 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_2)))
+
+save(mod_IND_2, file = '../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_3/mod_lme4GS_2/mod_lme4GS_2.RData')
+
+## 3. Subpoblación con 451 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_3 <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_3', 'mH_3', 'mH_3.RDS')) %>% # Se carga la matriz H de los 451 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_3)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_3/mod_lme4GS_3/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_3 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_3)))
+
+save(mod_IND_3, file = '../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_3/mod_lme4GS_3/mod_lme4GS_3.RData')
+
+## 4. Subpoblación con ningún individuo genotipado
+
+# a) Se preparan los datos de entrada ----
+
+mA_IND <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_3', 'mA', 'mA.RDS')) %>% # Se carga la matriz A de los individuos de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mA_IND)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_3/mod_lme4GS_4/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
+
+save(mod_IND_4, file = '../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_3/mod_lme4GS_4/mod_lme4GS_4.RData')
+
+#######################################################
+# Pedigrí 4: 300 individuos simulados en 3 generaciones
+#######################################################
+
+# 4. Se importa el archivo .fam obtenido usando plink y que posteriomente se uso para crear la hoja de parámetros para ejecutar el software molcoanc.
+
+famsnps_IND <- read_fam(here('Datos', 'Datos_IND', 'Soft_Molcoanc', 'nSNPs_IND.fam')) %>% 
+  select(fam) %>%
+  mutate(id = 301:751) %>%
+  rename(Variety = fam)
+
+# 5. Se unen en un solo conjuntos de datos los individuos mejorados y no mejorados.
+
+Pob_IND_3 <- Pob_IND_2 %>%
+  left_join(y = famsnps_IND, by = 'Variety') # Se unen al conjunto de datos anterior (famsnps_IND) debido a que aquí esta la identificación numérica como esta en el pedigrí.
+
+Pob_IND_4 <- Pob_IND %>%
+  left_join(y = famsnps_IND, by = 'Variety') %>% # Se unen al conjunto de datos famsnps_IND debido a que aquí esta la identificación numérica como esta en el pedigrí.
+  bind_rows(Pob_IND_3) %>% # Se une por filas al conjunto de datos de individuos no mejorados anterior Pob_IND_3.
+  select(-Variety) %>%
+  relocate(
+    Fen_escalado,
+    .after = id
+    )
+
+# 6. Se crea un conjunto de datos donde estaran los fenotipos de los individuos con pedigrí simulado mediante el software molcoanc, y se une posteriormente con el conjunto de datos anterior.
+
+Pob_IND_5 <- tibble(
+  id = seq(from = 1, to = 300, by = 1),
+  Fen_escalado = rep(x = NA, times = 300)
+  ) %>%
+  bind_rows(Pob_IND_4) %>%
+  arrange(id)
+
+##########################################
+# Uso del paquete lme4GS para el pedigrí 4
+##########################################
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_4') # Se crea una carpeta donde se guardaran los resultados del pedigríe 4.
+
+## 1. Subpoblación con 148 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_1 <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_4', 'mH_1', 'mH_1.RDS')) %>% # Se carga la matriz H de los 148 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_1)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_4/mod_lme4GS_1/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 148 indiviuos genotipados.
+
+mod_IND_1 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_1)))
+
+save(mod_IND_1, file = '../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_4/mod_lme4GS_1/mod_lme4GS_1.RData')
+
+## 2. Subpoblación con 298 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_2 <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_4', 'mH_2', 'mH_2.RDS')) %>% # Se carga la matriz H de los 298 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_2)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_4/mod_lme4GS_2/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_2 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_2)))
+
+save(mod_IND_2, file = '../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_4/mod_lme4GS_2/mod_lme4GS_2.RData')
+
+## 3. Subpoblación con 451 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_3 <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_4', 'mH_3', 'mH_3.RDS')) %>% # Se carga la matriz H de los 451 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_3)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_4/mod_lme4GS_3/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_3 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_3)))
+
+save(mod_IND_3, file = '../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_4/mod_lme4GS_3/mod_lme4GS_3.RData')
+
+## 4. Subpoblación con ningún individuo genotipado
+
+# a) Se preparan los datos de entrada ----
+
+mA_IND <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_4', 'mA', 'mA.RDS')) %>% # Se carga la matriz A de los individuos de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mA_IND)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_4/mod_lme4GS_4/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
+
+save(mod_IND_4, file = '../Datos/Datos_IND/Den_100.000_b/mod_lme4GS/Ped_4/mod_lme4GS_4/mod_lme4GS_4.RData')
+
+#### Población de arroz IND (10.000 SNPs) ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS') # Se crea una carpeta donde se guardaran los resultados de los modelos que se ajustaran para las distintas subpoblaciones de individuos genotipados con distintos pedigríes, con una desnidad de SNPs de 10.000.
+
+# 1. Se importan las bases de datos de fenotipos y de linea mejorada.
+
+lin_mej <- read_delim(here('Datos', 'iris_pedigree.csv'), delim = ',')
+Fenotipos <- read_delim(here('Datos', 'all.phenotypes.csv'), delim = ',')
+
+#### Población de arroz IND ----
+
+# 2. Se crea un conjunto de datos que contiene solo los individuos mejorados.
+
+Pob_mej <- lin_mej %>%
+  filter(Status_with_Pedigree.plus.knowledge == 'I') %>% # Conjunto de datos solo con los individuos mejorados (los que se clasificaron como "I").
+  select(X3K_DNA_IRIS_UNIQUE_ID) %>%
+  rename(Variety = X3K_DNA_IRIS_UNIQUE_ID)
+
+escalado <- function(x) { # Función usada para escalar el fenotipo.
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+  }
+
+Pob_IND <- Fenotipos %>%
+  filter(SNPsubsp == 'IND') %>% # Conjunto de datos solo con la especie IND.
+  mutate(
+    Variety_2 = Variety,
+    Fen_escalado = escalado(Time.to.flowering..from.sowing)
+    ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  '-'
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety_2,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety_2,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  inner_join(y = Pob_mej, by = 'Variety') %>%
+  select(Variety_2, Fen_escalado) %>% # Se creo el conjunto de datos con los individuos mejorados de la población indica.
+  mutate(Fen_escalado = NA) %>% # Los fenotipos de estos individuos se deben colocar como NAs al formar parte de la población de validación cruzada, y al ser los individuos que se quieren predecir.
+  rename(Variety = Variety_2)
+
+# 3. Se crea un conjunto de datos que no contiene los individuos mejorados.
+
+Pob_IND_2 <- Fenotipos %>%
+  filter(SNPsubsp == 'IND') %>% # Conjunto de datos solo con la especie IND.
+  mutate(
+    Variety_2 = Variety,
+    Fen_escalado = escalado(Time.to.flowering..from.sowing)
+    ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  '-'
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety_2,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety_2,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  anti_join(Pob_mej, by = 'Variety') %>%
+  select(Variety_2, Fen_escalado) %>% # Se creo el conjunto de datos con los individuos no mejorados de la población indica.
+  rename(Variety = Variety_2)
+
+#########################################################
+# Pedigrí 1: 2000 individuos simulados en 10 generaciones
+#########################################################
+
+# 4. Se importa el archivo .fam obtenido usando plink y que posteriomente se uso para crear la hoja de parámetros para ejecutar el software molcoanc.
+
+famsnps_IND <- read_fam(here('Datos', 'Datos_IND', 'Soft_Molcoanc', 'nSNPs_IND.fam')) %>% 
+  select(fam) %>%
+  mutate(id = 2001:2451) %>%
+  rename(Variety = fam)
+
+# 5. Se unen en un solo conjuntos de datos los individuos mejorados y no mejorados.
+
+Pob_IND_3 <- Pob_IND_2 %>%
+  left_join(y = famsnps_IND, by = 'Variety') # Se unen al conjunto de datos anterior (famsnps_IND) debido a que aquí esta la identificación numérica como esta en el pedigrí.
+
+Pob_IND_4 <- Pob_IND %>%
+  left_join(y = famsnps_IND, by = 'Variety') %>% # Se unen al conjunto de datos famsnps_IND debido a que aquí esta la identificación numérica como esta en el pedigrí.
+  bind_rows(Pob_IND_3) %>% # Se une por filas al conjunto de datos de individuos no mejorados anterior Pob_IND_3.
+  select(-Variety) %>%
+  relocate(
+    Fen_escalado,
+    .after = id
+    )
+
+# 6. Se crea un conjunto de datos donde estaran los fenotipos de los individuos con pedigrí simulado mediante el software molcoanc, y se une posteriormente con el conjunto de datos anterior.
+
+Pob_IND_5 <- tibble(
+  id = seq(from = 1, to = 2000, by = 1),
+  Fen_escalado = rep(x = NA, times = 2000)
+  ) %>%
+  bind_rows(Pob_IND_4) %>%
+  arrange(id)
+
+##########################################
+# Uso del paquete lme4GS para el pedigrí 1
+##########################################
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_1') # Se crea una carpeta donde se guardaran los resultados del pedigríe 1.
+
+## 1. Subpoblación con 148 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_1 <- readRDS(here('Datos', 'Datos_IND', 'Den_10.000', 'mH', 'Ped_1', 'mH_1', 'mH_1.RDS')) %>% # Se carga la matriz H de los 148 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_1)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_1/mod_lme4GS_1/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 148 indiviuos genotipados.
+
+mod_IND_1 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_1)))
+
+save(mod_IND_1, file = '../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_1/mod_lme4GS_1/mod_lme4GS_1.RData')
+
+## 2. Subpoblación con 298 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_2 <- readRDS(here('Datos', 'Datos_IND', 'Den_10.000', 'mH', 'Ped_1', 'mH_2', 'mH_2.RDS')) %>% # Se carga la matriz H de los 298 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_2)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_1/mod_lme4GS_2/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_2 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_2)))
+
+save(mod_IND_2, file = '../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_1/mod_lme4GS_2/mod_lme4GS_2.RData')
+
+## 3. Subpoblación con 451 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_3 <- readRDS(here('Datos', 'Datos_IND', 'Den_10.000', 'mH', 'Ped_1', 'mH_3', 'mH_3.RDS')) %>% # Se carga la matriz H de los 451 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_3)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_1/mod_lme4GS_3/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_3 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_3)))
+
+save(mod_IND_3, file = '../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_1/mod_lme4GS_3/mod_lme4GS_3.RData')
+
+## 4. Subpoblación con ningún individuo genotipado
+
+# a) Se preparan los datos de entrada ----
+
+mA_IND <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_1', 'mA', 'mA.RDS')) %>% # Se carga la matriz A de los individuos de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mA_IND)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_1/mod_lme4GS_4/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
+
+save(mod_IND_4, file = '../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_1/mod_lme4GS_4/mod_lme4GS_4.RData')
+
+########################################################
+# Pedigrí 3: 1210 individuos simulados en 7 generaciones
+########################################################
+
+# 4. Se importa el archivo .fam obtenido usando plink y que posteriomente se uso para crear la hoja de parámetros para ejecutar el software molcoanc.
+
+famsnps_IND <- read_fam(here('Datos', 'Datos_IND', 'Soft_Molcoanc', 'nSNPs_IND.fam')) %>% 
+  select(fam) %>%
+  mutate(id = 1211:1661) %>%
+  rename(Variety = fam)
+
+# 5. Se unen en un solo conjuntos de datos los individuos mejorados y no mejorados.
+
+Pob_IND_3 <- Pob_IND_2 %>%
+  left_join(y = famsnps_IND, by = 'Variety') # Se unen al conjunto de datos anterior (famsnps_IND) debido a que aquí esta la identificación numérica como esta en el pedigrí.
+
+Pob_IND_4 <- Pob_IND %>%
+  left_join(y = famsnps_IND, by = 'Variety') %>% # Se unen al conjunto de datos famsnps_IND debido a que aquí esta la identificación numérica como esta en el pedigrí.
+  bind_rows(Pob_IND_3) %>% # Se une por filas al conjunto de datos de individuos no mejorados anterior Pob_IND_3.
+  select(-Variety) %>%
+  relocate(
+    Fen_escalado,
+    .after = id
+    )
+
+# 6. Se crea un conjunto de datos donde estaran los fenotipos de los individuos con pedigrí simulado mediante el software molcoanc, y se une posteriormente con el conjunto de datos anterior.
+
+Pob_IND_5 <- tibble(
+  id = seq(from = 1, to = 1210, by = 1),
+  Fen_escalado = rep(x = NA, times = 1210)
+  ) %>%
+  bind_rows(Pob_IND_4) %>%
+  arrange(id)
+
+##########################################
+# Uso del paquete lme4GS para el pedigrí 3
+##########################################
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_3') # Se crea una carpeta donde se guardaran los resultados del pedigríe 3.
+
+## 1. Subpoblación con 148 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_1 <- readRDS(here('Datos', 'Datos_IND', 'Den_10.000', 'mH', 'Ped_3', 'mH_1', 'mH_1.RDS')) %>% # Se carga la matriz H de los 148 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_1)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_3/mod_lme4GS_1/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 148 indiviuos genotipados.
+
+mod_IND_1 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_1))) # Con la función lmerUvcov, se ajusta el modelo lineal mixto con una matriz de varianza-covarianza proporcionada (aquí la matriz H). Esta función toma como entrada una fórmula para especificar la respuesta (Fen_escalado), los efectos fijos (aquí no los hay) y los efectos aleatorios (los individuos), un data.frame y una lista (Uvcov) para especificar la matriz de varianza-covarianza para los efectos aleatorios.
+
+save(mod_IND_1, file = '../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_3/mod_lme4GS_1/mod_lme4GS_1.RData')
+
+## 2. Subpoblación con 298 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_2 <- readRDS(here('Datos', 'Datos_IND', 'Den_10.000', 'mH', 'Ped_3', 'mH_2', 'mH_2.RDS')) %>% # Se carga la matriz H de los 298 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_2)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_3/mod_lme4GS_2/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_2 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_2)))
+
+save(mod_IND_2, file = '../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_3/mod_lme4GS_2/mod_lme4GS_2.RData')
+
+## 3. Subpoblación con 451 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_3 <- readRDS(here('Datos', 'Datos_IND', 'Den_10.000', 'mH', 'Ped_3', 'mH_3', 'mH_3.RDS')) %>% # Se carga la matriz H de los 451 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_3)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_3/mod_lme4GS_3/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_3 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_3)))
+
+save(mod_IND_3, file = '../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_3/mod_lme4GS_3/mod_lme4GS_3.RData')
+
+## 4. Subpoblación con ningún individuo genotipado
+
+# a) Se preparan los datos de entrada ----
+
+mA_IND <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_3', 'mA', 'mA.RDS')) %>% # Se carga la matriz A de los individuos de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mA_IND)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_3/mod_lme4GS_4/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
+
+save(mod_IND_4, file = '../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_3/mod_lme4GS_4/mod_lme4GS_4.RData')
+
+#######################################################
+# Pedigrí 4: 300 individuos simulados en 3 generaciones
+#######################################################
+
+# 4. Se importa el archivo .fam obtenido usando plink y que posteriomente se uso para crear la hoja de parámetros para ejecutar el software molcoanc.
+
+famsnps_IND <- read_fam(here('Datos', 'Datos_IND', 'Soft_Molcoanc', 'nSNPs_IND.fam')) %>% 
+  select(fam) %>%
+  mutate(id = 301:751) %>%
+  rename(Variety = fam)
+
+# 5. Se unen en un solo conjuntos de datos los individuos mejorados y no mejorados.
+
+Pob_IND_3 <- Pob_IND_2 %>%
+  left_join(y = famsnps_IND, by = 'Variety') # Se unen al conjunto de datos anterior (famsnps_IND) debido a que aquí esta la identificación numérica como esta en el pedigrí.
+
+Pob_IND_4 <- Pob_IND %>%
+  left_join(y = famsnps_IND, by = 'Variety') %>% # Se unen al conjunto de datos famsnps_IND debido a que aquí esta la identificación numérica como esta en el pedigrí.
+  bind_rows(Pob_IND_3) %>% # Se une por filas al conjunto de datos de individuos no mejorados anterior Pob_IND_3.
+  select(-Variety) %>%
+  relocate(
+    Fen_escalado,
+    .after = id
+    )
+
+# 6. Se crea un conjunto de datos donde estaran los fenotipos de los individuos con pedigrí simulado mediante el software molcoanc, y se une posteriormente con el conjunto de datos anterior.
+
+Pob_IND_5 <- tibble(
+  id = seq(from = 1, to = 300, by = 1),
+  Fen_escalado = rep(x = NA, times = 300)
+  ) %>%
+  bind_rows(Pob_IND_4) %>%
+  arrange(id)
+
+##########################################
+# Uso del paquete lme4GS para el pedigrí 4
+##########################################
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_4') # Se crea una carpeta donde se guardaran los resultados del pedigríe 4.
+
+## 1. Subpoblación con 148 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_1 <- readRDS(here('Datos', 'Datos_IND', 'Den_10.000', 'mH', 'Ped_4', 'mH_1', 'mH_1.RDS')) %>% # Se carga la matriz H de los 148 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_1)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_4/mod_lme4GS_1/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 148 indiviuos genotipados.
+
+mod_IND_1 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_1)))
+
+save(mod_IND_1, file = '../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_4/mod_lme4GS_1/mod_lme4GS_1.RData')
+
+## 2. Subpoblación con 298 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_2 <- readRDS(here('Datos', 'Datos_IND', 'Den_10.000', 'mH', 'Ped_4', 'mH_2', 'mH_2.RDS')) %>% # Se carga la matriz H de los 298 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_2)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_4/mod_lme4GS_2/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_2 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_2)))
+
+save(mod_IND_2, file = '../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_4/mod_lme4GS_2/mod_lme4GS_2.RData')
+
+## 3. Subpoblación con 451 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_3 <- readRDS(here('Datos', 'Datos_IND', 'Den_10.000', 'mH', 'Ped_4', 'mH_3', 'mH_3.RDS')) %>% # Se carga la matriz H de los 451 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_3)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_4/mod_lme4GS_3/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_3 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_3)))
+
+save(mod_IND_3, file = '../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_4/mod_lme4GS_3/mod_lme4GS_3.RData')
+
+## 4. Subpoblación con ningún individuo genotipado
+
+# a) Se preparan los datos de entrada ----
+
+mA_IND <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_4', 'mA', 'mA.RDS')) %>% # Se carga la matriz A de los individuos de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mA_IND)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_4/mod_lme4GS_4/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
+
+save(mod_IND_4, file = '../Datos/Datos_IND/Den_10.000/mod_lme4GS/Ped_4/mod_lme4GS_4/mod_lme4GS_4.RData')
+
+#### Población de arroz IND (1.000 SNPs) ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS') # Se crea una carpeta donde se guardaran los resultados de los modelos que se ajustaran para las distintas subpoblaciones de individuos genotipados con distintos pedigríes, con una desnidad de SNPs de 10.000.
+
+# 1. Se importan las bases de datos de fenotipos y de linea mejorada.
+
+lin_mej <- read_delim(here('Datos', 'iris_pedigree.csv'), delim = ',')
+Fenotipos <- read_delim(here('Datos', 'all.phenotypes.csv'), delim = ',')
+
+#### Población de arroz IND ----
+
+# 2. Se crea un conjunto de datos que contiene solo los individuos mejorados.
+
+Pob_mej <- lin_mej %>%
+  filter(Status_with_Pedigree.plus.knowledge == 'I') %>% # Conjunto de datos solo con los individuos mejorados (los que se clasificaron como "I").
+  select(X3K_DNA_IRIS_UNIQUE_ID) %>%
+  rename(Variety = X3K_DNA_IRIS_UNIQUE_ID)
+
+escalado <- function(x) { # Función usada para escalar el fenotipo.
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+  }
+
+Pob_IND <- Fenotipos %>%
+  filter(SNPsubsp == 'IND') %>% # Conjunto de datos solo con la especie IND.
+  mutate(
+    Variety_2 = Variety,
+    Fen_escalado = escalado(Time.to.flowering..from.sowing)
+    ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  '-'
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety_2,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety_2,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  inner_join(y = Pob_mej, by = 'Variety') %>%
+  select(Variety_2, Fen_escalado) %>% # Se creo el conjunto de datos con los individuos mejorados de la población indica.
+  mutate(Fen_escalado = NA) %>% # Los fenotipos de estos individuos se deben colocar como NAs al formar parte de la población de validación cruzada, y al ser los individuos que se quieren predecir.
+  rename(Variety = Variety_2)
+
+# 3. Se crea un conjunto de datos que no contiene los individuos mejorados.
+
+Pob_IND_2 <- Fenotipos %>%
+  filter(SNPsubsp == 'IND') %>% # Conjunto de datos solo con la especie IND.
+  mutate(
+    Variety_2 = Variety,
+    Fen_escalado = escalado(Time.to.flowering..from.sowing)
+    ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  '-'
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety_2,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety_2,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  anti_join(Pob_mej, by = 'Variety') %>%
+  select(Variety_2, Fen_escalado) %>% # Se creo el conjunto de datos con los individuos no mejorados de la población indica.
+  rename(Variety = Variety_2)
+
+#########################################################
+# Pedigrí 1: 2000 individuos simulados en 10 generaciones
+#########################################################
+
+# 4. Se importa el archivo .fam obtenido usando plink y que posteriomente se uso para crear la hoja de parámetros para ejecutar el software molcoanc.
+
+famsnps_IND <- read_fam(here('Datos', 'Datos_IND', 'Soft_Molcoanc', 'nSNPs_IND.fam')) %>% 
+  select(fam) %>%
+  mutate(id = 2001:2451) %>%
+  rename(Variety = fam)
+
+# 5. Se unen en un solo conjuntos de datos los individuos mejorados y no mejorados.
+
+Pob_IND_3 <- Pob_IND_2 %>%
+  left_join(y = famsnps_IND, by = 'Variety') # Se unen al conjunto de datos anterior (famsnps_IND) debido a que aquí esta la identificación numérica como esta en el pedigrí.
+
+Pob_IND_4 <- Pob_IND %>%
+  left_join(y = famsnps_IND, by = 'Variety') %>% # Se unen al conjunto de datos famsnps_IND debido a que aquí esta la identificación numérica como esta en el pedigrí.
+  bind_rows(Pob_IND_3) %>% # Se une por filas al conjunto de datos de individuos no mejorados anterior Pob_IND_3.
+  select(-Variety) %>%
+  relocate(
+    Fen_escalado,
+    .after = id
+    )
+
+# 6. Se crea un conjunto de datos donde estaran los fenotipos de los individuos con pedigrí simulado mediante el software molcoanc, y se une posteriormente con el conjunto de datos anterior.
+
+Pob_IND_5 <- tibble(
+  id = seq(from = 1, to = 2000, by = 1),
+  Fen_escalado = rep(x = NA, times = 2000)
+  ) %>%
+  bind_rows(Pob_IND_4) %>%
+  arrange(id)
+
+##########################################
+# Uso del paquete lme4GS para el pedigrí 1
+##########################################
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_1') # Se crea una carpeta donde se guardaran los resultados del pedigríe 1.
+
+## 1. Subpoblación con 148 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_1 <- readRDS(here('Datos', 'Datos_IND', 'Den_1.000', 'mH', 'Ped_1', 'mH_1', 'mH_1.RDS')) %>% # Se carga la matriz H de los 148 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_1)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_1/mod_lme4GS_1/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 148 indiviuos genotipados.
+
+mod_IND_1 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_1)))
+
+save(mod_IND_1, file = '../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_1/mod_lme4GS_1/mod_lme4GS_1.RData')
+
+## 2. Subpoblación con 298 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_2 <- readRDS(here('Datos', 'Datos_IND', 'Den_1.000', 'mH', 'Ped_1', 'mH_2', 'mH_2.RDS')) %>% # Se carga la matriz H de los 298 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_2)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_1/mod_lme4GS_2/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_2 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_2)))
+
+save(mod_IND_2, file = '../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_1/mod_lme4GS_2/mod_lme4GS_2.RData')
+
+## 3. Subpoblación con 451 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_3 <- readRDS(here('Datos', 'Datos_IND', 'Den_1.000', 'mH', 'Ped_1', 'mH_3', 'mH_3.RDS')) %>% # Se carga la matriz H de los 451 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_3)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_1/mod_lme4GS_3/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_3 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_3)))
+
+save(mod_IND_3, file = '../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_1/mod_lme4GS_3/mod_lme4GS_3.RData')
+
+## 4. Subpoblación con ningún individuo genotipado
+
+# a) Se preparan los datos de entrada ----
+
+mA_IND <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_1', 'mA', 'mA.RDS')) %>% # Se carga la matriz A de los individuos de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mA_IND)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_1/mod_lme4GS_4/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
+
+save(mod_IND_4, file = '../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_1/mod_lme4GS_4/mod_lme4GS_4.RData')
+
+########################################################
+# Pedigrí 3: 1210 individuos simulados en 7 generaciones
+########################################################
+
+# 4. Se importa el archivo .fam obtenido usando plink y que posteriomente se uso para crear la hoja de parámetros para ejecutar el software molcoanc.
+
+famsnps_IND <- read_fam(here('Datos', 'Datos_IND', 'Soft_Molcoanc', 'nSNPs_IND.fam')) %>% 
+  select(fam) %>%
+  mutate(id = 1211:1661) %>%
+  rename(Variety = fam)
+
+# 5. Se unen en un solo conjuntos de datos los individuos mejorados y no mejorados.
+
+Pob_IND_3 <- Pob_IND_2 %>%
+  left_join(y = famsnps_IND, by = 'Variety') # Se unen al conjunto de datos anterior (famsnps_IND) debido a que aquí esta la identificación numérica como esta en el pedigrí.
+
+Pob_IND_4 <- Pob_IND %>%
+  left_join(y = famsnps_IND, by = 'Variety') %>% # Se unen al conjunto de datos famsnps_IND debido a que aquí esta la identificación numérica como esta en el pedigrí.
+  bind_rows(Pob_IND_3) %>% # Se une por filas al conjunto de datos de individuos no mejorados anterior Pob_IND_3.
+  select(-Variety) %>%
+  relocate(
+    Fen_escalado,
+    .after = id
+    )
+
+# 6. Se crea un conjunto de datos donde estaran los fenotipos de los individuos con pedigrí simulado mediante el software molcoanc, y se une posteriormente con el conjunto de datos anterior.
+
+Pob_IND_5 <- tibble(
+  id = seq(from = 1, to = 1210, by = 1),
+  Fen_escalado = rep(x = NA, times = 1210)
+  ) %>%
+  bind_rows(Pob_IND_4) %>%
+  arrange(id)
+
+##########################################
+# Uso del paquete lme4GS para el pedigrí 3
+##########################################
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_3') # Se crea una carpeta donde se guardaran los resultados del pedigríe 3.
+
+## 1. Subpoblación con 148 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_1 <- readRDS(here('Datos', 'Datos_IND', 'Den_1.000', 'mH', 'Ped_3', 'mH_1', 'mH_1.RDS')) %>% # Se carga la matriz H de los 148 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_1)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_3/mod_lme4GS_1/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 148 indiviuos genotipados.
+
+mod_IND_1 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_1)))
+
+save(mod_IND_1, file = '../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_3/mod_lme4GS_1/mod_lme4GS_1.RData')
+
+## 2. Subpoblación con 298 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_2 <- readRDS(here('Datos', 'Datos_IND', 'Den_1.000', 'mH', 'Ped_3', 'mH_2', 'mH_2.RDS')) %>% # Se carga la matriz H de los 298 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_2)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_3/mod_lme4GS_2/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_2 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_2)))
+
+save(mod_IND_2, file = '../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_3/mod_lme4GS_2/mod_lme4GS_2.RData')
+
+## 3. Subpoblación con 451 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_3 <- readRDS(here('Datos', 'Datos_IND', 'Den_1.000', 'mH', 'Ped_3', 'mH_3', 'mH_3.RDS')) %>% # Se carga la matriz H de los 451 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_3)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_3/mod_lme4GS_3/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_3 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_3)))
+
+save(mod_IND_3, file = '../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_3/mod_lme4GS_3/mod_lme4GS_3.RData')
+
+## 4. Subpoblación con ningún individuo genotipado
+
+# a) Se preparan los datos de entrada ----
+
+mA_IND <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_3', 'mA', 'mA.RDS')) %>% # Se carga la matriz A de los individuos de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mA_IND)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_3/mod_lme4GS_4/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
+
+save(mod_IND_4, file = '../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_3/mod_lme4GS_4/mod_lme4GS_4.RData')
+
+#######################################################
+# Pedigrí 4: 300 individuos simulados en 3 generaciones
+#######################################################
+
+# 4. Se importa el archivo .fam obtenido usando plink y que posteriomente se uso para crear la hoja de parámetros para ejecutar el software molcoanc.
+
+famsnps_IND <- read_fam(here('Datos', 'Datos_IND', 'Soft_Molcoanc', 'nSNPs_IND.fam')) %>% 
+  select(fam) %>%
+  mutate(id = 301:751) %>%
+  rename(Variety = fam)
+
+# 5. Se unen en un solo conjuntos de datos los individuos mejorados y no mejorados.
+
+Pob_IND_3 <- Pob_IND_2 %>%
+  left_join(y = famsnps_IND, by = 'Variety') # Se unen al conjunto de datos anterior (famsnps_IND) debido a que aquí esta la identificación numérica como esta en el pedigrí.
+
+Pob_IND_4 <- Pob_IND %>%
+  left_join(y = famsnps_IND, by = 'Variety') %>% # Se unen al conjunto de datos famsnps_IND debido a que aquí esta la identificación numérica como esta en el pedigrí.
+  bind_rows(Pob_IND_3) %>% # Se une por filas al conjunto de datos de individuos no mejorados anterior Pob_IND_3.
+  select(-Variety) %>%
+  relocate(
+    Fen_escalado,
+    .after = id
+    )
+
+# 6. Se crea un conjunto de datos donde estaran los fenotipos de los individuos con pedigrí simulado mediante el software molcoanc, y se une posteriormente con el conjunto de datos anterior.
+
+Pob_IND_5 <- tibble(
+  id = seq(from = 1, to = 300, by = 1),
+  Fen_escalado = rep(x = NA, times = 300)
+  ) %>%
+  bind_rows(Pob_IND_4) %>%
+  arrange(id)
+
+##########################################
+# Uso del paquete lme4GS para el pedigrí 4
+##########################################
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_4') # Se crea una carpeta donde se guardaran los resultados del pedigríe 4.
+
+## 1. Subpoblación con 148 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_1 <- readRDS(here('Datos', 'Datos_IND', 'Den_1.000', 'mH', 'Ped_4', 'mH_1', 'mH_1.RDS')) %>% # Se carga la matriz H de los 148 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_1)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_4/mod_lme4GS_1/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 148 indiviuos genotipados.
+
+mod_IND_1 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_1)))
+
+save(mod_IND_1, file = '../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_4/mod_lme4GS_1/mod_lme4GS_1.RData')
+
+## 2. Subpoblación con 298 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_2 <- readRDS(here('Datos', 'Datos_IND', 'Den_1.000', 'mH', 'Ped_4', 'mH_2', 'mH_2.RDS')) %>% # Se carga la matriz H de los 298 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_2)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_4/mod_lme4GS_2/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_2 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_2)))
+
+save(mod_IND_2, file = '../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_4/mod_lme4GS_2/mod_lme4GS_2.RData')
+
+## 3. Subpoblación con 451 individuos genotipados
+
+# a) Se preparan los datos de entrada ----
+
+mH_IND_3 <- readRDS(here('Datos', 'Datos_IND', 'Den_1.000', 'mH', 'Ped_4', 'mH_3', 'mH_3.RDS')) %>% # Se carga la matriz H de los 451 individuos genotipados de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mH_IND_3)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_4/mod_lme4GS_3/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_3 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_3)))
+
+save(mod_IND_3, file = '../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_4/mod_lme4GS_3/mod_lme4GS_3.RData')
+
+## 4. Subpoblación con ningún individuo genotipado
+
+# a) Se preparan los datos de entrada ----
+
+mA_IND <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mH', 'Ped_4', 'mA', 'mA.RDS')) %>% # Se carga la matriz A de los individuos de la población IND.
+  as.matrix()
+
+Fen_IND <- Pob_IND_5 # Se carga el conjunto de datos donde estan los fenotipos y la identificación de los individuos.
+
+Fen_IND$id <- rownames(mA_IND)
+
+# b) Se ajusta el modelo ----
+
+dir.create('../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_4/mod_lme4GS_4/') # Se crea una carpeta para guardar los resultados del modelo anteriormente ajustado para 298 indiviuos genotipados.
+
+mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
+
+save(mod_IND_4, file = '../Datos/Datos_IND/Den_1.000/mod_lme4GS/Ped_4/mod_lme4GS_4/mod_lme4GS_4.RData')
+```
+
+# 23. A continuación se analizan los resultados obtenidos al correr los datos con el paquete de R lme4GS para distintos pedigríes y diferentes densidades de SNPs.
+
+```{r Resultados con el paquete lme4GS para los distintos pedigríes y densidades de SNPs}
+
+# 1. Se importan las bases de datos de feotipos y de linea mejorada.
+
+lin_mej <- read_delim(here('Datos', 'iris_pedigree.csv'), delim = ',')
+Fenotipos <- read_delim(here('Datos', 'all.phenotypes.csv'), delim = ',')
+
+#### Población de arroz IND (100.000 SNPs) ----
+
+#########################################################
+# Pedigrí 1: 2000 individuos simulados en 10 generaciones
+#########################################################
+
+# 2. Se importa el archivo .fam obtenido usando plink y que posteriomente se uso para crear la hoja de parámetros para ejecutar el software molcoanc.
+
+famsnps_IND <- read_fam(here('Datos', 'Datos_IND', 'Soft_Molcoanc', 'nSNPs_IND.fam')) %>% 
+  select(fam) %>%
+  mutate(id = 2001:2451) %>%
+  rename(Variety = fam)
+
+# 3. Se crea un conjunto de datos que contiene solo los individuos mejorados.
+
+Pob_mej <- lin_mej %>%
+  filter(Status_with_Pedigree.plus.knowledge == 'I') %>% # Conjunto de datos solo con los individuos mejorados (los que se clasificaron como "I").
+  select(X3K_DNA_IRIS_UNIQUE_ID) %>%
+  rename(Variety = X3K_DNA_IRIS_UNIQUE_ID)
+
+escalado <- function(x) { # Función usada para escalar el fenotipo.
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+  }
+
+Pob_IND <- Fenotipos %>%
+  filter(SNPsubsp == 'IND') %>% # Conjunto de datos solo con la especie IND.
+  mutate(
+    Variety_2 = Variety,
+    Fen_escalado = escalado(Time.to.flowering..from.sowing)
+    ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  '-'
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety_2,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety_2,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  inner_join(y = Pob_mej, by = 'Variety') %>%
+  select(Variety_2, Fen_escalado) %>% # Se creo el conjunto de datos con los individuos mejorados de la población indica.
+  rename(Variety = Variety_2)
+
+Pob_IND_2 <- Pob_IND %>%
+  left_join(y = famsnps_IND, by = 'Variety') # Se unen al conjunto de datos famsnps_IND debido a que aquí esta la identificación numérica como esta en el pedigrí.
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_lme4GS', 'Ped_1', 'mod_lme4GS_1', 'mod_lme4GS_1.RData'))
+
+blup_IND_1 <- ranefUvcovNew(mod_IND_1, Uvcov = list(id = list(K = mH_IND_1)))
+blup_IND_1 <- blup_IND_1$id[, 1] # Con la función ranefUvcovNew() obtengo el blup para los niveles de efectos aleatorios (aquí los individuos) con la matriz de varianza-covarianza especificada (la matriz H).
+
+Pred_IND_1 <- fixef(mod_IND_1)[1] + blup_IND_1 # De esta forma obtengo los fenotipos predichos para los individuos con valores NA (aquí 2082 individuos).
+
+Pob_IND_NA <- Pob_IND_5 %>% # Aquí, de la población total en Pob_IND_5 del pedigrí 1, me quedo solo con los 2082 individuos con valores NA. 
+  filter(is.na(Fen_escalado))
+
+Pred_IND_1 <- Pred_IND_1 %>% # Del vector anterior de fenotipos predichos, sol me quedo con los que pertenecen a las variedades mejoradas.
   as_tibble() %>%
-  bind_cols(a) %>%
+  bind_cols(Pob_IND_NA) %>%
   filter(id %in% c(2001, 2005, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2030, 2062, 2076, 2101, 2116, 2127, 2128, 2129, 2130, 2133, 2134, 2135, 2137, 2170, 2179, 2180, 2202, 2210, 2249, 2263, 2264, 2281, 2308, 2327, 2328, 2365, 2368, 2369, 2370, 2372, 2374, 2375, 2376, 2424, 2437, 2446)) %>% # Estos serían los individuos que pertenecen a las variedades mejoradas.
-  select(value, id)
+  select(value, id) %>%
+  inner_join(y = Pob_IND_2, by = 'id')  %>%
+  mutate(Subpoblación = '148') %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
 
+## 2. Subpoblación con 298 individuos genotipados
 
-a <- Pob_IND_5 %>% 
-  filter(is.na(Fen_escalado)) %>% 
-  rowid_to_column(var = 'id2')
+load(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_lme4GS', 'Ped_1', 'mod_lme4GS_2', 'mod_lme4GS_2.RData'))
 
+blup_IND_2 <- ranefUvcovNew(mod_IND_2, Uvcov = list(id = list(K = mH_IND_2)))
+blup_IND_2 <- blup_IND_2$id[, 1]
+
+Pred_IND_2 <- fixef(mod_IND_2)[1] + blup_IND_2
+
+Pob_IND_NA <- Pob_IND_5 %>% 
+  filter(is.na(Fen_escalado))
+
+Pred_IND_2 <- Pred_IND_2 %>%
+  as_tibble() %>%
+  bind_cols(Pob_IND_NA) %>%
+  filter(id %in% c(2001, 2005, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2030, 2062, 2076, 2101, 2116, 2127, 2128, 2129, 2130, 2133, 2134, 2135, 2137, 2170, 2179, 2180, 2202, 2210, 2249, 2263, 2264, 2281, 2308, 2327, 2328, 2365, 2368, 2369, 2370, 2372, 2374, 2375, 2376, 2424, 2437, 2446)) %>% # Estos serían los individuos que pertenecen a las variedades mejoradas.
+  select(value, id) %>%
+  inner_join(y = Pob_IND_2, by = 'id')  %>%
+  mutate(Subpoblación = '298') %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_lme4GS', 'Ped_1', 'mod_lme4GS_3', 'mod_lme4GS_3.RData'))
+
+blup_IND_3 <- ranefUvcovNew(mod_IND_3, Uvcov = list(id = list(K = mH_IND_3)))
+blup_IND_3 <- blup_IND_3$id[, 1]
+
+Pred_IND_3 <- fixef(mod_IND_3)[1] + blup_IND_3
+
+Pob_IND_NA <- Pob_IND_5 %>% 
+  filter(is.na(Fen_escalado))
+
+Pred_IND_3 <- Pred_IND_3 %>%
+  as_tibble() %>%
+  bind_cols(Pob_IND_NA) %>%
+  filter(id %in% c(2001, 2005, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2030, 2062, 2076, 2101, 2116, 2127, 2128, 2129, 2130, 2133, 2134, 2135, 2137, 2170, 2179, 2180, 2202, 2210, 2249, 2263, 2264, 2281, 2308, 2327, 2328, 2365, 2368, 2369, 2370, 2372, 2374, 2375, 2376, 2424, 2437, 2446)) %>% # Estos serían los individuos que pertenecen a las variedades mejoradas.
+  select(value, id) %>%
+  inner_join(y = Pob_IND_2, by = 'id')  %>%
+  mutate(Subpoblación = '451') %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_lme4GS', 'Ped_1', 'mod_lme4GS_4', 'mod_lme4GS_4.RData'))
+
+blup_IND_4 <- ranefUvcovNew(mod_IND_4, Uvcov = list(id = list(K = mA_IND)))
+blup_IND_4 <- blup_IND_4$id[, 1]
+
+Pred_IND_4 <- fixef(mod_IND_4)[1] + blup_IND_4
+
+Pob_IND_NA <- Pob_IND_5 %>% 
+  filter(is.na(Fen_escalado))
+
+Pred_IND_4 <- Pred_IND_4 %>%
+  as_tibble() %>%
+  bind_cols(Pob_IND_NA) %>%
+  filter(id %in% c(2001, 2005, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2030, 2062, 2076, 2101, 2116, 2127, 2128, 2129, 2130, 2133, 2134, 2135, 2137, 2170, 2179, 2180, 2202, 2210, 2249, 2263, 2264, 2281, 2308, 2327, 2328, 2365, 2368, 2369, 2370, 2372, 2374, 2375, 2376, 2424, 2437, 2446)) %>% # Estos serían los individuos que pertenecen a las variedades mejoradas.
+  select(value, id) %>%
+  inner_join(y = Pob_IND_2, by = 'id')  %>%
+  mutate(Subpoblación = '0') %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+# 4. Se unen todos los datos anteriores de las distintas subpoblaciones de individuos genotipados en un solo conjunto de datos.
+
+Pred_IND_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  arrange(id) %>%
+  relocate(
+    Variety,
+    .after = id
+    ) %>%
+  relocate(
+    Fenotipo_predicho,
+    .after = Fenotipo_observado
+    ) %>%
+  mutate(Pedigrí = '5')
+
+#######################################################
+# Gráfico de dispersión de los resultados del pedigrí 1
+#######################################################
+
+Graf_disp_IND <- function(Subpoblación) {
+  Pred_IND_a %>%
+    filter(.data$Subpoblación == .env$Subpoblación) %>%
+    ggplot() +
+    aes(x = Fenotipo_observado, y = Fenotipo_predicho) +
+    geom_point(size = 4.4, colour = 'yellow', alpha = 0.6) +
+    geom_smooth(color = 'yellow', fill = 'yellow', method = 'lm', se = TRUE) +
+    stat_cor(p.accuracy = 0.001, colour = 'gray34', label.x = -1.5, label.y = -1.5) +
+    geom_rug(colour = 'gray') +
+    scale_x_continuous(labels = label_number(accuracy = 0.01)) +
+    scale_y_continuous(labels = label_number(accuracy = 0.01)) +
+    ggtitle(glue('Individuos genotipados: {Subpoblación}')) +
+    labs(x = 'Fenotipo observado', y = 'Fenotipo predicho') +
+    theme_bw() +
+    theme(
+      axis.text = element_text(size = 14),
+      axis.title = element_text(size = 15, face = 'bold'),
+      plot.title = element_text(size = 11, face = 'bold'),
+      legend.position = 'none'
+      )
+  }
+
+Subpoblación <- c('0', '148', '298', '451')
+Graf <- map(Subpoblación, Graf_disp_IND)
+(Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
+  plot_annotation(title = 'Pedigrí tres') # Aquí se coloco pedigrí tres pero en realidad es el pedigrí cinco.
+
+########################################################
+# Pedigrí 3: 1210 individuos simulados en 7 generaciones
+########################################################
+
+# 2. Se importa el archivo .fam obtenido usando plink y que posteriomente se uso para crear la hoja de parámetros para ejecutar el software molcoanc.
+
+famsnps_IND <- read_fam(here('Datos', 'Datos_IND', 'Soft_Molcoanc', 'nSNPs_IND.fam')) %>% 
+  select(fam) %>%
+  mutate(id = 1211:1661) %>%
+  rename(Variety = fam)
+
+# 3. Se crea un conjunto de datos que contiene solo los individuos mejorados.
+
+Pob_mej <- lin_mej %>%
+  filter(Status_with_Pedigree.plus.knowledge == 'I') %>% # Conjunto de datos solo con los individuos mejorados (los que se clasificaron como "I").
+  select(X3K_DNA_IRIS_UNIQUE_ID) %>%
+  rename(Variety = X3K_DNA_IRIS_UNIQUE_ID)
+
+escalado <- function(x) { # Función usada para escalar el fenotipo.
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+  }
+
+Pob_IND <- Fenotipos %>%
+  filter(SNPsubsp == 'IND') %>% # Conjunto de datos solo con la especie IND.
+  mutate(
+    Variety_2 = Variety,
+    Fen_escalado = escalado(Time.to.flowering..from.sowing)
+    ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  '-'
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety_2,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety_2,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  inner_join(y = Pob_mej, by = 'Variety') %>%
+  select(Variety_2, Fen_escalado) %>% # Se creo el conjunto de datos con los individuos mejorados de la población indica.
+  rename(Variety = Variety_2)
+
+Pob_IND_2 <- Pob_IND %>%
+  left_join(y = famsnps_IND, by = 'Variety') # Se unen al conjunto de datos famsnps_IND debido a que aquí esta la identificación numérica como esta en el pedigrí.
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_lme4GS', 'Ped_3', 'mod_lme4GS_1', 'mod_lme4GS_1.RData'))
+
+blup_IND_1 <- ranefUvcovNew(mod_IND_1, Uvcov = list(id = list(K = mH_IND_1)))
+blup_IND_1 <- blup_IND_1$id[, 1] # Con la función ranefUvcovNew() obtengo el blup para los niveles de efectos aleatorios (aquí los individuos) con la matriz de varianza-covarianza especificada (la matriz H).
+
+Pred_IND_9 <- fixef(mod_IND_1)[1] + blup_IND_1 # De esta forma obtengo los fenotipos predichos para los individuos con valores NA (aquí 2082 individuos).
+
+Pob_IND_NA <- Pob_IND_5 %>% # Aquí, de la población total de Pob_IND_5 del pedigrí 3, me quedo solo con los 1292 individuos con valores NA. 
+  filter(is.na(Fen_escalado))
+
+Pred_IND_9 <- Pred_IND_9 %>% # Del vector anterior de fenotipos predichos, solo me quedo con los que pertenecen a las variedades mejoradas.
+  as_tibble() %>%
+  bind_cols(Pob_IND_NA) %>%
+  filter(id %in% c(1211, 1215, 1223, 1224, 1226, 1227, 1228, 1229, 1230, 1231, 1232, 1233, 1240, 1272, 1286, 1311, 1326, 1337, 1338, 1339, 1340, 1343, 1344, 1345, 1347, 1380, 1389, 1390, 1412, 1420, 1459, 1473, 1474, 1491, 1518, 1537, 1538, 1575, 1578, 1579, 1580, 1582, 1584, 1585, 1586, 1634, 1647, 1656)) %>% # Estos serían los individuos que pertenecen a las variedades mejoradas.
+  select(value, id) %>%
+  inner_join(y = Pob_IND_2, by = 'id')  %>%
+  mutate(Subpoblación = '148') %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_lme4GS', 'Ped_3', 'mod_lme4GS_2', 'mod_lme4GS_2.RData'))
+
+blup_IND_2 <- ranefUvcovNew(mod_IND_2, Uvcov = list(id = list(K = mH_IND_2)))
+blup_IND_2 <- blup_IND_2$id[, 1]
+
+Pred_IND_10 <- fixef(mod_IND_2)[1] + blup_IND_2
+
+Pob_IND_NA <- Pob_IND_5 %>% 
+  filter(is.na(Fen_escalado))
+
+Pred_IND_10 <- Pred_IND_10 %>%
+  as_tibble() %>%
+  bind_cols(Pob_IND_NA) %>%
+  filter(id %in% c(1211, 1215, 1223, 1224, 1226, 1227, 1228, 1229, 1230, 1231, 1232, 1233, 1240, 1272, 1286, 1311, 1326, 1337, 1338, 1339, 1340, 1343, 1344, 1345, 1347, 1380, 1389, 1390, 1412, 1420, 1459, 1473, 1474, 1491, 1518, 1537, 1538, 1575, 1578, 1579, 1580, 1582, 1584, 1585, 1586, 1634, 1647, 1656)) %>% # Estos serían los individuos que pertenecen a las variedades mejoradas.
+  select(value, id) %>%
+  inner_join(y = Pob_IND_2, by = 'id')  %>%
+  mutate(Subpoblación = '298') %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_lme4GS', 'Ped_3', 'mod_lme4GS_3', 'mod_lme4GS_3.RData'))
+
+blup_IND_3 <- ranefUvcovNew(mod_IND_3, Uvcov = list(id = list(K = mH_IND_3)))
+blup_IND_3 <- blup_IND_3$id[, 1]
+
+Pred_IND_11 <- fixef(mod_IND_3)[1] + blup_IND_3
+
+Pob_IND_NA <- Pob_IND_5 %>% 
+  filter(is.na(Fen_escalado))
+
+Pred_IND_11 <- Pred_IND_11 %>%
+  as_tibble() %>%
+  bind_cols(Pob_IND_NA) %>%
+  filter(id %in% c(1211, 1215, 1223, 1224, 1226, 1227, 1228, 1229, 1230, 1231, 1232, 1233, 1240, 1272, 1286, 1311, 1326, 1337, 1338, 1339, 1340, 1343, 1344, 1345, 1347, 1380, 1389, 1390, 1412, 1420, 1459, 1473, 1474, 1491, 1518, 1537, 1538, 1575, 1578, 1579, 1580, 1582, 1584, 1585, 1586, 1634, 1647, 1656)) %>% # Estos serían los individuos que pertenecen a las variedades mejoradas.
+  select(value, id) %>%
+  inner_join(y = Pob_IND_2, by = 'id')  %>%
+  mutate(Subpoblación = '451') %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_lme4GS', 'Ped_3', 'mod_lme4GS_4', 'mod_lme4GS_4.RData'))
+
+blup_IND_4 <- ranefUvcovNew(mod_IND_4, Uvcov = list(id = list(K = mA_IND)))
+blup_IND_4 <- blup_IND_4$id[, 1]
+
+Pred_IND_12 <- fixef(mod_IND_4)[1] + blup_IND_4
+
+Pob_IND_NA <- Pob_IND_5 %>% 
+  filter(is.na(Fen_escalado))
+
+Pred_IND_12 <- Pred_IND_12 %>%
+  as_tibble() %>%
+  bind_cols(Pob_IND_NA) %>%
+  filter(id %in% c(1211, 1215, 1223, 1224, 1226, 1227, 1228, 1229, 1230, 1231, 1232, 1233, 1240, 1272, 1286, 1311, 1326, 1337, 1338, 1339, 1340, 1343, 1344, 1345, 1347, 1380, 1389, 1390, 1412, 1420, 1459, 1473, 1474, 1491, 1518, 1537, 1538, 1575, 1578, 1579, 1580, 1582, 1584, 1585, 1586, 1634, 1647, 1656)) %>% # Estos serían los individuos que pertenecen a las variedades mejoradas.
+  select(value, id) %>%
+  inner_join(y = Pob_IND_2, by = 'id')  %>%
+  mutate(Subpoblación = '0') %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+# 4. Se unen todos los datos anteriores de las distintas subpoblaciones de individuos. genotipados en un solo conjunto de datos
+
+Pred_IND_c <- bind_rows(Pred_IND_9, Pred_IND_10, Pred_IND_11, Pred_IND_12) %>%
+  arrange(id) %>%
+  relocate(
+    Variety,
+    .after = id
+  ) %>%
+  relocate(
+    Fenotipo_predicho,
+    .after = Fenotipo_observado
+  ) %>%
+  mutate(Pedigrí = '3')
+
+#######################################################
+# Gráfico de dispersión de los resultados del pedigrí 3
+#######################################################
+
+Graf_disp_IND <- function(Subpoblación) {
+  Pred_IND_c %>%
+    filter(.data$Subpoblación == .env$Subpoblación) %>%
+    ggplot() +
+    aes(x = Fenotipo_observado, y = Fenotipo_predicho) +
+    geom_point(size = 4.4, colour = 'yellow', alpha = 0.6) +
+    geom_smooth(color = 'yellow', fill = 'yellow', method = 'lm', se = TRUE) +
+    stat_cor(p.accuracy = 0.001, colour = 'gray34', label.x = -1.5, label.y = -1.5) +
+    geom_rug(colour = 'gray') +
+    scale_x_continuous(labels = label_number(accuracy = 0.01)) +
+    scale_y_continuous(labels = label_number(accuracy = 0.01)) +
+    ggtitle(glue('Individuos genotipados: {Subpoblación}')) +
+    labs(x = 'Fenotipo observado', y = 'Fenotipo predicho') +
+    theme_bw() +
+    theme(
+      axis.text = element_text(size = 14),
+      axis.title = element_text(size = 15, face = 'bold'),
+      plot.title = element_text(size = 11, face = 'bold'),
+      legend.position = 'none'
+      )
+  }
+
+Subpoblación <- c('0', '148', '298', '451')
+Graf <- map(Subpoblación, Graf_disp_IND)
+(Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
+  plot_annotation(title = 'Pedigrí dos') # Aquí se coloco pedigrí dos pero en realidad es el pedigrí tres.
+
+#######################################################
+# Pedigrí 4: 300 individuos simulados en 3 generaciones
+#######################################################
+
+# 2. Se importa el archivo .fam obtenido usando plink y que posteriomente se uso para crear la hoja de parámetros para ejecutar el software molcoanc.
+
+famsnps_IND <- read_fam(here('Datos', 'Datos_IND', 'Soft_Molcoanc', 'nSNPs_IND.fam')) %>% 
+  select(fam) %>%
+  mutate(id = 301:751) %>%
+  rename(Variety = fam)
+
+# 3. Se crea un conjunto de datos que contiene solo los individuos mejorados.
+
+Pob_mej <- lin_mej %>%
+  filter(Status_with_Pedigree.plus.knowledge == 'I') %>% # Conjunto de datos solo con los individuos mejorados (los que se clasificaron como "I").
+  select(X3K_DNA_IRIS_UNIQUE_ID) %>%
+  rename(Variety = X3K_DNA_IRIS_UNIQUE_ID)
+
+escalado <- function(x) { # Función usada para escalar el fenotipo.
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+  }
+
+Pob_IND <- Fenotipos %>%
+  filter(SNPsubsp == 'IND') %>% # Conjunto de datos solo con la especie IND.
+  mutate(
+    Variety_2 = Variety,
+    Fen_escalado = escalado(Time.to.flowering..from.sowing)
+    ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  '-'
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety_2,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety_2,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  inner_join(y = Pob_mej, by = 'Variety') %>%
+  select(Variety_2, Fen_escalado) %>% # Se creo el conjunto de datos con los individuos mejorados de la población indica.
+  rename(Variety = Variety_2)
+
+Pob_IND_2 <- Pob_IND %>%
+  left_join(y = famsnps_IND, by = 'Variety') # Se unen al conjunto de datos famsnps_IND debido a que aquí esta la identificación numérica como esta en el pedigrí.
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_lme4GS', 'Ped_4', 'mod_lme4GS_1', 'mod_lme4GS_1.RData'))
+
+blup_IND_1 <- ranefUvcovNew(mod_IND_1, Uvcov = list(id = list(K = mH_IND_1)))
+blup_IND_1 <- blup_IND_1$id[, 1] # Con la función ranefUvcovNew() obtengo el blup para los niveles de efectos aleatorios (aquí los individuos) con la matriz de varianza-covarianza especificada (la matriz H).
+
+Pred_IND_13 <- fixef(mod_IND_1)[1] + blup_IND_1 # De esta forma obtengo los fenotipos predichos para los individuos con valores NA (aquí 382 individuos).
+
+Pob_IND_NA <- Pob_IND_5 %>% # Aquí, de la población total de Pob_IND_5 del pedigrí 4, me quedo solo con los 382 individuos con valores NA. 
+  filter(is.na(Fen_escalado))
+
+Pred_IND_13 <- Pred_IND_13 %>% # Del vector anterior de fenotipos predichos, solo me quedo con los que pertenecen a las variedades mejoradas.
+  as_tibble() %>%
+  bind_cols(Pob_IND_NA) %>%
+  filter(id %in% c(301, 305, 313, 314, 316, 317, 318, 319, 320, 321, 322, 323, 330, 362, 376, 401, 416, 427, 428, 429, 430, 433, 434, 435, 437, 470, 479, 480, 502, 510, 549, 563, 564, 581, 608, 627, 628, 665, 668, 669, 670, 672, 674, 675, 676, 724, 737, 746)) %>% # Estos serían los individuos que pertenecen a las variedades mejoradas.
+  select(value, id) %>%
+  inner_join(y = Pob_IND_2, by = 'id')  %>%
+  mutate(Subpoblación = '148') %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_lme4GS', 'Ped_4', 'mod_lme4GS_2', 'mod_lme4GS_2.RData'))
+
+blup_IND_2 <- ranefUvcovNew(mod_IND_2, Uvcov = list(id = list(K = mH_IND_2)))
+blup_IND_2 <- blup_IND_2$id[, 1]
+
+Pred_IND_14 <- fixef(mod_IND_2)[1] + blup_IND_2
+
+Pob_IND_NA <- Pob_IND_5 %>% 
+  filter(is.na(Fen_escalado))
+
+Pred_IND_14 <- Pred_IND_14 %>%
+  as_tibble() %>%
+  bind_cols(Pob_IND_NA) %>%
+  filter(id %in% c(301, 305, 313, 314, 316, 317, 318, 319, 320, 321, 322, 323, 330, 362, 376, 401, 416, 427, 428, 429, 430, 433, 434, 435, 437, 470, 479, 480, 502, 510, 549, 563, 564, 581, 608, 627, 628, 665, 668, 669, 670, 672, 674, 675, 676, 724, 737, 746)) %>% # Estos serían los individuos que pertenecen a las variedades mejoradas.
+  select(value, id) %>%
+  inner_join(y = Pob_IND_2, by = 'id')  %>%
+  mutate(Subpoblación = '298') %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_lme4GS', 'Ped_4', 'mod_lme4GS_3', 'mod_lme4GS_3.RData'))
+
+blup_IND_3 <- ranefUvcovNew(mod_IND_3, Uvcov = list(id = list(K = mH_IND_3)))
+blup_IND_3 <- blup_IND_3$id[, 1]
+
+Pred_IND_15 <- fixef(mod_IND_3)[1] + blup_IND_3
+
+Pob_IND_NA <- Pob_IND_5 %>% 
+  filter(is.na(Fen_escalado))
+
+Pred_IND_15 <- Pred_IND_15 %>%
+  as_tibble() %>%
+  bind_cols(Pob_IND_NA) %>%
+  filter(id %in% c(301, 305, 313, 314, 316, 317, 318, 319, 320, 321, 322, 323, 330, 362, 376, 401, 416, 427, 428, 429, 430, 433, 434, 435, 437, 470, 479, 480, 502, 510, 549, 563, 564, 581, 608, 627, 628, 665, 668, 669, 670, 672, 674, 675, 676, 724, 737, 746)) %>% # Estos serían los individuos que pertenecen a las variedades mejoradas.
+  select(value, id) %>%
+  inner_join(y = Pob_IND_2, by = 'id')  %>%
+  mutate(Subpoblación = '451') %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_lme4GS', 'Ped_4', 'mod_lme4GS_4', 'mod_lme4GS_4.RData'))
+
+blup_IND_4 <- ranefUvcovNew(mod_IND_4, Uvcov = list(id = list(K = mA_IND)))
+blup_IND_4 <- blup_IND_4$id[, 1]
+
+Pred_IND_16 <- fixef(mod_IND_4)[1] + blup_IND_4
+
+Pob_IND_NA <- Pob_IND_5 %>% 
+  filter(is.na(Fen_escalado))
+
+Pred_IND_16 <- Pred_IND_16 %>%
+  as_tibble() %>%
+  bind_cols(Pob_IND_NA) %>%
+  filter(id %in% c(301, 305, 313, 314, 316, 317, 318, 319, 320, 321, 322, 323, 330, 362, 376, 401, 416, 427, 428, 429, 430, 433, 434, 435, 437, 470, 479, 480, 502, 510, 549, 563, 564, 581, 608, 627, 628, 665, 668, 669, 670, 672, 674, 675, 676, 724, 737, 746)) %>% # Estos serían los individuos que pertenecen a las variedades mejoradas.
+  select(value, id) %>%
+  inner_join(y = Pob_IND_2, by = 'id')  %>%
+  mutate(Subpoblación = '0') %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+# 4. Se unen todos los datos anteriores de las distintas subpoblaciones de individuos. genotipados en un solo conjunto de datos
+
+Pred_IND_d <- bind_rows(Pred_IND_13, Pred_IND_14, Pred_IND_15, Pred_IND_16) %>%
+  arrange(id) %>%
+  relocate(
+    Variety,
+    .after = id
+  ) %>%
+  relocate(
+    Fenotipo_predicho,
+    .after = Fenotipo_observado
+  ) %>%
+  mutate(Pedigrí = '1')
+
+#######################################################
+# Gráfico de dispersión de los resultados del pedigrí 4
+#######################################################
+
+Graf_disp_IND <- function(Subpoblación) {
+  Pred_IND_d %>%
+    filter(.data$Subpoblación == .env$Subpoblación) %>%
+    ggplot() +
+    aes(x = Fenotipo_observado, y = Fenotipo_predicho) +
+    geom_point(size = 4.4, colour = 'yellow', alpha = 0.6) +
+    geom_smooth(color = 'yellow', fill = 'yellow', method = 'lm', se = TRUE) +
+    stat_cor(p.accuracy = 0.001, colour = 'gray34', label.x = -1.5, label.y = -1.5) +
+    geom_rug(colour = 'gray') +
+    scale_x_continuous(labels = label_number(accuracy = 0.01)) +
+    scale_y_continuous(labels = label_number(accuracy = 0.01)) +
+    ggtitle(glue('Individuos genotipados: {Subpoblación}')) +
+    labs(x = 'Fenotipo observado', y = 'Fenotipo predicho') +
+    theme_bw() +
+    theme(
+      axis.text = element_text(size = 14),
+      axis.title = element_text(size = 15, face = 'bold'),
+      plot.title = element_text(size = 11, face = 'bold'),
+      legend.position = 'none'
+      )
+  }
+
+Subpoblación <- c('0', '148', '298', '451')
+Graf <- map(Subpoblación, Graf_disp_IND)
+(Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
+  plot_annotation(title = 'Pedigrí uno')
 
 ```
 
-# 23. A continuación se usa el módulo SeqBreed escrito en Python, especificando mediante numerales dentro de los comentarios (<!-- -->) que se hizo.
+# 24. A continuación se usa el módulo SeqBreed escrito en Python, especificando mediante numerales dentro de los comentarios (<!-- -->) que se hizo.
 
 <!--
 1. El modulo SeqBreed requiere que el archivo de genotipos este en formato variant call (VCF), por lo que a continuación se paso de formato plink a VCF siguiendo las instrucciones del tutorial de Genomics Boot Camp (https://www.youtube.com/watch?v=EJDknrHAkXs) y lo que se indica en plink (https://www.cog-genomics.org/plink/1.9/input#vcf).
