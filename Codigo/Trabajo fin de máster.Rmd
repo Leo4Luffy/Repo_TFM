@@ -10916,348 +10916,6 @@ Subpoblación <- c('0', '148', '298', '451')
 Graf <- map(Subpoblación, Graf_disp_IND)
 (Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
   plot_annotation(title = 'Pedigrí cuatro')
-
-
-
-Resultados <- tribble(
-  ~'Pedigrí', ~'0', ~'148', ~'298', ~'451', ~'Densidad',
-  '5', NA, 0.45, 0.52, 0.58, '100.000',
-  '2', NA, 0.55, 0.53, 0.58, '100.000',
-  '3', NA, 0.48, 0.53, 0.58, '100.000',
-  '1', NA, 0.53, 0.56, 0.58, '100.000',
-  '4', NA, 0.50, 0.54, 0.58, '100.000',
-  '5', NA, 0.46, 0.52, 0.58, '10.000',
-  '2', NA, 0.56, 0.52, 0.58, '10.000',
-  '3', NA, 0.49, 0.52, 0.58, '10.000',
-  '1', NA, 0.53, 0.54, 0.59, '10.000',
-  '4', NA, 0.51, 0.51, 0.59, '10.000',
-  '5', NA, 0.43, 0.43, 0.49, '1.000',
-  '2', NA, 0.53, 0.44, 0.49, '1.000',
-  '3', NA, 0.49, 0.46, 0.49, '1.000',
-  '1', NA, 0.52, 0.46, 0.49, '1.000',
-  '4', NA, 0.48, 0.44, 0.49, '1.000',
-  '5', 0.44, NA, NA, NA, '0',
-  '2', 0.54, NA, NA, NA, '0',
-  '3', 0.46, NA, NA, NA, '0',
-  '1', 0.50, NA, NA, NA, '0',
-  '4', 0.49, NA, NA, NA, '0'
-  ) %>%
-  pivot_longer(
-    cols = c('0', '148', '298', '451'),
-    names_to = 'Individuos genotipados',
-    values_to = 'Precisión'
-  ) %>%
-  na.omit()
-
-Resultado_1 <- Resultados %>% # Resultados con el pedigrí 5, con 451 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 5) %>%
-  arrange('Individuos genotipados') %>%
-  slice(3, 6, 9, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'cyan', size = 4.4, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí cinco y 451 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_2 <- Resultados %>% # Resultados con el pedigrí 5, con 298 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 5) %>%
-  arrange('Individuos genotipados') %>%
-  slice(2, 5, 8, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'black', size = 4.8, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí cinco y 298 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_3 <- Resultados %>% # Resultados con el pedigrí 5, con 148 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 5) %>%
-  arrange('Individuos genotipados') %>%
-  slice(1, 4, 7, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'red', size = 4.4, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí cinco y 148 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_3 | Resultado_2 | Resultado_1
-
-Resultado_4 <- Resultados %>% # Resultados con el pedigrí 4, con 451 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 4) %>%
-  arrange('Individuos genotipados') %>%
-  slice(3, 6, 9, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'cyan', size = 4.4, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí cuatro y 451 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_5 <- Resultados %>% # Resultados con el pedigrí 4, con 298 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 4) %>%
-  arrange('Individuos genotipados') %>%
-  slice(2, 5, 8, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'black', size = 4.8, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí cuatro y 298 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_6 <- Resultados %>% # Resultados con el pedigrí 4, con 148 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 4) %>%
-  arrange('Individuos genotipados') %>%
-  slice(1, 4, 7, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'red', size = 4.4, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí cuatro y 148 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_6 | Resultado_5 | Resultado_4
-
-Resultado_7 <- Resultados %>% # Resultados con el pedigrí 3, con 451 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 3) %>%
-  arrange('Individuos genotipados') %>%
-  slice(3, 6, 9, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'cyan', size = 4.4, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí tres y 451 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_8 <- Resultados %>% # Resultados con el pedigrí 3, con 298 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 3) %>%
-  arrange('Individuos genotipados') %>%
-  slice(2, 5, 8, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'black', size = 4.8, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí tres y 298 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_9 <- Resultados %>% # Resultados con el pedigrí 3, con 148 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 3) %>%
-  arrange('Individuos genotipados') %>%
-  slice(1, 4, 7, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'red', size = 4.4, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí tres y 148 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_9 | Resultado_8 | Resultado_7
-
-Resultado_10 <- Resultados %>% # Resultados con el pedigrí 2, con 451 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 2) %>%
-  arrange('Individuos genotipados') %>%
-  slice(3, 6, 9, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'cyan', size = 4.4, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí dos y 451 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_11 <- Resultados %>% # Resultados con el pedigrí 2, con 298 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 2) %>%
-  arrange('Individuos genotipados') %>%
-  slice(2, 5, 8, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'black', size = 4.8, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí dos y 298 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_12 <- Resultados %>% # Resultados con el pedigrí 2, con 148 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 2) %>%
-  arrange('Individuos genotipados') %>%
-  slice(1, 4, 7, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'red', size = 4.4, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí dos y 148 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_12 | Resultado_11 | Resultado_10
-
-Resultado_13 <- Resultados %>% # Resultados con el pedigrí 1, con 451 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 1) %>%
-  arrange('Individuos genotipados') %>%
-  slice(3, 6, 9, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'cyan', size = 4.4, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí uno y 451 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_14 <- Resultados %>% # Resultados con el pedigrí 1, con 298 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 1) %>%
-  arrange('Individuos genotipados') %>%
-  slice(2, 5, 8, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'black', size = 4.8, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí uno y 298 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_15 <- Resultados %>% # Resultados con el pedigrí 1, con 148 y 0 individuos genotipados, y distintas densidades de SNP.
-  filter(Pedigrí == 1) %>%
-  arrange('Individuos genotipados') %>%
-  slice(1, 4, 7, 10) %>%
-  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión)) +
-  geom_point(colour = 'red', size = 4.4, alpha = 0.4) +
-  scale_y_continuous(limits = c(0.25, 0.75)) +
-  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí uno y 148 individuos genotipados.') +
-  theme_bw() +
-  theme(
-    axis.text = element_text(face = 'bold', size = 14),
-    axis.title = element_text(face = 'bold', size = 15),
-    plot.title = element_text(size = 12.4, face = 'bold')
-    ) +
-  geom_label_repel(
-    size = 5.4,
-    box.padding = 0.7,
-    direction = 'y', vjust = 0.4
-    )
-
-Resultado_15 | Resultado_14 | Resultado_13
 ```
 
 # 21. A continuación se organizan los conjuntos de datos para ajustar los modelos usando el programa BLUPf90.
@@ -18958,6 +18616,303 @@ Subpoblación <- c('0', '148', '298', '451')
 Graf <- map(Subpoblación, Graf_disp_IND)
 (Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
   plot_annotation(title = 'Pedigrí uno')
+
+Resultados_corr <- tribble(
+  ~'Pedigrí', ~'0', ~'148', ~'298', ~'451', ~'Densidad', ~'Método',
+  '1', NA, 0.54, 0.53, 0.58, '100.000', 'RKHS',
+  '1', NA, 0.53, 0.52, 0.58, '100.000', 'reml',
+  '1', NA, 0.54, 0.52, 0.58, '10.000', 'RKHS',
+  '1', NA, 0.53, 0.51, 0.58, '10.000', 'reml',
+  '1', NA, 0.52, 0.43, 0.49, '1.000', 'RKHS',
+  '1', NA, 0.51, 0.42, 0.50, '1.000', 'reml',
+  '2', NA, 0.55, 0.55, 0.58, '100.000', 'RKHS',
+  '2', NA, 0.55, 0.55, 0.58, '100.000', 'reml',
+  '2', NA, 0.55, 0.53, 0.58, '10.000', 'RKHS',
+  '2', NA, 0.55, 0.54, 0.58, '10.000', 'reml',
+  '2', NA, 0.55, 0.46, 0.49, '1.000', 'RKHS',
+  '2', NA, 0.54, 0.46, 0.50, '1.000', 'reml',
+  '3', NA, 0.47, 0.52, 0.58, '100.000', 'RKHS',
+  '3', NA, 0.47, 0.53, 0.58, '100.000', 'reml',
+  '3', NA, 0.46, 0.52, 0.58, '10.000', 'RKHS',
+  '3', NA, 0.46, 0.51, 0.58, '10.000', 'reml',
+  '3', NA, 0.46, 0.44, 0.49, '1.000', 'RKHS',
+  '3', NA, 0.46, 0.44, 0.50, '1.000', 'reml',
+  '1', 0.54, NA, NA, NA, '0', 'RKHS',
+  '1', 0.54, NA, NA, NA, '0', 'reml',
+  '2', 0.53, NA, NA, NA, '0', 'RKHS',
+  '2', 0.53, NA, NA, NA, '0', 'reml',
+  '3', 0.54, NA, NA, NA, '0', 'RKHS',
+  '3', 0.54, NA, NA, NA, '0', 'reml'
+  ) %>%
+  pivot_longer(
+    cols = c('0', '148', '298', '451'),
+    names_to = 'Individuos genotipados',
+    values_to = 'Precisión'
+  ) %>%
+  na.omit()
+
+Resultado_1 <- Resultados_corr %>% # Resultados con el pedigrí 3, con 451 y 0 individuos genotipados, con los dos métodos, y distintas densidades de SNP.
+  filter(Pedigrí == 3) %>%
+  arrange('Individuos genotipados') %>%
+  slice(3, 6, 9, 12, 15, 18, 19, 20) %>%
+  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión, colour = Método)) +
+  geom_point(size = 4.8, alpha = 0.4) +
+  scale_color_manual(values = c('yellow', 'cyan')) +
+  scale_fill_manual(values = c('yellow', 'cyan')) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  facet_wrap(~ Método) +
+  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí tres y 451 individuos genotipados.') +
+  theme_bw() +
+  theme(
+    legend.position = 'none',
+    axis.text.y = element_text(face = 'bold', size = 14),
+    axis.text.x = element_text(face = 'bold', size = 10),
+    axis.title = element_text(face = 'bold', size = 15),
+    plot.title = element_text(size = 12.4, face = 'bold'),
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 13, colour = 'black', face = 'bold')
+    ) +
+  geom_label_repel(
+    size = 5.4,
+    colour = 'black',
+    box.padding = 0.7,
+    direction = 'y', vjust = 0.4
+    )
+
+Resultado_2 <- Resultados_corr %>% # Resultados con el pedigrí 3, con 298 y 0 individuos genotipados, con los dos métodos, y distintas densidades de SNP.
+  filter(Pedigrí == 3) %>%
+  arrange('Individuos genotipados') %>%
+  slice(2, 5, 8, 11, 14, 17, 19, 20) %>%
+  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión, colour = Método)) +
+  geom_point(size = 4.8, alpha = 0.4) +
+  scale_color_manual(values = c('yellow', 'cyan')) +
+  scale_fill_manual(values = c('yellow', 'cyan')) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  facet_wrap(~ Método) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí tres y 298 individuos genotipados.') +
+  theme_bw() +
+  theme(
+    legend.position = 'none',
+    axis.text.y = element_text(face = 'bold', size = 14),
+    axis.text.x = element_text(face = 'bold', size = 10),
+    axis.title = element_text(face = 'bold', size = 15),
+    plot.title = element_text(size = 12.4, face = 'bold'),
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 13, colour = 'black', face = 'bold')
+    ) +
+  geom_label_repel(
+    size = 5.4,
+    colour = 'black',
+    box.padding = 0.7,
+    direction = 'y', vjust = 0.4
+    )
+
+Resultado_3 <- Resultados_corr %>% # Resultados con el pedigrí 3, con 148 y 0 individuos genotipados, con los dos métodos, y distintas densidades de SNP.
+  filter(Pedigrí == 3) %>%
+  arrange('Individuos genotipados') %>%
+  slice(1, 4, 7, 10, 13, 16, 19, 20) %>%
+  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión, colour = Método)) +
+  geom_point(size = 4.4, alpha = 0.4) +
+  scale_color_manual(values = c('yellow', 'cyan')) +
+  scale_fill_manual(values = c('yellow', 'cyan')) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  facet_wrap(~ Método) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí tres y 148 individuos genotipados.') +
+  theme_bw() +
+  theme(
+    legend.position = 'none',
+    axis.text.y = element_text(face = 'bold', size = 14),
+    axis.text.x = element_text(face = 'bold', size = 10),
+    axis.title = element_text(face = 'bold', size = 15),
+    plot.title = element_text(size = 12.4, face = 'bold'),
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 13, colour = 'black', face = 'bold')
+    ) +
+  geom_label_repel(
+    size = 5.4,
+    colour = 'black',
+    box.padding = 0.7,
+    direction = 'y', vjust = 0.4
+    )
+
+Resultado_3 | Resultado_2 | Resultado_1
+
+Resultado_4 <- Resultados_corr %>% # Resultados con el pedigrí 2, con 451 y 0 individuos genotipados, con los dos métodos, y distintas densidades de SNP.
+  filter(Pedigrí == 2) %>%
+  slice(3, 6, 9, 12, 15, 18, 19, 20) %>%
+  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión, colour = Método)) +
+  geom_point(size = 4.8, alpha = 0.4) +
+  scale_color_manual(values = c('yellow', 'cyan')) +
+  scale_fill_manual(values = c('yellow', 'cyan')) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  facet_wrap(~ Método) +
+  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí dos y 451 individuos genotipados.') +
+  theme_bw() +
+  theme(
+    legend.position = 'none',
+    axis.text.y = element_text(face = 'bold', size = 14),
+    axis.text.x = element_text(face = 'bold', size = 10),
+    axis.title = element_text(face = 'bold', size = 15),
+    plot.title = element_text(size = 12.4, face = 'bold'),
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 13, colour = 'black', face = 'bold')
+    ) +
+  geom_label_repel(
+    size = 5.4,
+    colour = 'black',
+    box.padding = 0.7,
+    direction = 'y', vjust = 0.4
+    )
+
+Resultado_5 <- Resultados_corr %>% # Resultados con el pedigrí 2, con 298 y 0 individuos genotipados, con los dos métodos, y distintas densidades de SNP.
+  filter(Pedigrí == 2) %>%
+  arrange('Individuos genotipados') %>%
+  slice(2, 5, 8, 11, 14, 17, 19, 20) %>%
+  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión, colour = Método)) +
+  geom_point(size = 4.8, alpha = 0.4) +
+  scale_color_manual(values = c('yellow', 'cyan')) +
+  scale_fill_manual(values = c('yellow', 'cyan')) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  facet_wrap(~ Método) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí dos y 298 individuos genotipados.') +
+  theme_bw() +
+  theme(
+    legend.position = 'none',
+    axis.text.y = element_text(face = 'bold', size = 14),
+    axis.text.x = element_text(face = 'bold', size = 10),
+    axis.title = element_text(face = 'bold', size = 15),
+    plot.title = element_text(size = 12.4, face = 'bold'),
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 13, colour = 'black', face = 'bold')
+    ) +
+  geom_label_repel(
+    size = 5.4,
+    colour = 'black',
+    box.padding = 0.7,
+    direction = 'y', vjust = 0.4
+    )
+
+Resultado_6 <- Resultados_corr %>% # Resultados con el pedigrí 2, con 148 y 0 individuos genotipados, con los dos métodos, y distintas densidades de SNP.
+  filter(Pedigrí == 2) %>%
+  arrange('Individuos genotipados') %>%
+  slice(1, 4, 7, 10, 13, 16, 19, 20) %>%
+  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión, colour = Método)) +
+  geom_point(size = 4.4, alpha = 0.4) +
+  scale_color_manual(values = c('yellow', 'cyan')) +
+  scale_fill_manual(values = c('yellow', 'cyan')) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  facet_wrap(~ Método) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí dos y 148 individuos genotipados.') +
+  theme_bw() +
+  theme(
+    legend.position = 'none',
+    axis.text.y = element_text(face = 'bold', size = 14),
+    axis.text.x = element_text(face = 'bold', size = 10),
+    axis.title = element_text(face = 'bold', size = 15),
+    plot.title = element_text(size = 12.4, face = 'bold'),
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 13, colour = 'black', face = 'bold')
+    ) +
+  geom_label_repel(
+    size = 5.4,
+    colour = 'black',
+    box.padding = 0.7,
+    direction = 'y', vjust = 0.4
+    )
+
+Resultado_6 | Resultado_5 | Resultado_4
+
+Resultado_7 <- Resultados_corr %>% # Resultados con el pedigrí 1, con 451 y 0 individuos genotipados, con los dos métodos, y distintas densidades de SNP.
+  filter(Pedigrí == 1) %>%
+  arrange('Individuos genotipados') %>%
+  slice(3, 6, 9, 12, 15, 18, 19, 20) %>%
+  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión, colour = Método)) +
+  geom_point(size = 4.8, alpha = 0.4) +
+  scale_color_manual(values = c('yellow', 'cyan')) +
+  scale_fill_manual(values = c('yellow', 'cyan')) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  facet_wrap(~ Método) +
+  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí uno y 451 individuos genotipados.') +
+  theme_bw() +
+  theme(
+    legend.position = 'none',
+    axis.text.y = element_text(face = 'bold', size = 14),
+    axis.text.x = element_text(face = 'bold', size = 10),
+    axis.title = element_text(face = 'bold', size = 15),
+    plot.title = element_text(size = 12.4, face = 'bold'),
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 13, colour = 'black', face = 'bold')
+    ) +
+  geom_label_repel(
+    size = 5.4,
+    colour = 'black',
+    box.padding = 0.7,
+    direction = 'y', vjust = 0.4
+    )
+
+Resultado_8 <- Resultados_corr %>% # Resultados con el pedigrí 1, con 298 y 0 individuos genotipados, con los dos métodos, y distintas densidades de SNP.
+  filter(Pedigrí == 1) %>%
+  arrange('Individuos genotipados') %>%
+  slice(2, 5, 8, 11, 14, 17, 19, 20) %>%
+  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión, colour = Método)) +
+  geom_point(size = 4.8, alpha = 0.4) +
+  scale_color_manual(values = c('yellow', 'cyan')) +
+  scale_fill_manual(values = c('yellow', 'cyan')) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  facet_wrap(~ Método) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí uno y 298 individuos genotipados.') +
+  theme_bw() +
+  theme(
+    legend.position = 'none',
+    axis.text.y = element_text(face = 'bold', size = 14),
+    axis.text.x = element_text(face = 'bold', size = 10),
+    axis.title = element_text(face = 'bold', size = 15),
+    plot.title = element_text(size = 12.4, face = 'bold'),
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 13, colour = 'black', face = 'bold')
+    ) +
+  geom_label_repel(
+    size = 5.4,
+    colour = 'black',
+    box.padding = 0.7,
+    direction = 'y', vjust = 0.4
+    )
+
+Resultado_9 <- Resultados_corr %>% # Resultados con el pedigrí 1, con 148 y 0 individuos genotipados, con los dos métodos, y distintas densidades de SNP.
+  filter(Pedigrí == 1) %>%
+  arrange('Individuos genotipados') %>%
+  slice(1, 4, 7, 10, 13, 16, 19, 20) %>%
+  ggplot(data = ., aes(x = Densidad, y = Precisión, label = Precisión, colour = Método)) +
+  geom_point(size = 4.4, alpha = 0.4) +
+  scale_color_manual(values = c('yellow', 'cyan')) +
+  scale_fill_manual(values = c('yellow', 'cyan')) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  facet_wrap(~ Método) +
+  scale_y_continuous(limits = c(0.25, 0.75)) +
+  labs(x = 'Densidad del marcador', y = 'Precisión de la predicción (r)', title = 'Pedigrí uno y 148 individuos genotipados.') +
+  theme_bw() +
+  theme(
+    legend.position = 'none',
+    axis.text.y = element_text(face = 'bold', size = 14),
+    axis.text.x = element_text(face = 'bold', size = 10),
+    axis.title = element_text(face = 'bold', size = 15),
+    plot.title = element_text(size = 12.4, face = 'bold'),
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 13, colour = 'black', face = 'bold')
+    ) +
+  geom_label_repel(
+    size = 5.4,
+    colour = 'black',
+    box.padding = 0.7,
+    direction = 'y', vjust = 0.4
+    )
+
+Resultado_9 | Resultado_8 | Resultado_7
 ```
 
 # 24. A continuación se usa el módulo SeqBreed escrito en Python, especificando mediante numerales dentro de los comentarios (<!-- -->) que se hizo.
