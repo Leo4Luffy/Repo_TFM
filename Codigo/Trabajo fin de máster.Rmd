@@ -19158,7 +19158,7 @@ $ echo $?
 
 ```{r Carga del paquete reticulate para usar Python en R y de otros paquetes de interés}
 
-pacman::p_load(reticulate, dplyr, qqman, here, readr, tibble, tidyr, ggplot2)
+pacman::p_load(reticulate, dplyr, qqman, here, readr, tibble, tidyr, ggplot2, genio, BEDMatrix)
 
 use_condaenv(conda = '/home/leo/anaconda3/bin/python') # Se uso el entorno conda (indicando la ruta donde reside la carpeta de Python), como la versión de Python que se quiere usar.
 
@@ -19394,40 +19394,32 @@ QTNs <- res_GWAS %>%
   slice(pos) %>% # Del conjunto de datos resultante al hacer el GWAS, se seleccionan los 50 QTNs elegidos anteriormente.
   select(Chr, bp, b) %>% # Se seleccionan las columnas del cromosoma, posición en pares de bases y efecto.
   arrange(Chr, bp) %>%
+  mutate(
+    dom = 0.0,
+    Chr = as.factor(Chr)
+    ) %>% # Se crea una nueva columna con efecto igual a 0 para el efecto dominante.
   write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'QTNs.txt'), delim = ' ', col_names = FALSE) # Este sería el archivo de QTNs.
 
-# Se visualizan los QTNs anteriores (INTENTAR VISUALIZARLO SEGÚN https://slidetodoc.com/statistical-genomics-lecture-9-genetic-architecture-and-simulation/):
+# Se visualizan los QTNs anteriormente seleccionados:
 
-my.GM=read.table(file="http://zzlab.net/GAPIT/data/mdp_SNP_information.txt", head=T)
-
-my.GD=read.table(file="http://zzlab.net/GAPIT/data/mdp_numeric.txt", head=T)
-
-NQTN=10
-
-X=my.GD[, -1] 
-
-n=nrow(X)
-
-m=ncol(X)
-
-QTN.position=sample(m, NQTN, replace=F)
-
-SNPQ=as.matrix(X[, QTN.position])
-
-QTN.position 
-
-head(SNPQ)
-
-plot(my.GM[, c(2, 3)])
-lines(my.GM[QTN.position, c(2, 3)], type="p", col="red")
-points(my.GM[QTN.position, c(2, 3)], type="p", col="blue", cex = 5)
+res_GWAS %>%
+  mutate(Chr = as.factor(Chr)) %>%
+  ggplot(data = ., aes(x = Chr, y = bp)) +
+  geom_point(colour = 'cyan', fill = 'cyan', alpha = 0.4, size = 1.4) +
+  geom_point(data = QTNs, aes(x = Chr, y = bp), colour = 'black', fill = 'white', alpha = 0.6, size = 3.0) +
+  labs(x = 'Cromosomas', y = 'Posición (pb)') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 14, face = 'bold'),
+    axis.title = element_text(size = 15, face = 'bold')
+    )
 ```
 
 <!--
 9. A continuación, se especifica la posición de los QTNs, sus efectos y la heredabilidad asumida. Luego se calcula las varianzas aditivas y dominantes por locus suponiendo equilibrio.
 -->
 
-```{python Creación de QTNs}
+```{python Se genera el archivo de QTNs que se usara en el SeqBreed}
 
 os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que es donde estan los archivos anteriormente generados y guardados.
 
