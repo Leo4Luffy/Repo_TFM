@@ -5027,13 +5027,51 @@ Pred_IND_4 <- mod_IND_4$yHat %>%
     'Fenotipo_observado' = Fen_escalado
     )
 
-varE <- scan(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_BGLR', 'Ped_1', 'mod_BGLR_4', 'ablup_varE.dat'))
-varU <- scan(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_BGLR', 'Ped_1', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat'))
+varE <- scan(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_BGLR', 'Ped_1', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU <- scan(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_BGLR', 'Ped_1', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
 h2_IND_1 <- varU/(varU + varE) %>%
-  as_tibble() %>%
-  summarise(
-    h2 = mean(value)
-    ) # La heredabilidad fue igual a 0.49.
+  as_tibble() #%>%
+  #summarise(
+    #h2 = mean(value)
+    #) # La heredabilidad fue igual a 0.49.
+
+varU_1 <- ggplot(data = varU, aes(x = value)) +
+  geom_density(color = 'yellow', fill = 'yellow', alpha = 0.4) +
+  labs(title = 'Pedigrí 3 - Var(a)', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 12, face = 'bold'),
+    axis.title.x = element_text(size = 13, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+varE_1 <- ggplot(data = varE, aes(x = value)) +
+  geom_density(color = 'cyan', fill = 'cyan', alpha = 0.4) +
+  labs(title = 'Pedigrí 3 - Var(e)', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 12, face = 'bold'),
+    axis.title.x = element_text(size = 13, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+h2_1 <- ggplot(data = h2_IND_1, aes(x = value)) +
+  geom_density(color = 'red', fill = 'red', alpha = 0.4) +
+  labs(title = 'Pedigrí 3 - h2', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 12, face = 'bold'),
+    axis.title.x = element_text(size = 13, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
 
 # 4. Se unen todos los datos anteriores de las distintas subpoblaciones de individuos. genotipados en un solo conjunto de datos
 
@@ -5367,13 +5405,51 @@ Pred_IND_12 <- mod_IND_4$yHat %>%
     'Fenotipo_observado' = Fen_escalado
     )
 
-varE <- scan(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_BGLR', 'Ped_3', 'mod_BGLR_4', 'ablup_varE.dat'))
-varU <- scan(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_BGLR', 'Ped_3', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat'))
+varE <- scan(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_BGLR', 'Ped_3', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU <- scan(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_BGLR', 'Ped_3', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
 h2_IND_1 <- varU/(varU + varE) %>%
-  as_tibble() %>%
-  summarise(
-    h2 = mean(value)
-    ) # La heredabilidad fue igual a 0.60.
+  as_tibble() #%>%
+  #summarise(
+    #h2 = mean(value)
+    #) # La heredabilidad fue igual a 0.60.
+
+varU_2 <- ggplot(data = varU, aes(x = value)) +
+  geom_density(color = 'yellow', fill = 'yellow', alpha = 0.4) +
+  labs(title = 'Pedigrí 2 - Var(a)', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 12, face = 'bold'),
+    axis.title.x = element_text(size = 13, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+varE_2 <- ggplot(data = varE, aes(x = value)) +
+  geom_density(color = 'cyan', fill = 'cyan', alpha = 0.4) +
+  labs(title = 'Pedigrí 2 - Var(e)', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 12, face = 'bold'),
+    axis.title.x = element_text(size = 13, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+h2_2 <- ggplot(data = h2_IND_1, aes(x = value)) +
+  geom_density(color = 'red', fill = 'red', alpha = 0.4) +
+  labs(title = 'Pedigrí 2 - h2', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 12, face = 'bold'),
+    axis.title.x = element_text(size = 13, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
 
 # 4. Se unen todos los datos anteriores de las distintas subpoblaciones de individuos. genotipados en un solo conjunto de datos
 
@@ -5541,13 +5617,51 @@ Pred_IND_16 <- mod_IND_4$yHat %>%
     'Fenotipo_observado' = Fen_escalado
     )
 
-varE <- scan(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_BGLR', 'Ped_4', 'mod_BGLR_4', 'ablup_varE.dat'))
-varU <- scan(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_BGLR', 'Ped_4', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat'))
+varE <- scan(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_BGLR', 'Ped_4', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU <- scan(here('Datos', 'Datos_IND', 'Den_100.000_b', 'mod_BGLR', 'Ped_4', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
 h2_IND_1 <- varU/(varU + varE) %>%
-  as_tibble() %>%
-  summarise(
-    h2 = mean(value)
-    ) # La heredabilidad fue igual a 0.60.
+  as_tibble() #%>%
+  #summarise(
+    #h2 = mean(value)
+    #) # La heredabilidad fue igual a 0.72.
+
+varU_3 <- ggplot(data = varU, aes(x = value)) +
+  geom_density(color = 'yellow', fill = 'yellow', alpha = 0.4) +
+  labs(title = 'Pedigrí 1 - Var(a)', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 12, face = 'bold'),
+    axis.title.x = element_text(size = 13, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+varE_3 <- ggplot(data = varE, aes(x = value)) +
+  geom_density(color = 'cyan', fill = 'cyan', alpha = 0.4) +
+  labs(title = 'Pedigrí 1 - Var(e)', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 12, face = 'bold'),
+    axis.title.x = element_text(size = 13, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+h2_3 <- ggplot(data = h2_IND_1, aes(x = value)) +
+  geom_density(color = 'red', fill = 'red', alpha = 0.4) +
+  labs(title = 'Pedigrí 1 - h2', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 12, face = 'bold'),
+    axis.title.x = element_text(size = 13, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
 
 # 4. Se unen todos los datos anteriores de las distintas subpoblaciones de individuos. genotipados en un solo conjunto de datos
 
@@ -16970,6 +17084,16 @@ Graf <- map(Subpoblación, Graf_disp_IND)
 (Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
   plot_annotation(title = 'Pedigrí tres') # Aquí se coloco pedigrí tres pero en realidad es el pedigrí cinco.
 
+##############################################################
+# (co)varianza y heredabilidad de los resultados del pedigrí 1
+##############################################################
+
+summary(mod_IND_4) # Aquí se oberva el resultado resumido del modelo, donde la varianza aditiva es igual a 0.5651 y la varianza ambiental es de 0.1258.
+
+cv_mod_IND_4 <- VarCorr(mod_IND_4)
+comp_varianza_4 <- as.data.frame(cv_mod_IND_4)$vcov
+h2_4 <- comp_varianza_4[1] / sum(comp_varianza_4[1:2]) # La heredabilidad fue igual a 0.82.
+
 ########################################################
 # Pedigrí 3: 1210 individuos simulados en 7 generaciones
 ########################################################
@@ -17176,6 +17300,16 @@ Graf <- map(Subpoblación, Graf_disp_IND)
 (Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
   plot_annotation(title = 'Pedigrí dos') # Aquí se coloco pedigrí dos pero en realidad es el pedigrí tres.
 
+##############################################################
+# (co)varianza y heredabilidad de los resultados del pedigrí 3
+##############################################################
+
+summary(mod_IND_4) # Aquí se oberva el resultado resumido del modelo, donde la varianza aditiva es igual a 0.4569 y la varianza ambiental es de 0.1695.
+
+cv_mod_IND_4 <- VarCorr(mod_IND_4)
+comp_varianza_4 <- as.data.frame(cv_mod_IND_4)$vcov
+h2_4 <- comp_varianza_4[1] / sum(comp_varianza_4[1:2]) # La heredabilidad fue igual a 0.73.
+
 #######################################################
 # Pedigrí 4: 300 individuos simulados en 3 generaciones
 #######################################################
@@ -17381,6 +17515,16 @@ Graf <- map(Subpoblación, Graf_disp_IND)
 (Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
   plot_annotation(title = 'Pedigrí uno')
 
+##############################################################
+# (co)varianza y heredabilidad de los resultados del pedigrí 3
+##############################################################
+
+summary(mod_IND_4) # Aquí se oberva el resultado resumido del modelo, donde la varianza aditiva es igual a 0.4882 y la varianza ambiental es de 0.1131.
+
+cv_mod_IND_4 <- VarCorr(mod_IND_4)
+comp_varianza_4 <- as.data.frame(cv_mod_IND_4)$vcov
+h2_4 <- comp_varianza_4[1] / sum(comp_varianza_4[1:2]) # La heredabilidad fue igual a 0.81.
+
 #### Población de arroz IND (10.000 SNPs) ----
 
 #########################################################
@@ -17584,6 +17728,16 @@ Subpoblación <- c('0', '148', '298', '451')
 Graf <- map(Subpoblación, Graf_disp_IND)
 (Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
   plot_annotation(title = 'Pedigrí tres') # Aquí se coloco pedigrí tres pero en realidad es el pedigrí cinco.
+
+##############################################################
+# (co)varianza y heredabilidad de los resultados del pedigrí 3
+##############################################################
+
+summary(mod_IND_4) # Aquí se oberva el resultado resumido del modelo, donde la varianza aditiva es igual a 0.5651 y la varianza ambiental es de 0.1258.
+
+cv_mod_IND_4 <- VarCorr(mod_IND_4)
+comp_varianza_4 <- as.data.frame(cv_mod_IND_4)$vcov
+h2_4 <- comp_varianza_4[1] / sum(comp_varianza_4[1:2]) # La heredabilidad fue igual a 0.82.
 
 ########################################################
 # Pedigrí 3: 1210 individuos simulados en 7 generaciones
@@ -17791,6 +17945,16 @@ Graf <- map(Subpoblación, Graf_disp_IND)
 (Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
   plot_annotation(title = 'Pedigrí dos') # Aquí se coloco pedigrí dos pero en realidad es el pedigrí tres.
 
+##############################################################
+# (co)varianza y heredabilidad de los resultados del pedigrí 3
+##############################################################
+
+summary(mod_IND_4) # Aquí se oberva el resultado resumido del modelo, donde la varianza aditiva es igual a 0.4569 y la varianza ambiental es de 0.1695.
+
+cv_mod_IND_4 <- VarCorr(mod_IND_4)
+comp_varianza_4 <- as.data.frame(cv_mod_IND_4)$vcov
+h2_4 <- comp_varianza_4[1] / sum(comp_varianza_4[1:2]) # La heredabilidad fue igual a 0.73.
+
 #######################################################
 # Pedigrí 4: 300 individuos simulados en 3 generaciones
 #######################################################
@@ -17996,6 +18160,16 @@ Subpoblación <- c('0', '148', '298', '451')
 Graf <- map(Subpoblación, Graf_disp_IND)
 (Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
   plot_annotation(title = 'Pedigrí uno')
+
+##############################################################
+# (co)varianza y heredabilidad de los resultados del pedigrí 3
+##############################################################
+
+summary(mod_IND_4) # Aquí se oberva el resultado resumido del modelo, donde la varianza aditiva es igual a 0.4882 y la varianza ambiental es de 0.1131.
+
+cv_mod_IND_4 <- VarCorr(mod_IND_4)
+comp_varianza_4 <- as.data.frame(cv_mod_IND_4)$vcov
+h2_4 <- comp_varianza_4[1] / sum(comp_varianza_4[1:2]) # La heredabilidad fue igual a 0.81.
 
 #### Población de arroz IND (1.000 SNPs) ----
 
@@ -18205,6 +18379,16 @@ Graf <- map(Subpoblación, Graf_disp_IND)
 (Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
   plot_annotation(title = 'Pedigrí tres') # Aquí se coloco pedigrí tres pero en realidad es el pedigrí cinco.
 
+##############################################################
+# (co)varianza y heredabilidad de los resultados del pedigrí 3
+##############################################################
+
+summary(mod_IND_4) # Aquí se oberva el resultado resumido del modelo, donde la varianza aditiva es igual a 0.5651 y la varianza ambiental es de 0.1695.
+
+cv_mod_IND_4 <- VarCorr(mod_IND_4)
+comp_varianza_4 <- as.data.frame(cv_mod_IND_4)$vcov
+h2_4 <- comp_varianza_4[1] / sum(comp_varianza_4[1:2]) # La heredabilidad fue igual a 0.73.
+
 ########################################################
 # Pedigrí 3: 1210 individuos simulados en 7 generaciones
 ########################################################
@@ -18411,6 +18595,16 @@ Graf <- map(Subpoblación, Graf_disp_IND)
 (Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
   plot_annotation(title = 'Pedigrí dos') # Aquí se coloco pedigrí dos pero en realidad es el pedigrí tres.
 
+##############################################################
+# (co)varianza y heredabilidad de los resultados del pedigrí 3
+##############################################################
+
+summary(mod_IND_4) # Aquí se oberva el resultado resumido del modelo, donde la varianza aditiva es igual a 0.4569 y la varianza ambiental es de 0.1695.
+
+cv_mod_IND_4 <- VarCorr(mod_IND_4)
+comp_varianza_4 <- as.data.frame(cv_mod_IND_4)$vcov
+h2_4 <- comp_varianza_4[1] / sum(comp_varianza_4[1:2]) # La heredabilidad fue igual a 0.73.
+
 #######################################################
 # Pedigrí 4: 300 individuos simulados en 3 generaciones
 #######################################################
@@ -18616,6 +18810,18 @@ Subpoblación <- c('0', '148', '298', '451')
 Graf <- map(Subpoblación, Graf_disp_IND)
 (Graf[[1]] | Graf[[2]] | Graf[[3]] | Graf[[4]]) +
   plot_annotation(title = 'Pedigrí uno')
+
+##############################################################
+# (co)varianza y heredabilidad de los resultados del pedigrí 3
+##############################################################
+
+summary(mod_IND_4) # Aquí se oberva el resultado resumido del modelo, donde la varianza aditiva es igual a 0.4882 y la varianza ambiental es de 0.1131.
+
+cv_mod_IND_4 <- VarCorr(mod_IND_4)
+comp_varianza_4 <- as.data.frame(cv_mod_IND_4)$vcov
+h2_4 <- comp_varianza_4[1] / sum(comp_varianza_4[1:2]) # La heredabilidad fue igual a 0.82.
+
+#### Resultado total de los métodos RKHS y reml ----
 
 Resultados_corr <- tribble(
   ~'Pedigrí', ~'0', ~'148', ~'298', ~'451', ~'Densidad', ~'Método',
@@ -18952,7 +19158,7 @@ $ echo $?
 
 ```{r Carga del paquete reticulate para usar Python en R y de otros paquetes de interés}
 
-pacman::p_load(reticulate, dplyr, qqman, here, readr, tibble, tidyr)
+pacman::p_load(reticulate, dplyr, qqman, here, readr, tibble, tidyr, ggplot2)
 
 use_condaenv(conda = '/home/leo/anaconda3/bin/python') # Se uso el entorno conda (indicando la ruta donde reside la carpeta de Python), como la versión de Python que se quiere usar.
 
@@ -18992,7 +19198,7 @@ dir_tr = os.getcwd() + '/SeqBreed' # Se indica aquí la ubicación del que sera 
 ```
 
 <!--
-5. Usando el comando gg.GFounder(), se genera a continuación un archivo que contiene la posición de los SNPs de la población base de IND.
+5. Usando el comando gg.GFounder(), se genera a continuación un archivo que contiene el genotipo y la posición de los SNPs de la población base de IND.
 -->
 
 ```{python Creación del archivo con la posición de los SNPs de la población base}
@@ -19006,116 +19212,28 @@ SNPs_pos = 'SNPs_pos' # Se indica aquí el nombre del archivo que contendra la i
 os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, porque si no fuera así el archivo generado a continuación se guardaria en el directorio de trabajo raíz (dentro de la carpeta de Codigo). 
 Gen_Pob_base = gg.GFounder(vcfFile = vcf_IND, snpFile = SNPs_pos)
 
-pickle.dump(Gen_Pob_base, open('Gen_Pob_base', 'wb')) # El archivo generado anteriormente (Gen_Pob_base) se guarda aquí como un "archivo pickle", esto es, un archivo donde se almacena el resultado para que sea utilizado más adelante.
+pickle.dump(Gen_Pob_base, open('Gen_Pob_base', 'wb')) # El archivo generado anteriormente (Gen_Pob_base) se guarda aquí como un "archivo pickle", esto es, un archivo donde se almacena el resultado para que sea utilizado más adelante. wb hace referncia a que con "w" se escribira en el archivo Gen_Pob_base, y "b" se refiere a modo binario.
 ```
 
 <!--
-6.
+6. A continuación se genera un objeto usando el comando gg.Genome(), el cual contendra el nombre de los cromosomas y otras característica del genoma de interés.
 -->
 
-```{python Creación de QTNs}
+```{python Creación del objeto con caracteristicas del genoma}
 
-os.chdir(dir_tr)
+os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que es donde estan los archivos anteriormente generados y guardados.
 
-SNPs_pos = 'SNPs_pos'
+SNPs_pos = 'SNPs_pos' # Se crea el objeto "SNPs_pos", que corresponde al archivo generado anteriormente con la posición de los SNPs.
 
-gfeatures = gg.Genome(snpFile = SNPs_pos, ploidy = Gen_Pob_base.ploidy,  XChr = 'X', YChr = 'Y', MTChr = 'MT')
+Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo generado anteriormente "Gen_pob_base", que corresponde al genotipo de la población base. rb hace referencia a que se cargara el archivo en modo lectura ("r"), y en modo binario ("b").
 
-#gfeatures.print()
+Gen_caracteristicas = gg.Genome(snpFile = SNPs_pos, mapFile = None, ploidy = Gen_Pob_base.ploidy,  XChr = 'X', YChr = 'Y', MTChr = 'MT')
 
-qtn = gg.QTNs(h2 = [0.60], genome = gfeatures, nqtn = 10)
-
-qtn.get_var(gfeatures, Gen_Pob_base)
-qtn.print(gfeatures)
-qtn.plot(plotFile = 'qtn.png')
+Gen_caracteristicas.print()
 ```
 
 <!--
-7. Se genera un pedigrí especificando el número de individuos de la generación 0 (o población base) que se quisieran cruzar y el número de hijos en la generación 2 que cada individuo por autofecundación tendría.
--->
-
-```{r Generación del pedigrí}
-
-# Población fundadora (F0) ----
-
-Pob_fun <- tibble(
-  id = 1:451,
-  Prog1 = rep(x = 0, times = 451),
-  Prog2 = rep(x = 0, times = 451)#,
-  #Gen = 0
-  )
-
-# Generación F1 ----
-
-fun_F1 <- function(x){
-  Pob_fun %>%
-    select(id) %>%
-    sample_n(2) %>%
-    mutate(Relacion = c('Prog1', 'Prog2')) %>%
-    pivot_wider(
-      names_from = Relacion,
-      values_from = id
-    )
-  }
-
-F1 <- replicate(n = 40, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
-
-F1 <- plyr::ldply(F1, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
-  mutate(
-    id = 452:491#,
-    #Gen = 1
-    )
-  
-# Generación F2 ----
-
-F2 <- F1 %>%
-  select(id) %>%
-  dplyr::rename(Prog1 = id) %>%
-  mutate(Prog2 = Prog1) %>%
-  mutate(count = 3) %>% # Se indica aquí la frecuencia con la que se debe repetir una fila (al ser 3, cada fila se repetiria 3 veces, sin embargo también es posible indica por ejemplo c(2, 3), es decir, la fila 1 repetedia 2 veces y la fila 2 repetida 3 veces).
-  uncount(count) %>%
-  mutate(
-    id = 492:611#,
-    #Gen = 2
-  )
-
-# Generación F3 ----
-
-F3 <- F2 %>%
-  select(id) %>%
-  dplyr::rename(Prog1 = id) %>%
-  mutate(
-    Prog2 = Prog1,
-    id = 612:731#,
-    #Gen = 3
-    )
-
-# Población total ----
-
-Pob <- bind_rows(Pob_fun, F1, F2, F3) %>%
-  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri.txt'), delim = ' ', col_names = FALSE) # Este sería la población en su totalidad.
-```
-
-<!--
-8. 
--->
-
-```{python}
-
-os.chdir(dir_tr)
-
-#Pedigri = 'Pedigri.txt'
-
-#pop = gg.Population(gfeatures, pedFile = Pedigri, generation = None, qtns = qtn, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(pop.inds)))
-
-pop.print('pop.out')
-
-```
-
-
-<!--
-9.
+7. Se realiza a continuación un GWAS.
 -->
 
 ```{r Se hace un GWAS usando GCTA}
@@ -19239,6 +19357,170 @@ Graf_qq <- gg_qqplot(res_GWAS$p) +
     )
 
 Graf_Manhattan | Graf_qq
+```
+
+<!--
+8. En base al GWAS anterior, se crea a continuación el archivo de QTNs, seleccionando 50 de ellos proporcional a la varianza aditiva explicada.
+-->
+
+```{r Se crea el archivo de QTNs}
+
+res_GWAS <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'GWAS', 'gwas_IND_LD.mlma')) # Se importa el archivo con los resultados del GWAS.
+
+# Se muestrearan los QTLs (o QTNs) proporcional a la varianza aditiva explicada (va=2*p*(1-p)*a^2): 
+
+va_GWAS <- res_GWAS %>%
+  mutate(
+    va = (2)*(Freq)*(1-Freq)*(b)^2, # Aqui se calcula la varianza aditiva explicada por cada locus, en base a la frecuencia alelica (Freq) y el efecto (b).
+    cum_va = cumsum(va)
+    ) %>%
+  pull(cum_va) %>%
+  as.matrix()
+
+# Se crea a continuación una instrucción que muestrea de forma aleatoria 50 QTLs (o QTNs) proporconal a la varianza aditiva calculada anteriormente:
+
+nSNPs <- nrow(va_GWAS) # Se indica aquí el número de SNPs, que corresponde al número de filas en "va_GWAS".
+nQTLs <- 50 # Se indica aquí la cantidad de QTLs (o QTNs) que se consideraran.
+pos <- vector(mode = 'integer', length = nQTLs) # Se crea un objeto (un vector) que contiene ceros con una longitud igual al número de QTLs que se desean seleccionar.
+
+for (iq in seq(nQTLs)) {
+  x = runif(n = 1, min = 0, max = va_GWAS[nSNPs]) # Se indica aquí generar un solo número (n = 1) de forma aleatoria dentro del intervalo 0 a 4.223640.
+  pos[iq] = 1 + length(va_GWAS[va_GWAS <= x]) # Se llena el objeto anterior "pos", indicando la posición dentro del objeto "va_GWAS" cuyos valores son menor o igual al número anterior generado de forma aleatoria.
+  }
+
+# Se seleccionan los QTLs (o QTNs) según la posiciones muestreadas anteriomente: 
+
+QTNs <- res_GWAS %>%
+  slice(pos) %>% # Del conjunto de datos resultante al hacer el GWAS, se seleccionan los 50 QTNs elegidos anteriormente.
+  select(Chr, bp, b) %>% # Se seleccionan las columnas del cromosoma, posición en pares de bases y efecto.
+  arrange(Chr, bp) %>%
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'QTNs.txt'), delim = ' ', col_names = FALSE) # Este sería el archivo de QTNs.
+
+# Se visualizan los QTNs anteriores (INTENTAR VISUALIZARLO SEGÚN https://slidetodoc.com/statistical-genomics-lecture-9-genetic-architecture-and-simulation/):
+
+my.GM=read.table(file="http://zzlab.net/GAPIT/data/mdp_SNP_information.txt", head=T)
+
+my.GD=read.table(file="http://zzlab.net/GAPIT/data/mdp_numeric.txt", head=T)
+
+NQTN=10
+
+X=my.GD[, -1] 
+
+n=nrow(X)
+
+m=ncol(X)
+
+QTN.position=sample(m, NQTN, replace=F)
+
+SNPQ=as.matrix(X[, QTN.position])
+
+QTN.position 
+
+head(SNPQ)
+
+plot(my.GM[, c(2, 3)])
+lines(my.GM[QTN.position, c(2, 3)], type="p", col="red")
+points(my.GM[QTN.position, c(2, 3)], type="p", col="blue", cex = 5)
+```
+
+<!--
+9. A continuación, se especifica la posición de los QTNs, sus efectos y la heredabilidad asumida. Luego se calcula las varianzas aditivas y dominantes por locus suponiendo equilibrio.
+-->
+
+```{python Creación de QTNs}
+
+os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que es donde estan los archivos anteriormente generados y guardados.
+
+QTNs = 'QTNs.txt' # Se crea el objeto "QTNs", que corresponde al archivo generado anteriormente con el cromosoma, la prosición y el efecto de los 50 QTNs seleccionados.
+
+QTN = gg.QTNs(h2 = [0.7], genome = Gen_caracteristicas, qtnFile = QTNs) # Se especifica la posición de los QTNs, sus efectos y se asume una heredabilidad de 0.7.
+
+QTN.get_var(Gen_caracteristicas, Gen_Pob_base) # Se calcula las varianzas aditivas y dominantes para cada locus.
+QTN.print(Gen_caracteristicas) # Aquí se observa el cromosoma, su posición, la fecuencia alelica, el efecto aditivo, el efecto dominante, la varianza aditiva y la varianza dominante.
+QTN.plot() # Aquí se observa la varianza en función de la frecuencia y la distribución de la varianza para los efectos aditivos y dominantes.
+```
+
+<!--
+10. Se genera un pedigrí especificando el número de individuos de la generación 0 (o población base) que se quisieran cruzar y el número de hijos en la generación 2 que cada individuo por autofecundación tendría.
+-->
+
+```{r Generación del pedigrí}
+
+# Población fundadora (F0) ----
+
+Pob_fun <- tibble(
+  id = 1:451,
+  Prog1 = rep(x = 0, times = 451),
+  Prog2 = rep(x = 0, times = 451)#,
+  #Gen = 0
+  )
+
+# Generación F1 ----
+
+fun_F1 <- function(x){
+  Pob_fun %>%
+    select(id) %>%
+    sample_n(2) %>%
+    mutate(Relacion = c('Prog1', 'Prog2')) %>%
+    pivot_wider(
+      names_from = Relacion,
+      values_from = id
+    )
+  }
+
+F1 <- replicate(n = 40, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1 <- plyr::ldply(F1, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:491#,
+    #Gen = 1
+    )
+  
+# Generación F2 ----
+
+F2 <- F1 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 3) %>% # Se indica aquí la frecuencia con la que se debe repetir una fila (al ser 3, cada fila se repetiria 3 veces, sin embargo también es posible indica por ejemplo c(2, 3), es decir, la fila 1 repetedia 2 veces y la fila 2 repetida 3 veces).
+  uncount(count) %>%
+  mutate(
+    id = 492:611#,
+    #Gen = 2
+  )
+
+# Generación F3 ----
+
+F3 <- F2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 612:731#,
+    #Gen = 3
+    )
+
+# Población total ----
+
+Pob <- bind_rows(Pob_fun, F1, F2, F3) %>%
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri.txt'), delim = ' ', col_names = FALSE) # Este sería la población en su totalidad.
+```
+
+<!--
+11. 
+-->
+
+```{python}
+
+os.chdir(dir_tr)
+
+#Pedigri = 'Pedigri.txt'
+
+#pop = gg.Population(gfeatures, pedFile = Pedigri, generation = None, qtns = qtn, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(pop.inds)))
+
+pop.print('pop.out')
+
 ```
 
 
