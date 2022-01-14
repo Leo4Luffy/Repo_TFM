@@ -19699,14 +19699,57 @@ Pob_4 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = Non
 pickle.dump(Pob, open('Pob_4', 'wb'))
 ```
 
-#
+<!--
+12. Se crea a continuación tres archivos de texto indicando la densidad de SNPs (100.000, 10.000 y 1.000).
+-->
+
+```{r Densidades de SNPs en SeqBreed}
+
+# Densidad de 100.000 SNPs ----
+
+chip_100.000 <- read_table(here('Datos', 'Datos_IND', 'SeqBreed', 'plink', 'frec_0.05_IND.bim'), col_names = FALSE) %>%
+  select(X1, X4) %>%
+  write_tsv(here('Datos', 'Datos_IND', 'SeqBreed', 'chip_3.txt'), col_names = FALSE) # Este conjunto de datos se usara luego para indicar la densidad del chip en 100.000 SNPs. La primera columna es el cromosoma y la segunda columna es la posición del SNP.
+
+# Densidad de 10.000 SNPs ----
+
+chip_10.000 <- read_table(here('Datos', 'Datos_IND', 'Den_10.000', 'mG', 'mG_3', 'nSNPs_IND.bim'), col_names = FALSE) %>%
+  select(X1, X4) %>%
+  write_tsv(here('Datos', 'Datos_IND', 'SeqBreed', 'chip_2.txt'), col_names = FALSE) # Este conjunto de datos se usara luego para indicar la densidad del chip en 10.000 SNPs. La primera columna es el cromosoma y la segunda columna es la posición del SNP.
+
+# Densidad de 10.000 SNPs ----
+
+chip_1.000 <- read_table(here('Datos', 'Datos_IND', 'Den_1.000', 'mG', 'mG_3', 'nSNPs_IND.bim'), col_names = FALSE) %>%
+  select(X1, X4) %>%
+  write_tsv(here('Datos', 'Datos_IND', 'SeqBreed', 'chip_1.txt'), col_names = FALSE) # Este conjunto de datos se usara luego para indicar la densidad del chip en 1.000 SNPs. La primera columna es el cromosoma y la segunda columna es la posición del SNP.
+```
+
+<!--
+13.
+-->
 
 ```{python}
 
-os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que es donde estan los archivos de pedigríes.
+os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que es donde estan los archivos de SNPs.
 
-Pob_1 = pickle.load(open('Pob_1', 'rb')) # Se carga el archivo generado anteriormente "Gen_pob_base", que corresponde al genotipo de la población base.
+# 1. Se genera a continuación el objeto "chip", ya que este variara en el análisis de acuerdo a 1.000, 10.000 y 100.000 SNPs ----
 
-print('Num. de individuos es '+str(len(Pob_1.inds))) # Se prueba si carga bien indicando el número de individuos en el pedigrí que es de 2091.
+SNPs_pos = 'SNPs_pos' # Se crea el objeto "SNPs_pos", que corresponde al archivo generado en pasos atras con la posición de los SNPs.
+
+den_chips = [dir_tr + '/chip_1.txt', dir_tr + '/chip_2.txt', dir_tr + '/chip_3.txt', SNPs_pos] # Se crea aquí una lista con las distintas densidades de SNPs (1.000, 10.000 y 100.000 SNPs).
+
+chips = []
+for file in den_chips:
+    chip = gg.Chip(chipFile = file, genome = Gen_caracteristicas, name = file+'_chip')
+    chips.append(chip) # Se genera aquí el objeto "chip" a partir de la lista anterior de posiciones predefinidas.
+
+for chip in chips:
+    chip.print(Gen_caracteristicas) # Se imprime lo anterior para ver si se genero el objeto "chip" bien, y si lo genero bien ya que se observa la información correcta de densidad de SNPs para cada chip (chip_1 = 960, chip_2 = 9843 y chip_3 = 100231).
+
+# 2. 
+
+#Pob_1 = pickle.load(open('Pob_1', 'rb')) # Se carga el archivo generado en pasos atras "Pob_1", que corresponde a... del pedigrí 1.
+
+#print('Num. de individuos es '+str(len(Pob_1.inds))) # Se prueba si carga bien indicando el número de individuos en el pedigrí que es de 2091.
 ```
 
