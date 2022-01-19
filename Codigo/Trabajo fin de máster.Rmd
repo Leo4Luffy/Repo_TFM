@@ -19646,7 +19646,7 @@ Ped_4 <- bind_rows(Pob_fun, F1_4, F2_4, F3_4) %>% # Aquí se juntan todas las ge
 ```
 
 <!--
-11. 
+11. Se generan los valores genotípicos y fenotipos para todos los individuos en cada uno de los pedigríes, a partir del uso del comando gg.Population().
 -->
 
 ```{python}
@@ -19662,9 +19662,9 @@ Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo gen
 Pedigri_1 = 'Pedigri_1/Pedigri_1.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
 
 Pob_1 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_1, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(pop.inds)))
+print('No. of individuals is ' + str(len(Pob_1.inds)))
 
-pickle.dump(Pob, open('Pob_1', 'wb'))
+pickle.dump(Pob_1, open('Pob_1', 'wb'))
 
 ###########
 # Pedigrí 2
@@ -19673,31 +19673,31 @@ pickle.dump(Pob, open('Pob_1', 'wb'))
 Pedigri_2 = 'Pedigri_2/Pedigri_2.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
 
 Pob_2 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_2, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(pop.inds)))
+print('No. of individuals is ' + str(len(Pob_2.inds)))
 
-pickle.dump(Pob, open('Pob_2', 'wb'))
+pickle.dump(Pob_2, open('Pob_2', 'wb'))
 
 ###########
 # Pedigrí 3
 ###########
 
-Pedigri_3 = 'Pedigri_3/Pedigri_3.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
+Pedigri_3 = 'Pedigri_3/Pedigri_3.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 2 generado anteriormente.
 
 Pob_3 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_3, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(pop.inds)))
+print('No. of individuals is ' + str(len(Pob_3.inds)))
 
-pickle.dump(Pob, open('Pob_3', 'wb'))
+pickle.dump(Pob_3, open('Pob_3', 'wb'))
 
 ###########
 # Pedigrí 4
 ###########
 
-Pedigri_4 = 'Pedigri_4/Pedigri_4.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
+Pedigri_4 = 'Pedigri_4/Pedigri_4.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 2 generado anteriormente.
 
 Pob_4 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(pop.inds)))
+print('No. of individuals is ' + str(len(Pob_4.inds)))
 
-pickle.dump(Pob, open('Pob_4', 'wb'))
+pickle.dump(Pob_4, open('Pob_4', 'wb'))
 ```
 
 <!--
@@ -19726,7 +19726,7 @@ chip_1.000 <- read_table(here('Datos', 'Datos_IND', 'Den_1.000', 'mG', 'mG_3', '
 ```
 
 <!--
-13.
+13. Se obtienen los resultados del ssGBLUP para el pedigrí 1.
 -->
 
 ```{python}
@@ -19747,13 +19747,13 @@ for file in den_chips:
 for chip in chips:
     chip.print(Gen_caracteristicas) # Se imprime lo anterior para ver si se genero el objeto "chip" bien, y si lo genero bien ya que se observa la información correcta de densidad de SNPs para cada chip (chip_1 = 960, chip_2 = 9843 y chip_3 = 100231).
 
-# 2. Se 
+# 2. Se carga el objeto "Gen_Pob_base" ----
 
 Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo generado en pasos atras "Gen_Pob_base" "Gen_pob_base", que corresponde al genotipo de la población base.
 
-# 3. Se
+# 3. Se carga el objeto "Pob_1" ----
 
-Pob_1 = pickle.load(open('Pob_1', 'rb')) # Se carga el archivo generado en pasos atras "Pob_1", que corresponde a... del pedigrí 1.
+Pob_1 = pickle.load(open('Pob_1', 'rb')) # Se carga el archivo generado en pasos atras "Pob_1", que corresponde a los valores genotípicos y fenotipos de todos los individuos del pedigrí 1.
 
 print('Num. de individuos es ' + str(len(Pob_1.inds))) # Se prueba si carga bien indicando el número de individuos en el pedigrí que es de 2091.
 
@@ -19771,7 +19771,7 @@ print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 1.000 SN
 
 os.mkdir('Pedigri_1/chip_1/Geno_1') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con todos los individuos genotipados.
 
-# 4. Se
+# 4. Se realiza el ssGBLUP ----
 
 ind_gen_1 = np.arange(2091, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 1 al 2091).
 
@@ -19783,7 +19783,7 @@ itrait = 0
 
 sel.doEbv(Pob_1, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
 
-# 5. Se
+# 5. Se calculan los valores genéticos aditivos fenotipos, los fenotipos y las varianzas genéticas aditivas ----
 
 ebv_ssGBLUP_1 = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_ssGBLUP_1 = pd.DataFrame(ebv_ssGBLUP_1)
@@ -19805,7 +19805,7 @@ print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 1.000 SN
 
 os.mkdir('Pedigri_1/chip_1/Geno_2') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
 
-# 4. Se
+# 4. Se realiza el ssGBLUP ----
 
 ind_gen_2 = np.arange(452, 1292, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 452 al 1291, esto es, los individuos de la generación F1 y F2).
 
@@ -19817,7 +19817,7 @@ itrait = 0
 
 sel.doEbv(Pob_1, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_2, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
 
-# 5. Se
+# 5. Se calculas los valores genéticos aditivos, los fenotipos y las varianzas genéticas aditivas ----
 
 ebv_ssGBLUP_2 = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_ssGBLUP_2 = pd.DataFrame(ebv_ssGBLUP_2)
@@ -19839,7 +19839,7 @@ print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 1.000 SN
 
 os.mkdir('Pedigri_1/chip_1/Geno_3') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
 
-# 4. Se
+# 4. Se realiza el ssGBLUP ----
 
 ind_gen_3 = np.arange(492, 1292, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 492 al 1291, esto es, los individuos de la generación F2).
 
@@ -19851,7 +19851,7 @@ itrait = 0
 
 sel.doEbv(Pob_1, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_3, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
 
-# 5. Se
+# 5. Se calculan los valores genéticos aditivos, los fenotipos y las varianzas genéticas aditivas ----
 
 ebv_ssGBLUP_3 = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_ssGBLUP_3 = pd.DataFrame(ebv_ssGBLUP_3)
@@ -19879,7 +19879,7 @@ print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 S
 
 os.mkdir('Pedigri_1/chip_2/Geno_1') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con todos los individuos genotipados.
 
-# 4. Se
+# 4. Se realiza el ssGBLUP ----
 
 ind_gen_1 = np.arange(2091, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 1 al 2091).
 
@@ -19891,7 +19891,7 @@ itrait = 0
 
 sel.doEbv(Pob_1, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
 
-# 5. Se
+# 5. Se calculan los valores genéticos aditivos, los fenotipos y las varianzas genéticas aditivas ---- 
 
 ebv_ssGBLUP_1 = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_ssGBLUP_1 = pd.DataFrame(ebv_ssGBLUP_1)
@@ -19913,7 +19913,7 @@ print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 S
 
 os.mkdir('Pedigri_1/chip_2/Geno_2') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
 
-# 4. Se
+# 4. Se realiza el ssGBLUP ----
 
 ind_gen_2 = np.arange(452, 1292, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 452 al 1291, esto es, los individuos de la generación F1 y F2).
 
@@ -19925,7 +19925,7 @@ itrait = 0
 
 sel.doEbv(Pob_1, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_2, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
 
-# 5. Se
+# 5. Se calculan los valores genéticos aditivos, los fenotipos y las varianzas genéticas aditivas ----
 
 ebv_ssGBLUP_2 = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_ssGBLUP_2 = pd.DataFrame(ebv_ssGBLUP_2)
@@ -19947,7 +19947,7 @@ print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 S
 
 os.mkdir('Pedigri_1/chip_2/Geno_3') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
 
-# 4. Se
+# 4. Se realiza el ssGBLUP ----
 
 ind_gen_3 = np.arange(492, 1292, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 492 al 1291, esto es, los individuos de la generación F2).
 
@@ -19959,7 +19959,7 @@ itrait = 0
 
 sel.doEbv(Pob_1, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_3, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
 
-# 5. Se
+# 5. Se calculan los valores genéticos aditivos, los fenotipos y las varianzas genéticas aditivas ----
 
 ebv_ssGBLUP_3 = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_ssGBLUP_3 = pd.DataFrame(ebv_ssGBLUP_3)
@@ -19987,7 +19987,7 @@ print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 100.000 
 
 os.mkdir('Pedigri_1/chip_3/Geno_1') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con todos los individuos genotipados.
 
-# 4. Se
+# 4. Se realiza el ssGBLUP ----
 
 ind_gen_1 = np.arange(2091, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 1 al 2091).
 
@@ -19999,7 +19999,7 @@ itrait = 0
 
 sel.doEbv(Pob_1, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
 
-# 5. Se
+# 5. Se calculan los valores genéticos aditivos, los fenotipos y las varianzas genéticas aditivas ----
 
 ebv_ssGBLUP_1 = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_ssGBLUP_1 = pd.DataFrame(ebv_ssGBLUP_1)
@@ -20021,7 +20021,7 @@ print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 S
 
 os.mkdir('Pedigri_1/chip_3/Geno_2') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
 
-# 4. Se
+# 4. Se realiza el ssGBLUP ----
 
 ind_gen_2 = np.arange(452, 1292, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 452 al 1291, esto es, los individuos de la generación F1 y F2).
 
@@ -20033,7 +20033,7 @@ itrait = 0
 
 sel.doEbv(Pob_1, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_2, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
 
-# 5. Se
+# 5. Se calculan los valores genéticos aditivos, los fenotipos y las varianzas genéticas aditivas ----
 
 ebv_ssGBLUP_2 = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_ssGBLUP_2 = pd.DataFrame(ebv_ssGBLUP_2)
@@ -20055,7 +20055,7 @@ print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 S
 
 os.mkdir('Pedigri_1/chip_3/Geno_3') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
 
-# 4. Se
+# 4. Se realiza el ssGBLUP ----
 
 ind_gen_3 = np.arange(492, 1292, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 492 al 1291, esto es, los individuos de la generación F2).
 
@@ -20067,7 +20067,7 @@ itrait = 0
 
 sel.doEbv(Pob_1, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_3, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
 
-# 5. Se
+# 5. Se calculan los valores genéticos aditivos, los fenotipos y las varianzas genéticas aditivas ----
 
 ebv_ssGBLUP_3 = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_ssGBLUP_3 = pd.DataFrame(ebv_ssGBLUP_3)
@@ -20081,3 +20081,1226 @@ g_add_3 = np.array(list(Pob_1.inds[i].g_add[itrait] for i in range(Pob_1.n)))
 g_add_3 = pd.DataFrame(g_add_3)
 g_add_3.to_csv (r'Pedigri_1/chip_3/Geno_3/g_add_3.csv', index = False, header = True)
 ```
+
+<!--
+14. Se obtienen los resultados para el pedigrí 2.
+-->
+
+```{python}
+
+os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que es donde estan los archivos de SNPs.
+
+# 1. Se genera a continuación el objeto "chip", ya que este variara en el análisis de acuerdo a 1.000, 10.000 y 100.000 SNPs ----
+
+SNPs_pos = 'SNPs_pos' # Se crea el objeto "SNPs_pos", que corresponde al archivo generado en pasos atras con la posición de los SNPs.
+
+den_chips = [dir_tr + '/chip_1.txt', dir_tr + '/chip_2.txt', dir_tr + '/chip_3.txt', SNPs_pos] # Se crea aquí una lista con las distintas densidades de SNPs (1.000, 10.000 y 100.000 SNPs).
+
+chips = []
+for file in den_chips:
+    chip = gg.Chip(chipFile = file, genome = Gen_caracteristicas, name = file + '_chip')
+    chips.append(chip) # Se genera aquí el objeto "chip" a partir de la lista anterior de posiciones predefinidas.
+
+for chip in chips:
+    chip.print(Gen_caracteristicas) # Se imprime lo anterior para ver si se genero el objeto "chip" bien, y si lo genero bien ya que se observa la información correcta de densidad de SNPs para cada chip (chip_1 = 960, chip_2 = 9843 y chip_3 = 100231).
+
+# 2. Se 
+
+Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo generado en pasos atras "Gen_Pob_base" "Gen_pob_base", que corresponde al genotipo de la población base.
+
+# 3. Se
+
+Pob_2 = pickle.load(open('Pob_2', 'rb')) # Se carga el archivo generado en pasos atras "Pob_2", que corresponde a... del pedigrí 2.
+
+print('Num. de individuos es ' + str(len(Pob_2.inds))) # Se prueba si carga bien indicando el número de individuos en el pedigrí que es de 2071.
+
+###########################
+# Densidad de SNPs de 1.000
+###########################
+
+os.mkdir('Pedigri_2/chip_1') # Se crea la carpeta que contendra todos los resultados al realizar ssGBLUP con una densidad de 1.000 SNPs.
+
+######################################
+# Con todos los individuos genotipados
+######################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 1.000 SNPs y con todos los individuos genotipados.')
+
+os.mkdir('Pedigri_2/chip_1/Geno_1') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con todos los individuos genotipados.
+
+# 4. Se
+
+ind_gen_1 = np.arange(2071, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 1 al 2071).
+
+mX_1 = gg.do_X([Pob_2.inds[i] for i in ind_gen_1], Gen_caracteristicas, Gen_Pob_base, chips[1], minMaf = 0.05) # Aquí se crea el objeto "mX_1" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1271, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1271, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_2, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_1 = np.array(list(Pob_2.inds[i].ebv for i in range(Pob_2.n)))
+ebv_ssGBLUP_1 = pd.DataFrame(ebv_ssGBLUP_1)
+ebv_ssGBLUP_1.to_csv (r'Pedigri_2/chip_1/Geno_1/ebv_1.csv', index = False, header = True)
+
+y_1 = np.array(list(Pob_2.inds[i].y[itrait] for i in range(Pob_2.n)))
+y_1 = pd.DataFrame(y_1)
+y_1.to_csv (r'Pedigri_2/chip_1/Geno_1/Fenotipo_1.csv', index = False, header = True)
+
+g_add_1 = np.array(list(Pob_2.inds[i].g_add[itrait] for i in range(Pob_2.n)))
+g_add_1 = pd.DataFrame(g_add_1)
+g_add_1.to_csv (r'Pedigri_2/chip_1/Geno_1/g_add_1.csv', index = False, header = True)
+
+############################################################
+# Con los individuos de las generaciones F1 y F2 genotipados
+############################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 1.000 SNPs y los individuos de las generaciones F1 y F2 genotipados.')
+
+os.mkdir('Pedigri_2/chip_1/Geno_2') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_2 = np.arange(452, 1272, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 452 al 1271, esto es, los individuos de la generación F1 y F2).
+
+mX_2 = gg.do_X([Pob_2.inds[i] for i in ind_gen_2], Gen_caracteristicas, Gen_Pob_base, chips[1], minMaf = 0.05) # Aquí se crea el objeto "mX_2" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1271, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1271, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_2, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_2, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_2 = np.array(list(Pob_2.inds[i].ebv for i in range(Pob_2.n)))
+ebv_ssGBLUP_2 = pd.DataFrame(ebv_ssGBLUP_2)
+ebv_ssGBLUP_2.to_csv (r'Pedigri_2/chip_1/Geno_2/ebv_2.csv', index = False, header = True)
+
+y_2 = np.array(list(Pob_2.inds[i].y[itrait] for i in range(Pob_2.n)))
+y_2 = pd.DataFrame(y_2)
+y_2.to_csv (r'Pedigri_2/chip_1/Geno_2/Fenotipo_2.csv', index = False, header = True)
+
+g_add_2 = np.array(list(Pob_2.inds[i].g_add[itrait] for i in range(Pob_2.n)))
+g_add_2 = pd.DataFrame(g_add_2)
+g_add_2.to_csv (r'Pedigri_2/chip_1/Geno_2/g_add_2.csv', index = False, header = True)
+
+####################################################
+# Con los individuos de la generación F2 genotipados
+####################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 1.000 SNPs y los individuos de la generación F2 genotipados.')
+
+os.mkdir('Pedigri_2/chip_1/Geno_3') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_3 = np.arange(492, 1272, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 492 al 1271, esto es, los individuos de la generación F2).
+
+mX_3 = gg.do_X([Pob_2.inds[i] for i in ind_gen_3], Gen_caracteristicas, Gen_Pob_base, chips[1], minMaf = 0.05) # Aquí se crea el objeto "mX_3" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1271, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1271, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_2, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_3, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_3 = np.array(list(Pob_2.inds[i].ebv for i in range(Pob_2.n)))
+ebv_ssGBLUP_3 = pd.DataFrame(ebv_ssGBLUP_3)
+ebv_ssGBLUP_3.to_csv (r'Pedigri_2/chip_1/Geno_3/ebv_3.csv', index = False, header = True)
+
+y_3 = np.array(list(Pob_2.inds[i].y[itrait] for i in range(Pob_2.n)))
+y_3 = pd.DataFrame(y_3)
+y_3.to_csv (r'Pedigri_2/chip_1/Geno_3/Fenotipo_3.csv', index = False, header = True)
+
+g_add_3 = np.array(list(Pob_2.inds[i].g_add[itrait] for i in range(Pob_2.n)))
+g_add_3 = pd.DataFrame(g_add_3)
+g_add_3.to_csv (r'Pedigri_2/chip_1/Geno_3/g_add_3.csv', index = False, header = True)
+
+############################
+# Densidad de SNPs de 10.000
+############################
+
+os.mkdir('Pedigri_2/chip_2') # Se crea la carpeta que contendra todos los resultados al realizar ssGBLUP con una densidad de 10.000 SNPs.
+
+######################################
+# Con todos los individuos genotipados
+######################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y con todos los individuos genotipados.')
+
+os.mkdir('Pedigri_2/chip_2/Geno_1') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con todos los individuos genotipados.
+
+# 4. Se
+
+ind_gen_1 = np.arange(2071, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 1 al 2071).
+
+mX_1 = gg.do_X([Pob_2.inds[i] for i in ind_gen_1], Gen_caracteristicas, Gen_Pob_base, chips[2], minMaf = 0.05) # Aquí se crea el objeto "mX_1" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1271, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1271, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_2, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_1 = np.array(list(Pob_2.inds[i].ebv for i in range(Pob_2.n)))
+ebv_ssGBLUP_1 = pd.DataFrame(ebv_ssGBLUP_1)
+ebv_ssGBLUP_1.to_csv (r'Pedigri_2/chip_2/Geno_1/ebv_1.csv', index = False, header = True)
+
+y_1 = np.array(list(Pob_2.inds[i].y[itrait] for i in range(Pob_2.n)))
+y_1 = pd.DataFrame(y_1)
+y_1.to_csv (r'Pedigri_2/chip_2/Geno_1/Fenotipo_1.csv', index = False, header = True)
+
+g_add_1 = np.array(list(Pob_2.inds[i].g_add[itrait] for i in range(Pob_2.n)))
+g_add_1 = pd.DataFrame(g_add_1)
+g_add_1.to_csv (r'Pedigri_2/chip_2/Geno_1/g_add_1.csv', index = False, header = True)
+
+############################################################
+# Con los individuos de las generaciones F1 y F2 genotipados
+############################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y los individuos de las generaciones F1 y F2 genotipados.')
+
+os.mkdir('Pedigri_2/chip_2/Geno_2') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_2 = np.arange(452, 1272, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 452 al 1271, esto es, los individuos de la generación F1 y F2).
+
+mX_2 = gg.do_X([Pob_2.inds[i] for i in ind_gen_2], Gen_caracteristicas, Gen_Pob_base, chips[2], minMaf = 0.05) # Aquí se crea el objeto "mX_2" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1271, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1271, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_2, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_2, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_2 = np.array(list(Pob_2.inds[i].ebv for i in range(Pob_2.n)))
+ebv_ssGBLUP_2 = pd.DataFrame(ebv_ssGBLUP_2)
+ebv_ssGBLUP_2.to_csv (r'Pedigri_2/chip_2/Geno_2/ebv_2.csv', index = False, header = True)
+
+y_2 = np.array(list(Pob_2.inds[i].y[itrait] for i in range(Pob_2.n)))
+y_2 = pd.DataFrame(y_2)
+y_2.to_csv (r'Pedigri_2/chip_2/Geno_2/Fenotipo_2.csv', index = False, header = True)
+
+g_add_2 = np.array(list(Pob_2.inds[i].g_add[itrait] for i in range(Pob_2.n)))
+g_add_2 = pd.DataFrame(g_add_2)
+g_add_2.to_csv (r'Pedigri_2/chip_2/Geno_2/g_add_2.csv', index = False, header = True)
+
+####################################################
+# Con los individuos de la generación F2 genotipados
+####################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y los individuos de la generación F2 genotipados.')
+
+os.mkdir('Pedigri_2/chip_2/Geno_3') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_3 = np.arange(492, 1272, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 492 al 1271, esto es, los individuos de la generación F2).
+
+mX_3 = gg.do_X([Pob_2.inds[i] for i in ind_gen_3], Gen_caracteristicas, Gen_Pob_base, chips[2], minMaf = 0.05) # Aquí se crea el objeto "mX_3" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1271, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1291, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_2, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_3, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_3 = np.array(list(Pob_2.inds[i].ebv for i in range(Pob_2.n)))
+ebv_ssGBLUP_3 = pd.DataFrame(ebv_ssGBLUP_3)
+ebv_ssGBLUP_3.to_csv (r'Pedigri_2/chip_2/Geno_3/ebv_3.csv', index = False, header = True)
+
+y_3 = np.array(list(Pob_2.inds[i].y[itrait] for i in range(Pob_2.n)))
+y_3 = pd.DataFrame(y_3)
+y_3.to_csv (r'Pedigri_2/chip_2/Geno_3/Fenotipo_3.csv', index = False, header = True)
+
+g_add_3 = np.array(list(Pob_2.inds[i].g_add[itrait] for i in range(Pob_2.n)))
+g_add_3 = pd.DataFrame(g_add_3)
+g_add_3.to_csv (r'Pedigri_2/chip_2/Geno_3/g_add_3.csv', index = False, header = True)
+
+#############################
+# Densidad de SNPs de 100.000
+#############################
+
+os.mkdir('Pedigri_2/chip_3') # Se crea la carpeta que contendra todos los resultados al realizar ssGBLUP con una densidad de 100.000 SNPs.
+
+######################################
+# Con todos los individuos genotipados
+######################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 100.000 SNPs y con todos los individuos genotipados.')
+
+os.mkdir('Pedigri_2/chip_3/Geno_1') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con todos los individuos genotipados.
+
+# 4. Se
+
+ind_gen_1 = np.arange(2071, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 1 al 2071).
+
+mX_1 = gg.do_X([Pob_2.inds[i] for i in ind_gen_1], Gen_caracteristicas, Gen_Pob_base, chips[3], minMaf = 0.05) # Aquí se crea el objeto "mX_1" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1271, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1271, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_2, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_1 = np.array(list(Pob_2.inds[i].ebv for i in range(Pob_2.n)))
+ebv_ssGBLUP_1 = pd.DataFrame(ebv_ssGBLUP_1)
+ebv_ssGBLUP_1.to_csv (r'Pedigri_2/chip_3/Geno_1/ebv_1.csv', index = False, header = True)
+
+y_1 = np.array(list(Pob_2.inds[i].y[itrait] for i in range(Pob_2.n)))
+y_1 = pd.DataFrame(y_1)
+y_1.to_csv (r'Pedigri_2/chip_3/Geno_1/Fenotipo_1.csv', index = False, header = True)
+
+g_add_1 = np.array(list(Pob_2.inds[i].g_add[itrait] for i in range(Pob_2.n)))
+g_add_1 = pd.DataFrame(g_add_1)
+g_add_1.to_csv (r'Pedigri_2/chip_3/Geno_1/g_add_1.csv', index = False, header = True)
+
+############################################################
+# Con los individuos de las generaciones F1 y F2 genotipados
+############################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y los individuos de las generaciones F1 y F2 genotipados.')
+
+os.mkdir('Pedigri_2/chip_3/Geno_2') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_2 = np.arange(452, 1272, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 452 al 1271, esto es, los individuos de la generación F1 y F2).
+
+mX_2 = gg.do_X([Pob_2.inds[i] for i in ind_gen_2], Gen_caracteristicas, Gen_Pob_base, chips[3], minMaf = 0.05) # Aquí se crea el objeto "mX_2" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1271, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1271, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_2, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_2, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_2 = np.array(list(Pob_2.inds[i].ebv for i in range(Pob_2.n)))
+ebv_ssGBLUP_2 = pd.DataFrame(ebv_ssGBLUP_2)
+ebv_ssGBLUP_2.to_csv (r'Pedigri_2/chip_3/Geno_2/ebv_2.csv', index = False, header = True)
+
+y_2 = np.array(list(Pob_2.inds[i].y[itrait] for i in range(Pob_2.n)))
+y_2 = pd.DataFrame(y_2)
+y_2.to_csv (r'Pedigri_2/chip_3/Geno_2/Fenotipo_2.csv', index = False, header = True)
+
+g_add_2 = np.array(list(Pob_2.inds[i].g_add[itrait] for i in range(Pob_2.n)))
+g_add_2 = pd.DataFrame(g_add_2)
+g_add_2.to_csv (r'Pedigri_2/chip_3/Geno_2/g_add_2.csv', index = False, header = True)
+
+####################################################
+# Con los individuos de la generación F2 genotipados
+####################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y los individuos de la generación F2 genotipados.')
+
+os.mkdir('Pedigri_2/chip_3/Geno_3') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_3 = np.arange(492, 1272, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 492 al 1271, esto es, los individuos de la generación F2).
+
+mX_3 = gg.do_X([Pob_2.inds[i] for i in ind_gen_3], Gen_caracteristicas, Gen_Pob_base, chips[3], minMaf = 0.05) # Aquí se crea el objeto "mX_3" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1271, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1291, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_2, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_3, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_3 = np.array(list(Pob_2.inds[i].ebv for i in range(Pob_2.n)))
+ebv_ssGBLUP_3 = pd.DataFrame(ebv_ssGBLUP_3)
+ebv_ssGBLUP_3.to_csv (r'Pedigri_2/chip_3/Geno_3/ebv_3.csv', index = False, header = True)
+
+y_3 = np.array(list(Pob_2.inds[i].y[itrait] for i in range(Pob_2.n)))
+y_3 = pd.DataFrame(y_3)
+y_3.to_csv (r'Pedigri_2/chip_3/Geno_3/Fenotipo_3.csv', index = False, header = True)
+
+g_add_3 = np.array(list(Pob_2.inds[i].g_add[itrait] for i in range(Pob_2.n)))
+g_add_3 = pd.DataFrame(g_add_3)
+g_add_3.to_csv (r'Pedigri_2/chip_3/Geno_3/g_add_3.csv', index = False, header = True)
+```
+
+<!--
+15. Se obtienen los resultados para el pedigrí 3.
+-->
+
+```{python}
+
+os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que es donde estan los archivos de SNPs.
+
+# 1. Se genera a continuación el objeto "chip", ya que este variara en el análisis de acuerdo a 1.000, 10.000 y 100.000 SNPs ----
+
+SNPs_pos = 'SNPs_pos' # Se crea el objeto "SNPs_pos", que corresponde al archivo generado en pasos atras con la posición de los SNPs.
+
+den_chips = [dir_tr + '/chip_1.txt', dir_tr + '/chip_2.txt', dir_tr + '/chip_3.txt', SNPs_pos] # Se crea aquí una lista con las distintas densidades de SNPs (1.000, 10.000 y 100.000 SNPs).
+
+chips = []
+for file in den_chips:
+    chip = gg.Chip(chipFile = file, genome = Gen_caracteristicas, name = file + '_chip')
+    chips.append(chip) # Se genera aquí el objeto "chip" a partir de la lista anterior de posiciones predefinidas.
+
+for chip in chips:
+    chip.print(Gen_caracteristicas) # Se imprime lo anterior para ver si se genero el objeto "chip" bien, y si lo genero bien ya que se observa la información correcta de densidad de SNPs para cada chip (chip_1 = 960, chip_2 = 9843 y chip_3 = 100231).
+
+# 2. Se 
+
+Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo generado en pasos atras "Gen_Pob_base" "Gen_pob_base", que corresponde al genotipo de la población base.
+
+# 3. Se
+
+Pob_3 = pickle.load(open('Pob_3', 'rb')) # Se carga el archivo generado en pasos atras "Pob_3", que corresponde a... del pedigrí 3.
+
+print('Num. de individuos es ' + str(len(Pob_3.inds))) # Se prueba si carga bien indicando el número de individuos en el pedigrí que es de 2061.
+
+###########################
+# Densidad de SNPs de 1.000
+###########################
+
+os.mkdir('Pedigri_3/chip_1') # Se crea la carpeta que contendra todos los resultados al realizar ssGBLUP con una densidad de 1.000 SNPs.
+
+######################################
+# Con todos los individuos genotipados
+######################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 1.000 SNPs y con todos los individuos genotipados.')
+
+os.mkdir('Pedigri_3/chip_1/Geno_1') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con todos los individuos genotipados.
+
+# 4. Se
+
+ind_gen_1 = np.arange(2061, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 1 al 2061).
+
+mX_1 = gg.do_X([Pob_3.inds[i] for i in ind_gen_1], Gen_caracteristicas, Gen_Pob_base, chips[1], minMaf = 0.05) # Aquí se crea el objeto "mX_1" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1261, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1261, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_3, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_1 = np.array(list(Pob_3.inds[i].ebv for i in range(Pob_3.n)))
+ebv_ssGBLUP_1 = pd.DataFrame(ebv_ssGBLUP_1)
+ebv_ssGBLUP_1.to_csv (r'Pedigri_3/chip_1/Geno_1/ebv_1.csv', index = False, header = True)
+
+y_1 = np.array(list(Pob_3.inds[i].y[itrait] for i in range(Pob_3.n)))
+y_1 = pd.DataFrame(y_1)
+y_1.to_csv (r'Pedigri_3/chip_1/Geno_1/Fenotipo_1.csv', index = False, header = True)
+
+g_add_1 = np.array(list(Pob_3.inds[i].g_add[itrait] for i in range(Pob_3.n)))
+g_add_1 = pd.DataFrame(g_add_1)
+g_add_1.to_csv (r'Pedigri_3/chip_1/Geno_1/g_add_1.csv', index = False, header = True)
+
+############################################################
+# Con los individuos de las generaciones F1 y F2 genotipados
+############################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 1.000 SNPs y los individuos de las generaciones F1 y F2 genotipados.')
+
+os.mkdir('Pedigri_3/chip_1/Geno_2') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_2 = np.arange(452, 1262, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 452 al 1261, esto es, los individuos de la generación F1 y F2).
+
+mX_2 = gg.do_X([Pob_3.inds[i] for i in ind_gen_2], Gen_caracteristicas, Gen_Pob_base, chips[1], minMaf = 0.05) # Aquí se crea el objeto "mX_2" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1261, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1261, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_3, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_2, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_2 = np.array(list(Pob_3.inds[i].ebv for i in range(Pob_3.n)))
+ebv_ssGBLUP_2 = pd.DataFrame(ebv_ssGBLUP_2)
+ebv_ssGBLUP_2.to_csv (r'Pedigri_3/chip_1/Geno_2/ebv_2.csv', index = False, header = True)
+
+y_2 = np.array(list(Pob_3.inds[i].y[itrait] for i in range(Pob_3.n)))
+y_2 = pd.DataFrame(y_2)
+y_2.to_csv (r'Pedigri_3/chip_1/Geno_2/Fenotipo_2.csv', index = False, header = True)
+
+g_add_2 = np.array(list(Pob_3.inds[i].g_add[itrait] for i in range(Pob_3.n)))
+g_add_2 = pd.DataFrame(g_add_2)
+g_add_2.to_csv (r'Pedigri_3/chip_1/Geno_2/g_add_2.csv', index = False, header = True)
+
+####################################################
+# Con los individuos de la generación F2 genotipados
+####################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 1.000 SNPs y los individuos de la generación F2 genotipados.')
+
+os.mkdir('Pedigri_3/chip_1/Geno_3') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_3 = np.arange(492, 1262, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 492 al 1261, esto es, los individuos de la generación F2).
+
+mX_3 = gg.do_X([Pob_3.inds[i] for i in ind_gen_3], Gen_caracteristicas, Gen_Pob_base, chips[1], minMaf = 0.05) # Aquí se crea el objeto "mX_3" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1261, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1261, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_3, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_3, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_3 = np.array(list(Pob_3.inds[i].ebv for i in range(Pob_3.n)))
+ebv_ssGBLUP_3 = pd.DataFrame(ebv_ssGBLUP_3)
+ebv_ssGBLUP_3.to_csv (r'Pedigri_3/chip_1/Geno_3/ebv_3.csv', index = False, header = True)
+
+y_3 = np.array(list(Pob_3.inds[i].y[itrait] for i in range(Pob_3.n)))
+y_3 = pd.DataFrame(y_3)
+y_3.to_csv (r'Pedigri_3/chip_1/Geno_3/Fenotipo_3.csv', index = False, header = True)
+
+g_add_3 = np.array(list(Pob_3.inds[i].g_add[itrait] for i in range(Pob_3.n)))
+g_add_3 = pd.DataFrame(g_add_3)
+g_add_3.to_csv (r'Pedigri_3/chip_1/Geno_3/g_add_3.csv', index = False, header = True)
+
+############################
+# Densidad de SNPs de 10.000
+############################
+
+os.mkdir('Pedigri_3/chip_2') # Se crea la carpeta que contendra todos los resultados al realizar ssGBLUP con una densidad de 10.000 SNPs.
+
+######################################
+# Con todos los individuos genotipados
+######################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y con todos los individuos genotipados.')
+
+os.mkdir('Pedigri_3/chip_2/Geno_1') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con todos los individuos genotipados.
+
+# 4. Se
+
+ind_gen_1 = np.arange(2061, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 1 al 2061).
+
+mX_1 = gg.do_X([Pob_3.inds[i] for i in ind_gen_1], Gen_caracteristicas, Gen_Pob_base, chips[2], minMaf = 0.05) # Aquí se crea el objeto "mX_1" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1261, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1261, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_3, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_1 = np.array(list(Pob_3.inds[i].ebv for i in range(Pob_3.n)))
+ebv_ssGBLUP_1 = pd.DataFrame(ebv_ssGBLUP_1)
+ebv_ssGBLUP_1.to_csv (r'Pedigri_3/chip_2/Geno_1/ebv_1.csv', index = False, header = True)
+
+y_1 = np.array(list(Pob_3.inds[i].y[itrait] for i in range(Pob_3.n)))
+y_1 = pd.DataFrame(y_1)
+y_1.to_csv (r'Pedigri_3/chip_2/Geno_1/Fenotipo_1.csv', index = False, header = True)
+
+g_add_1 = np.array(list(Pob_3.inds[i].g_add[itrait] for i in range(Pob_3.n)))
+g_add_1 = pd.DataFrame(g_add_1)
+g_add_1.to_csv (r'Pedigri_3/chip_2/Geno_1/g_add_1.csv', index = False, header = True)
+
+############################################################
+# Con los individuos de las generaciones F1 y F2 genotipados
+############################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y los individuos de las generaciones F1 y F2 genotipados.')
+
+os.mkdir('Pedigri_3/chip_2/Geno_2') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_2 = np.arange(452, 1262, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 452 al 1261, esto es, los individuos de la generación F1 y F2).
+
+mX_2 = gg.do_X([Pob_3.inds[i] for i in ind_gen_2], Gen_caracteristicas, Gen_Pob_base, chips[2], minMaf = 0.05) # Aquí se crea el objeto "mX_2" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1261, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1261, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_3, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_2, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_2 = np.array(list(Pob_3.inds[i].ebv for i in range(Pob_3.n)))
+ebv_ssGBLUP_2 = pd.DataFrame(ebv_ssGBLUP_2)
+ebv_ssGBLUP_2.to_csv (r'Pedigri_3/chip_2/Geno_2/ebv_2.csv', index = False, header = True)
+
+y_2 = np.array(list(Pob_3.inds[i].y[itrait] for i in range(Pob_3.n)))
+y_2 = pd.DataFrame(y_2)
+y_2.to_csv (r'Pedigri_3/chip_2/Geno_2/Fenotipo_2.csv', index = False, header = True)
+
+g_add_2 = np.array(list(Pob_3.inds[i].g_add[itrait] for i in range(Pob_3.n)))
+g_add_2 = pd.DataFrame(g_add_2)
+g_add_2.to_csv (r'Pedigri_3/chip_2/Geno_2/g_add_2.csv', index = False, header = True)
+
+####################################################
+# Con los individuos de la generación F2 genotipados
+####################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y los individuos de la generación F2 genotipados.')
+
+os.mkdir('Pedigri_3/chip_2/Geno_3') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_3 = np.arange(492, 1262, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 492 al 1261, esto es, los individuos de la generación F2).
+
+mX_3 = gg.do_X([Pob_3.inds[i] for i in ind_gen_3], Gen_caracteristicas, Gen_Pob_base, chips[2], minMaf = 0.05) # Aquí se crea el objeto "mX_3" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1261, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1261, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_3, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_3, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_3 = np.array(list(Pob_3.inds[i].ebv for i in range(Pob_3.n)))
+ebv_ssGBLUP_3 = pd.DataFrame(ebv_ssGBLUP_3)
+ebv_ssGBLUP_3.to_csv (r'Pedigri_3/chip_2/Geno_3/ebv_3.csv', index = False, header = True)
+
+y_3 = np.array(list(Pob_3.inds[i].y[itrait] for i in range(Pob_3.n)))
+y_3 = pd.DataFrame(y_3)
+y_3.to_csv (r'Pedigri_3/chip_2/Geno_3/Fenotipo_3.csv', index = False, header = True)
+
+g_add_3 = np.array(list(Pob_3.inds[i].g_add[itrait] for i in range(Pob_3.n)))
+g_add_3 = pd.DataFrame(g_add_3)
+g_add_3.to_csv (r'Pedigri_3/chip_2/Geno_3/g_add_3.csv', index = False, header = True)
+
+#############################
+# Densidad de SNPs de 100.000
+#############################
+
+os.mkdir('Pedigri_3/chip_3') # Se crea la carpeta que contendra todos los resultados al realizar ssGBLUP con una densidad de 100.000 SNPs.
+
+######################################
+# Con todos los individuos genotipados
+######################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 100.000 SNPs y con todos los individuos genotipados.')
+
+os.mkdir('Pedigri_3/chip_3/Geno_1') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con todos los individuos genotipados.
+
+# 4. Se
+
+ind_gen_1 = np.arange(2061, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 1 al 2061).
+
+mX_1 = gg.do_X([Pob_3.inds[i] for i in ind_gen_1], Gen_caracteristicas, Gen_Pob_base, chips[3], minMaf = 0.05) # Aquí se crea el objeto "mX_1" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1261, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1261, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_3, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_1 = np.array(list(Pob_3.inds[i].ebv for i in range(Pob_3.n)))
+ebv_ssGBLUP_1 = pd.DataFrame(ebv_ssGBLUP_1)
+ebv_ssGBLUP_1.to_csv (r'Pedigri_3/chip_3/Geno_1/ebv_1.csv', index = False, header = True)
+
+y_1 = np.array(list(Pob_3.inds[i].y[itrait] for i in range(Pob_3.n)))
+y_1 = pd.DataFrame(y_1)
+y_1.to_csv (r'Pedigri_3/chip_3/Geno_1/Fenotipo_1.csv', index = False, header = True)
+
+g_add_1 = np.array(list(Pob_3.inds[i].g_add[itrait] for i in range(Pob_3.n)))
+g_add_1 = pd.DataFrame(g_add_1)
+g_add_1.to_csv (r'Pedigri_3/chip_3/Geno_1/g_add_1.csv', index = False, header = True)
+
+############################################################
+# Con los individuos de las generaciones F1 y F2 genotipados
+############################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y los individuos de las generaciones F1 y F2 genotipados.')
+
+os.mkdir('Pedigri_3/chip_3/Geno_2') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_2 = np.arange(452, 1262, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 452 al 1261, esto es, los individuos de la generación F1 y F2).
+
+mX_2 = gg.do_X([Pob_3.inds[i] for i in ind_gen_2], Gen_caracteristicas, Gen_Pob_base, chips[3], minMaf = 0.05) # Aquí se crea el objeto "mX_2" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1261, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1261, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_3, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_2, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_2 = np.array(list(Pob_3.inds[i].ebv for i in range(Pob_3.n)))
+ebv_ssGBLUP_2 = pd.DataFrame(ebv_ssGBLUP_2)
+ebv_ssGBLUP_2.to_csv (r'Pedigri_3/chip_3/Geno_2/ebv_2.csv', index = False, header = True)
+
+y_2 = np.array(list(Pob_3.inds[i].y[itrait] for i in range(Pob_3.n)))
+y_2 = pd.DataFrame(y_2)
+y_2.to_csv (r'Pedigri_3/chip_3/Geno_2/Fenotipo_2.csv', index = False, header = True)
+
+g_add_2 = np.array(list(Pob_3.inds[i].g_add[itrait] for i in range(Pob_3.n)))
+g_add_2 = pd.DataFrame(g_add_2)
+g_add_2.to_csv (r'Pedigri_3/chip_3/Geno_2/g_add_2.csv', index = False, header = True)
+
+####################################################
+# Con los individuos de la generación F2 genotipados
+####################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y los individuos de la generación F2 genotipados.')
+
+os.mkdir('Pedigri_3/chip_3/Geno_3') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_3 = np.arange(492, 1262, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 492 al 1261, esto es, los individuos de la generación F2).
+
+mX_3 = gg.do_X([Pob_3.inds[i] for i in ind_gen_3], Gen_caracteristicas, Gen_Pob_base, chips[3], minMaf = 0.05) # Aquí se crea el objeto "mX_3" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1261, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1291, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_3, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_3, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_3 = np.array(list(Pob_3.inds[i].ebv for i in range(Pob_3.n)))
+ebv_ssGBLUP_3 = pd.DataFrame(ebv_ssGBLUP_3)
+ebv_ssGBLUP_3.to_csv (r'Pedigri_3/chip_3/Geno_3/ebv_3.csv', index = False, header = True)
+
+y_3 = np.array(list(Pob_3.inds[i].y[itrait] for i in range(Pob_3.n)))
+y_3 = pd.DataFrame(y_3)
+y_3.to_csv (r'Pedigri_3/chip_3/Geno_3/Fenotipo_3.csv', index = False, header = True)
+
+g_add_3 = np.array(list(Pob_3.inds[i].g_add[itrait] for i in range(Pob_3.n)))
+g_add_3 = pd.DataFrame(g_add_3)
+g_add_3.to_csv (r'Pedigri_3/chip_3/Geno_3/g_add_3.csv', index = False, header = True)
+```
+
+<!--
+16. Se obtienen los resultados para el pedigrí 4.
+-->
+
+```{python}
+
+os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que es donde estan los archivos de SNPs.
+
+# 1. Se genera a continuación el objeto "chip", ya que este variara en el análisis de acuerdo a 1.000, 10.000 y 100.000 SNPs ----
+
+SNPs_pos = 'SNPs_pos' # Se crea el objeto "SNPs_pos", que corresponde al archivo generado en pasos atras con la posición de los SNPs.
+
+den_chips = [dir_tr + '/chip_1.txt', dir_tr + '/chip_2.txt', dir_tr + '/chip_3.txt', SNPs_pos] # Se crea aquí una lista con las distintas densidades de SNPs (1.000, 10.000 y 100.000 SNPs).
+
+chips = []
+for file in den_chips:
+    chip = gg.Chip(chipFile = file, genome = Gen_caracteristicas, name = file + '_chip')
+    chips.append(chip) # Se genera aquí el objeto "chip" a partir de la lista anterior de posiciones predefinidas.
+
+for chip in chips:
+    chip.print(Gen_caracteristicas) # Se imprime lo anterior para ver si se genero el objeto "chip" bien, y si lo genero bien ya que se observa la información correcta de densidad de SNPs para cada chip (chip_1 = 960, chip_2 = 9843 y chip_3 = 100231).
+
+# 2. Se 
+
+Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo generado en pasos atras "Gen_Pob_base" "Gen_pob_base", que corresponde al genotipo de la población base.
+
+# 3. Se
+
+Pob_4 = pickle.load(open('Pob_4', 'rb')) # Se carga el archivo generado en pasos atras "Pob_3", que corresponde a... del pedigrí 4.
+
+print('Num. de individuos es ' + str(len(Pob_4.inds))) # Se prueba si carga bien indicando el número de individuos en el pedigrí que es de 2131.
+
+###########################
+# Densidad de SNPs de 1.000
+###########################
+
+os.mkdir('Pedigri_4/chip_1') # Se crea la carpeta que contendra todos los resultados al realizar ssGBLUP con una densidad de 1.000 SNPs.
+
+######################################
+# Con todos los individuos genotipados
+######################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 1.000 SNPs y con todos los individuos genotipados.')
+
+os.mkdir('Pedigri_4/chip_1/Geno_1') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con todos los individuos genotipados.
+
+# 4. Se
+
+ind_gen_1 = np.arange(2131, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 1 al 2131).
+
+mX_1 = gg.do_X([Pob_4.inds[i] for i in ind_gen_1], Gen_caracteristicas, Gen_Pob_base, chips[1], minMaf = 0.05) # Aquí se crea el objeto "mX_1" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1331, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_4, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_1 = np.array(list(Pob_4.inds[i].ebv for i in range(Pob_4.n)))
+ebv_ssGBLUP_1 = pd.DataFrame(ebv_ssGBLUP_1)
+ebv_ssGBLUP_1.to_csv (r'Pedigri_4/chip_1/Geno_1/ebv_1.csv', index = False, header = True)
+
+y_1 = np.array(list(Pob_4.inds[i].y[itrait] for i in range(Pob_4.n)))
+y_1 = pd.DataFrame(y_1)
+y_1.to_csv (r'Pedigri_4/chip_1/Geno_1/Fenotipo_1.csv', index = False, header = True)
+
+g_add_1 = np.array(list(Pob_4.inds[i].g_add[itrait] for i in range(Pob_4.n)))
+g_add_1 = pd.DataFrame(g_add_1)
+g_add_1.to_csv (r'Pedigri_4/chip_1/Geno_1/g_add_1.csv', index = False, header = True)
+
+############################################################
+# Con los individuos de las generaciones F1 y F2 genotipados
+############################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 1.000 SNPs y los individuos de las generaciones F1 y F2 genotipados.')
+
+os.mkdir('Pedigri_4/chip_1/Geno_2') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_2 = np.arange(452, 1332, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 452 al 1331, esto es, los individuos de la generación F1 y F2).
+
+mX_2 = gg.do_X([Pob_4.inds[i] for i in ind_gen_2], Gen_caracteristicas, Gen_Pob_base, chips[1], minMaf = 0.05) # Aquí se crea el objeto "mX_2" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1331, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_4, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_2, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_2 = np.array(list(Pob_4.inds[i].ebv for i in range(Pob_4.n)))
+ebv_ssGBLUP_2 = pd.DataFrame(ebv_ssGBLUP_2)
+ebv_ssGBLUP_2.to_csv (r'Pedigri_4/chip_1/Geno_2/ebv_2.csv', index = False, header = True)
+
+y_2 = np.array(list(Pob_4.inds[i].y[itrait] for i in range(Pob_4.n)))
+y_2 = pd.DataFrame(y_2)
+y_2.to_csv (r'Pedigri_4/chip_1/Geno_2/Fenotipo_2.csv', index = False, header = True)
+
+g_add_2 = np.array(list(Pob_4.inds[i].g_add[itrait] for i in range(Pob_4.n)))
+g_add_2 = pd.DataFrame(g_add_2)
+g_add_2.to_csv (r'Pedigri_4/chip_1/Geno_2/g_add_2.csv', index = False, header = True)
+
+####################################################
+# Con los individuos de la generación F2 genotipados
+####################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 1.000 SNPs y los individuos de la generación F2 genotipados.')
+
+os.mkdir('Pedigri_4/chip_1/Geno_3') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_3 = np.arange(532, 1332, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 531 al 1331, esto es, los individuos de la generación F2).
+
+mX_3 = gg.do_X([Pob_4.inds[i] for i in ind_gen_3], Gen_caracteristicas, Gen_Pob_base, chips[1], minMaf = 0.05) # Aquí se crea el objeto "mX_3" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1331, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_4, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_3, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_3 = np.array(list(Pob_4.inds[i].ebv for i in range(Pob_4.n)))
+ebv_ssGBLUP_3 = pd.DataFrame(ebv_ssGBLUP_3)
+ebv_ssGBLUP_3.to_csv (r'Pedigri_4/chip_1/Geno_3/ebv_3.csv', index = False, header = True)
+
+y_3 = np.array(list(Pob_4.inds[i].y[itrait] for i in range(Pob_4.n)))
+y_3 = pd.DataFrame(y_3)
+y_3.to_csv (r'Pedigri_4/chip_1/Geno_3/Fenotipo_3.csv', index = False, header = True)
+
+g_add_3 = np.array(list(Pob_4.inds[i].g_add[itrait] for i in range(Pob_4.n)))
+g_add_3 = pd.DataFrame(g_add_3)
+g_add_3.to_csv (r'Pedigri_4/chip_1/Geno_3/g_add_3.csv', index = False, header = True)
+
+############################
+# Densidad de SNPs de 10.000
+############################
+
+os.mkdir('Pedigri_4/chip_2') # Se crea la carpeta que contendra todos los resultados al realizar ssGBLUP con una densidad de 10.000 SNPs.
+
+######################################
+# Con todos los individuos genotipados
+######################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y con todos los individuos genotipados.')
+
+os.mkdir('Pedigri_4/chip_2/Geno_1') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con todos los individuos genotipados.
+
+# 4. Se
+
+ind_gen_1 = np.arange(2131, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 1 al 2131).
+
+mX_1 = gg.do_X([Pob_4.inds[i] for i in ind_gen_1], Gen_caracteristicas, Gen_Pob_base, chips[2], minMaf = 0.05) # Aquí se crea el objeto "mX_1" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1331, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_4, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_1 = np.array(list(Pob_4.inds[i].ebv for i in range(Pob_4.n)))
+ebv_ssGBLUP_1 = pd.DataFrame(ebv_ssGBLUP_1)
+ebv_ssGBLUP_1.to_csv (r'Pedigri_4/chip_2/Geno_1/ebv_1.csv', index = False, header = True)
+
+y_1 = np.array(list(Pob_4.inds[i].y[itrait] for i in range(Pob_4.n)))
+y_1 = pd.DataFrame(y_1)
+y_1.to_csv (r'Pedigri_4/chip_2/Geno_1/Fenotipo_1.csv', index = False, header = True)
+
+g_add_1 = np.array(list(Pob_4.inds[i].g_add[itrait] for i in range(Pob_4.n)))
+g_add_1 = pd.DataFrame(g_add_1)
+g_add_1.to_csv (r'Pedigri_4/chip_2/Geno_1/g_add_1.csv', index = False, header = True)
+
+############################################################
+# Con los individuos de las generaciones F1 y F2 genotipados
+############################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y los individuos de las generaciones F1 y F2 genotipados.')
+
+os.mkdir('Pedigri_4/chip_2/Geno_2') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_2 = np.arange(452, 1332, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 452 al 1331, esto es, los individuos de la generación F1 y F2).
+
+mX_2 = gg.do_X([Pob_4.inds[i] for i in ind_gen_2], Gen_caracteristicas, Gen_Pob_base, chips[2], minMaf = 0.05) # Aquí se crea el objeto "mX_2" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1331, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_4, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_2, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_2 = np.array(list(Pob_4.inds[i].ebv for i in range(Pob_4.n)))
+ebv_ssGBLUP_2 = pd.DataFrame(ebv_ssGBLUP_2)
+ebv_ssGBLUP_2.to_csv (r'Pedigri_4/chip_2/Geno_2/ebv_2.csv', index = False, header = True)
+
+y_2 = np.array(list(Pob_4.inds[i].y[itrait] for i in range(Pob_4.n)))
+y_2 = pd.DataFrame(y_2)
+y_2.to_csv (r'Pedigri_4/chip_2/Geno_2/Fenotipo_2.csv', index = False, header = True)
+
+g_add_2 = np.array(list(Pob_4.inds[i].g_add[itrait] for i in range(Pob_4.n)))
+g_add_2 = pd.DataFrame(g_add_2)
+g_add_2.to_csv (r'Pedigri_4/chip_2/Geno_2/g_add_2.csv', index = False, header = True)
+
+####################################################
+# Con los individuos de la generación F2 genotipados
+####################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y los individuos de la generación F2 genotipados.')
+
+os.mkdir('Pedigri_4/chip_2/Geno_3') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_3 = np.arange(532, 1332, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 492 al 1261, esto es, los individuos de la generación F2).
+
+mX_3 = gg.do_X([Pob_4.inds[i] for i in ind_gen_3], Gen_caracteristicas, Gen_Pob_base, chips[2], minMaf = 0.05) # Aquí se crea el objeto "mX_3" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1331, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_4, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_3, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_3 = np.array(list(Pob_4.inds[i].ebv for i in range(Pob_4.n)))
+ebv_ssGBLUP_3 = pd.DataFrame(ebv_ssGBLUP_3)
+ebv_ssGBLUP_3.to_csv (r'Pedigri_4/chip_2/Geno_3/ebv_3.csv', index = False, header = True)
+
+y_3 = np.array(list(Pob_4.inds[i].y[itrait] for i in range(Pob_4.n)))
+y_3 = pd.DataFrame(y_3)
+y_3.to_csv (r'Pedigri_4/chip_2/Geno_3/Fenotipo_3.csv', index = False, header = True)
+
+g_add_3 = np.array(list(Pob_4.inds[i].g_add[itrait] for i in range(Pob_4.n)))
+g_add_3 = pd.DataFrame(g_add_3)
+g_add_3.to_csv (r'Pedigri_4/chip_2/Geno_3/g_add_3.csv', index = False, header = True)
+
+#############################
+# Densidad de SNPs de 100.000
+#############################
+
+os.mkdir('Pedigri_4/chip_3') # Se crea la carpeta que contendra todos los resultados al realizar ssGBLUP con una densidad de 100.000 SNPs.
+
+######################################
+# Con todos los individuos genotipados
+######################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 100.000 SNPs y con todos los individuos genotipados.')
+
+os.mkdir('Pedigri_4/chip_3/Geno_1') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con todos los individuos genotipados.
+
+# 4. Se
+
+ind_gen_1 = np.arange(2131, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 1 al 2061).
+
+mX_1 = gg.do_X([Pob_4.inds[i] for i in ind_gen_1], Gen_caracteristicas, Gen_Pob_base, chips[3], minMaf = 0.05) # Aquí se crea el objeto "mX_1" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1331, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_4, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_1 = np.array(list(Pob_4.inds[i].ebv for i in range(Pob_4.n)))
+ebv_ssGBLUP_1 = pd.DataFrame(ebv_ssGBLUP_1)
+ebv_ssGBLUP_1.to_csv (r'Pedigri_4/chip_3/Geno_1/ebv_1.csv', index = False, header = True)
+
+y_1 = np.array(list(Pob_4.inds[i].y[itrait] for i in range(Pob_4.n)))
+y_1 = pd.DataFrame(y_1)
+y_1.to_csv (r'Pedigri_4/chip_3/Geno_1/Fenotipo_1.csv', index = False, header = True)
+
+g_add_1 = np.array(list(Pob_4.inds[i].g_add[itrait] for i in range(Pob_4.n)))
+g_add_1 = pd.DataFrame(g_add_1)
+g_add_1.to_csv (r'Pedigri_4/chip_3/Geno_1/g_add_1.csv', index = False, header = True)
+
+############################################################
+# Con los individuos de las generaciones F1 y F2 genotipados
+############################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y los individuos de las generaciones F1 y F2 genotipados.')
+
+os.mkdir('Pedigri_4/chip_3/Geno_2') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_2 = np.arange(452, 1332, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 452 al 1331, esto es, los individuos de la generación F1 y F2).
+
+mX_2 = gg.do_X([Pob_4.inds[i] for i in ind_gen_2], Gen_caracteristicas, Gen_Pob_base, chips[3], minMaf = 0.05) # Aquí se crea el objeto "mX_2" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1331, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_4, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_2, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_2 = np.array(list(Pob_4.inds[i].ebv for i in range(Pob_4.n)))
+ebv_ssGBLUP_2 = pd.DataFrame(ebv_ssGBLUP_2)
+ebv_ssGBLUP_2.to_csv (r'Pedigri_4/chip_3/Geno_2/ebv_2.csv', index = False, header = True)
+
+y_2 = np.array(list(Pob_4.inds[i].y[itrait] for i in range(Pob_4.n)))
+y_2 = pd.DataFrame(y_2)
+y_2.to_csv (r'Pedigri_4/chip_3/Geno_2/Fenotipo_2.csv', index = False, header = True)
+
+g_add_2 = np.array(list(Pob_4.inds[i].g_add[itrait] for i in range(Pob_4.n)))
+g_add_2 = pd.DataFrame(g_add_2)
+g_add_2.to_csv (r'Pedigri_4/chip_3/Geno_2/g_add_2.csv', index = False, header = True)
+
+####################################################
+# Con los individuos de la generación F2 genotipados
+####################################################
+
+print('\n' + 'Evaluación mediante ssGBLUP considerando una densidad de 10.000 SNPs y los individuos de la generación F2 genotipados.')
+
+os.mkdir('Pedigri_4/chip_3/Geno_3') # Se crea la carpeta que contendra los resultados al realizar ssGBLUP con los individuos de la generación F2 genotipados.
+
+# 4. Se
+
+ind_gen_3 = np.arange(532, 1332, 1, dtype = np.int) # Aquí se crea el objeto "ind_gen" que indica que individuos estan genotipados (del individuo 492 al 1261, esto es, los individuos de la generación F2).
+
+mX_3 = gg.do_X([Pob_4.inds[i] for i in ind_gen_3], Gen_caracteristicas, Gen_Pob_base, chips[3], minMaf = 0.05) # Aquí se crea el objeto "mX_3" que corresponde a la matriz de SNPs.
+
+ind_fen = np.arange(1331, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_4, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_3, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+
+# 5. Se
+
+ebv_ssGBLUP_3 = np.array(list(Pob_4.inds[i].ebv for i in range(Pob_4.n)))
+ebv_ssGBLUP_3 = pd.DataFrame(ebv_ssGBLUP_3)
+ebv_ssGBLUP_3.to_csv (r'Pedigri_4/chip_3/Geno_3/ebv_3.csv', index = False, header = True)
+
+y_3 = np.array(list(Pob_4.inds[i].y[itrait] for i in range(Pob_4.n)))
+y_3 = pd.DataFrame(y_3)
+y_3.to_csv (r'Pedigri_4/chip_3/Geno_3/Fenotipo_3.csv', index = False, header = True)
+
+g_add_3 = np.array(list(Pob_4.inds[i].g_add[itrait] for i in range(Pob_4.n)))
+g_add_3 = pd.DataFrame(g_add_3)
+g_add_3.to_csv (r'Pedigri_4/chip_3/Geno_3/g_add_3.csv', index = False, header = True)
+```
+
+<!--
+17. Se realiza el aBLUP para los distintos pedigríes.
+-->
+
+```{python}
+
+os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que es donde estan los archivos para hacer el ablup.
+
+# Para el pedigrí 1 ----
+
+os.mkdir('Pedigri_1/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
+
+## 1. Se carga el objeto "Pob_1":
+
+Pob_1 = pickle.load(open('Pob_1', 'rb')) # Se carga el archivo generado en pasos atras "Pob_1", que corresponde a los valores genotípicos y fenotipos de todos los individuos del pedigrí 1.
+
+print('Num. de individuos es ' + str(len(Pob_1.inds))) # Se prueba si carga bien indicando el número de individuos en el pedigrí que es de 2091.
+
+## 2. Se realiza el aBLUP:
+
+ind_fen = np.arange(1291, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1291, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_1, criterion = 'blup', yIds = ind_fen, h2 = 0.7, itrait = itrait)
+
+## 3. Se calculan los valores genéticos aditivos fenotipos, los fenotipos y las varianzas genéticas aditivas:
+
+ebv_aBLUP = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
+ebv_aBLUP = pd.DataFrame(ebv_aBLUP)
+ebv_aBLUP.to_csv (r'Pedigri_1/chip_0/ebv.csv', index = False, header = True)
+
+y_aBLUP = np.array(list(Pob_1.inds[i].y[itrait] for i in range(Pob_1.n)))
+y_aBLUP = pd.DataFrame(y_aBLUP)
+y_aBLUP.to_csv (r'Pedigri_1/chip_0/Fenotipo.csv', index = False, header = True)
+
+g_add = np.array(list(Pob_1.inds[i].g_add[itrait] for i in range(Pob_1.n)))
+g_add = pd.DataFrame(g_add)
+g_add.to_csv (r'Pedigri_1/chip_0/g_add.csv', index = False, header = True)
+
+# Para el pedigrí 2 ----
+
+os.mkdir('Pedigri_2/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
+
+## 1. Se carga el objeto "Pob_2":
+
+Pob_2 = pickle.load(open('Pob_2', 'rb')) # Se carga el archivo generado en pasos atras "Pob_2", que corresponde a los valores genotípicos y fenotipos de todos los individuos del pedigrí 2.
+
+print('Num. de individuos es ' + str(len(Pob_2.inds))) # Se prueba si carga bien indicando el número de individuos en el pedigrí que es de 2071.
+
+## 2. Se realiza el aBLUP:
+
+ind_fen = np.arange(1271, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1271, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_2, criterion = 'blup', yIds = ind_fen, h2 = 0.7, itrait = itrait)
+
+## 3. Se calculan los valores genéticos aditivos fenotipos, los fenotipos y las varianzas genéticas aditivas:
+
+ebv_aBLUP = np.array(list(Pob_2.inds[i].ebv for i in range(Pob_2.n)))
+ebv_aBLUP = pd.DataFrame(ebv_aBLUP)
+ebv_aBLUP.to_csv (r'Pedigri_2/chip_0/ebv_1.csv', index = False, header = True)
+
+y_aBLUP = np.array(list(Pob_2.inds[i].y[itrait] for i in range(Pob_2.n)))
+y_aBLUP = pd.DataFrame(y_aBLUP)
+y_aBLUP.to_csv (r'Pedigri_2/chip_0/Fenotipo_1.csv', index = False, header = True)
+
+g_add = np.array(list(Pob_2.inds[i].g_add[itrait] for i in range(Pob_2.n)))
+g_add = pd.DataFrame(g_add)
+g_add.to_csv (r'Pedigri_2/chip_0/g_add.csv', index = False, header = True)
+
+# Para el pedigrí 3 ----
+
+os.mkdir('Pedigri_3/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
+
+## 1. Se carga el objeto "Pob_3":
+
+Pob_3 = pickle.load(open('Pob_3', 'rb')) # Se carga el archivo generado en pasos atras "Pob_3", que corresponde a los valores genotípicos y fenotipos de todos los individuos del pedigrí 3.
+
+print('Num. de individuos es ' + str(len(Pob_3.inds))) # Se prueba si carga bien indicando el número de individuos en el pedigrí que es de 2061.
+
+## 2. Se realiza el aBLUP:
+
+ind_fen = np.arange(1261, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1261, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_3, criterion = 'blup', yIds = ind_fen, h2 = 0.7, itrait = itrait)
+
+## 3. Se calculan los valores genéticos aditivos fenotipos, los fenotipos y las varianzas genéticas aditivas:
+
+ebv_aBLUP = np.array(list(Pob_3.inds[i].ebv for i in range(Pob_3.n)))
+ebv_aBLUP = pd.DataFrame(ebv_aBLUP)
+ebv_aBLUP.to_csv (r'Pedigri_3/chip_0/ebv_1.csv', index = False, header = True)
+
+y_aBLUP = np.array(list(Pob_3.inds[i].y[itrait] for i in range(Pob_3.n)))
+y_aBLUP = pd.DataFrame(y_aBLUP)
+y_aBLUP.to_csv (r'Pedigri_3/chip_0/Fenotipo_1.csv', index = False, header = True)
+
+g_add = np.array(list(Pob_3.inds[i].g_add[itrait] for i in range(Pob_3.n)))
+g_add = pd.DataFrame(g_add)
+g_add.to_csv (r'Pedigri_3/chip_0/g_add.csv', index = False, header = True)
+
+# Para el pedigrí 4 ----
+
+os.mkdir('Pedigri_4/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
+
+## 1. Se carga el objeto "Pob_3":
+
+Pob_4 = pickle.load(open('Pob_4', 'rb')) # Se carga el archivo generado en pasos atras "Pob_4", que corresponde a los valores genotípicos y fenotipos de todos los individuos del pedigrí 4.
+
+print('Num. de individuos es ' + str(len(Pob_4.inds))) # Se prueba si carga bien indicando el número de individuos en el pedigrí que es de 2131.
+
+## 2. Se realiza el aBLUP:
+
+ind_fen = np.arange(1331, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
+
+itrait = 0
+
+sel.doEbv(Pob_4, criterion = 'blup', yIds = ind_fen, h2 = 0.7, itrait = itrait)
+
+## 3. Se calculan los valores genéticos aditivos fenotipos, los fenotipos y las varianzas genéticas aditivas:
+
+ebv_aBLUP = np.array(list(Pob_4.inds[i].ebv for i in range(Pob_4.n)))
+ebv_aBLUP = pd.DataFrame(ebv_aBLUP)
+ebv_aBLUP.to_csv (r'Pedigri_4/chip_0/ebv_1.csv', index = False, header = True)
+
+y_aBLUP = np.array(list(Pob_4.inds[i].y[itrait] for i in range(Pob_4.n)))
+y_aBLUP = pd.DataFrame(y_aBLUP)
+y_aBLUP.to_csv (r'Pedigri_4/chip_0/Fenotipo_1.csv', index = False, header = True)
+
+g_add = np.array(list(Pob_4.inds[i].g_add[itrait] for i in range(Pob_4.n)))
+g_add = pd.DataFrame(g_add)
+g_add.to_csv (r'Pedigri_4/chip_0/g_add.csv', index = False, header = True)
+```
+
+<!--
+18.
+-->
+
+```{r}
+
+ebv_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importa el .
+
+Fenotipo_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa el .
+
+Cor <- bind_cols(ebv_1, Fenotipo_1) %>%
+  summarise(cor(X1...1, X1...2)) # Dio una correlación de .
+```
+
