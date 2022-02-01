@@ -19158,7 +19158,7 @@ $ echo $?
 
 ```{r Carga del paquete reticulate para usar Python en R y de otros paquetes de interés}
 
-pacman::p_load(reticulate, dplyr, qqman, here, readr, tibble, tidyr, ggplot2, ggrepel, genio, BEDMatrix)
+pacman::p_load(reticulate, dplyr, qqman, here, readr, tibble, tidyr, ggplot2, ggrepel, patchwork, genio, BEDMatrix)
 
 use_condaenv(conda = '/home/leo/anaconda3/bin/python') # Se uso el entorno conda (indicando la ruta donde reside la carpeta de Python), como la versión de Python que se quiere usar.
 
@@ -19643,6 +19643,456 @@ F3_4 <- F2_4 %>%
 
 Ped_4 <- bind_rows(Pob_fun, F1_4, F2_4, F3_4) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
   write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'Pedigri_4.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 4.
+
+###########
+# Pedigrí 5
+###########
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_5') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del cinco pedigrí.
+
+# Generación F1 ----
+
+F1_5 <- replicate(n = 200, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_5 <- plyr::ldply(F1_5, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:651#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 200 individuos como resultado de los 200 cruces en la F0.
+
+# Generación F2 ----
+
+F2_5 <- F1_5 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 4) %>%
+  uncount(count) %>%
+  mutate(
+    id = 652:1451#,
+    #Gen = 2
+  ) # Este correspondería a 4 descencientes para cada uno de los 200 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_5 <- F2_5 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1452:2251#,
+    #Gen = 3
+    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_5 <- bind_rows(Pob_fun, F1_5, F2_5, F3_5) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_5', 'Pedigri_5.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 5.
+
+###########
+# Pedigrí 6
+###########
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_6') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+
+# Generación F1 ----
+
+F1_6 <- replicate(n = 400, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_6 <- plyr::ldply(F1_6, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:851#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 400 individuos como resultado de los 400 cruces en la F0.
+
+# Generación F2 ----
+
+F2_6 <- F1_6 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 2) %>%
+  uncount(count) %>%
+  mutate(
+    id = 852:1651#,
+    #Gen = 2
+  ) # Este correspondería a 2 descencientes para cada uno de los 400 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_6 <- F2_6 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1652:2451#,
+    #Gen = 3
+    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_6 <- bind_rows(Pob_fun, F1_6, F2_6, F3_6) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_6', 'Pedigri_6.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 6.
+
+###########
+# Pedigrí 7
+###########
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_7') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+
+# Generación F1 ----
+
+F1_7 <- replicate(n = 100, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_7 <- plyr::ldply(F1_7, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:551#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 100 individuos como resultado de los 100 cruces en la F0.
+
+# Generación F2 ----
+
+F2_7 <- F1_7 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 8) %>%
+  uncount(count) %>%
+  mutate(
+    id = 552:1351#,
+    #Gen = 2
+  ) # Este correspondería a 8 descencientes para cada uno de los 100 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_7 <- F2_7 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1352:2151#,
+    #Gen = 3
+    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_7 <- bind_rows(Pob_fun, F1_7, F2_7, F3_7) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_7', 'Pedigri_7.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 7.
+
+###########
+# Pedigrí 8
+###########
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_8') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+
+# Generación F1 ----
+
+F1_8 <- replicate(n = 25, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_8 <- plyr::ldply(F1_8, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:476#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 25 individuos como resultado de los 25 cruces en la F0.
+
+# Generación F2 ----
+
+F2_8 <- F1_8 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 32) %>%
+  uncount(count) %>%
+  mutate(
+    id = 477:1276#,
+    #Gen = 2
+  ) # Este correspondería a 32 descencientes para cada uno de los 25 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_8 <- F2_8 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1277:2076#,
+    #Gen = 3
+    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_8 <- bind_rows(Pob_fun, F1_8, F2_8, F3_8) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_8', 'Pedigri_8.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 8.
+
+###########
+# Pedigrí 9
+###########
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_9') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+
+# Generación F1 ----
+
+F1_9 <- replicate(n = 32, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_9 <- plyr::ldply(F1_9, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:483#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 32 individuos como resultado de los 32 cruces en la F0.
+
+# Generación F2 ----
+
+F2_9 <- F1_9 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 25) %>%
+  uncount(count) %>%
+  mutate(
+    id = 484:1283#,
+    #Gen = 2
+  ) # Este correspondería a 32 descencientes para cada uno de los 25 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_9 <- F2_9 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1284:2083#,
+    #Gen = 3
+    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_9 <- bind_rows(Pob_fun, F1_9, F2_9, F3_9) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_9', 'Pedigri_9.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 9.
+
+############
+# Pedigrí 10
+############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_10') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+
+# Generación F1 ----
+
+F1_10 <- replicate(n = 50, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_10 <- plyr::ldply(F1_10, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:501#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 50 individuos como resultado de los 50 cruces en la F0.
+
+# Generación F2 ----
+
+F2_10 <- F1_10 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 16) %>%
+  uncount(count) %>%
+  mutate(
+    id = 502:1301#,
+    #Gen = 2
+  ) # Este correspondería a 16 descencientes para cada uno de los 50 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_10 <- F2_10 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1302:2101#,
+    #Gen = 3
+    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_10 <- bind_rows(Pob_fun, F1_10, F2_10, F3_10) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_10', 'Pedigri_10.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 10.
+
+############
+# Pedigrí 11
+############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_11') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+
+# Generación F1 ----
+
+F1_11 <- replicate(n = 16, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_11 <- plyr::ldply(F1_11, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:467#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 50 individuos como resultado de los 50 cruces en la F0.
+
+# Generación F2 ----
+
+F2_11 <- F1_11 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 50) %>%
+  uncount(count) %>%
+  mutate(
+    id = 468:1267#,
+    #Gen = 2
+  ) # Este correspondería a 50 descencientes para cada uno de los 16 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_11 <- F2_11 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1268:2067#,
+    #Gen = 3
+    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_11 <- bind_rows(Pob_fun, F1_11, F2_11, F3_11) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_11', 'Pedigri_11.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 11.
+
+############
+# Pedigrí 12
+############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_12') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+
+# Generación F1 ----
+
+F1_12 <- replicate(n = 160, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_12 <- plyr::ldply(F1_12, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:611#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 160 individuos como resultado de los 160 cruces en la F0.
+
+# Generación F2 ----
+
+F2_12 <- F1_12 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 5) %>%
+  uncount(count) %>%
+  mutate(
+    id = 612:1411#,
+    #Gen = 2
+  ) # Este correspondería a 5 descencientes para cada uno de los 160 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_12 <- F2_12 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1412:2211#,
+    #Gen = 3
+    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_12 <- bind_rows(Pob_fun, F1_12, F2_12, F3_12) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_12', 'Pedigri_12.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 12.
+
+############
+# Pedigrí 13
+############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_13') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+
+# Generación F1 ----
+
+F1_13 <- replicate(n = 5, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_13 <- plyr::ldply(F1_13, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:456#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 5 individuos como resultado de los 5 cruces en la F0.
+
+# Generación F2 ----
+
+F2_13 <- F1_13 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 160) %>%
+  uncount(count) %>%
+  mutate(
+    id = 457:1256#,
+    #Gen = 2
+  ) # Este correspondería a 160 descencientes para cada uno de los 5 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_13 <- F2_13 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1257:2056#,
+    #Gen = 3
+    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_13 <- bind_rows(Pob_fun, F1_13, F2_13, F3_13) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_13', 'Pedigri_13.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 13.
+
+############
+# Pedigrí 14
+############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_14') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+
+# Generación F1 ----
+
+F1_14 <- replicate(n = 8, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_14 <- plyr::ldply(F1_14, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:459#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 5 individuos como resultado de los 5 cruces en la F0.
+
+# Generación F2 ----
+
+F2_14 <- F1_14 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 100) %>%
+  uncount(count) %>%
+  mutate(
+    id = 460:1259#,
+    #Gen = 2
+  ) # Este correspondería a 160 descencientes para cada uno de los 5 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_14 <- F2_14 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1260:2059#,
+    #Gen = 3
+    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_14 <- bind_rows(Pob_fun, F1_14, F2_14, F3_14) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_14', 'Pedigri_14.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 14.
 ```
 
 <!--
@@ -19659,45 +20109,155 @@ Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo gen
 # Pedigrí 1
 ###########
 
-Pedigri_1 = 'Pedigri_1/Pedigri_1.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
+#Pedigri_1 = 'Pedigri_1/Pedigri_1.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
 
-Pob_1 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_1, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-print('No. of individuals is ' + str(len(Pob_1.inds)))
+#Pob_1 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_1, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_1.inds)))
 
-pickle.dump(Pob_1, open('Pob_1', 'wb'))
+#pickle.dump(Pob_1, open('Pob_1', 'wb'))
 
 ###########
 # Pedigrí 2
 ###########
 
-Pedigri_2 = 'Pedigri_2/Pedigri_2.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
+#Pedigri_2 = 'Pedigri_2/Pedigri_2.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
 
-Pob_2 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_2, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-print('No. of individuals is ' + str(len(Pob_2.inds)))
+#Pob_2 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_2, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_2.inds)))
 
-pickle.dump(Pob_2, open('Pob_2', 'wb'))
+#pickle.dump(Pob_2, open('Pob_2', 'wb'))
 
 ###########
 # Pedigrí 3
 ###########
 
-Pedigri_3 = 'Pedigri_3/Pedigri_3.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 2 generado anteriormente.
+#Pedigri_3 = 'Pedigri_3/Pedigri_3.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 3 generado anteriormente.
 
-Pob_3 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_3, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-print('No. of individuals is ' + str(len(Pob_3.inds)))
+#Pob_3 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_3, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_3.inds)))
 
-pickle.dump(Pob_3, open('Pob_3', 'wb'))
+#pickle.dump(Pob_3, open('Pob_3', 'wb'))
 
 ###########
 # Pedigrí 4
 ###########
 
-Pedigri_4 = 'Pedigri_4/Pedigri_4.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 2 generado anteriormente.
+#Pedigri_4 = 'Pedigri_4/Pedigri_4.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 4 generado anteriormente.
 
-Pob_4 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-print('No. of individuals is ' + str(len(Pob_4.inds)))
+#Pob_4 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_4.inds)))
 
-pickle.dump(Pob_4, open('Pob_4', 'wb'))
+#pickle.dump(Pob_4, open('Pob_4', 'wb'))
+
+###########
+# Pedigrí 5
+###########
+
+#Pedigri_5 = 'Pedigri_5/Pedigri_5.txt' # Se crea el objeto "Pedigri_5", que corresponde al pedigrí 5 generado anteriormente.
+
+#Pob_5 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_5, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_5.inds)))
+
+#pickle.dump(Pob_5, open('Pob_5', 'wb'))
+
+###########
+# Pedigrí 6
+###########
+
+#Pedigri_6 = 'Pedigri_6/Pedigri_6.txt' # Se crea el objeto "Pedigri_6", que corresponde al pedigrí 6 generado anteriormente.
+
+#Pob_6 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_6, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_6.inds)))
+
+#pickle.dump(Pob_6, open('Pob_6', 'wb'))
+
+###########
+# Pedigrí 7
+###########
+
+#Pedigri_7 = 'Pedigri_7/Pedigri_7.txt' # Se crea el objeto "Pedigri_7", que corresponde al pedigrí 7 generado anteriormente.
+
+#Pob_7 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_7, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_7.inds)))
+
+#pickle.dump(Pob_7, open('Pob_7', 'wb'))
+
+###########
+# Pedigrí 8
+###########
+
+#Pedigri_8 = 'Pedigri_8/Pedigri_8.txt' # Se crea el objeto "Pedigri_8", que corresponde al pedigrí 8 generado anteriormente.
+
+#Pob_8 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_8, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_8.inds)))
+
+#pickle.dump(Pob_8, open('Pob_8', 'wb'))
+
+###########
+# Pedigrí 9
+###########
+
+#Pedigri_9 = 'Pedigri_9/Pedigri_9.txt' # Se crea el objeto "Pedigri_9", que corresponde al pedigrí 9 generado anteriormente.
+
+#Pob_9 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_9, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_9.inds)))
+
+#pickle.dump(Pob_9, open('Pob_9', 'wb'))
+
+############
+# Pedigrí 10
+############
+
+#Pedigri_10 = 'Pedigri_10/Pedigri_10.txt' # Se crea el objeto "Pedigri_10", que corresponde al pedigrí 10 generado anteriormente.
+
+#Pob_10 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_10, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_10.inds)))
+
+#pickle.dump(Pob_10, open('Pob_10', 'wb'))
+
+############
+# Pedigrí 11
+############
+
+#Pedigri_11 = 'Pedigri_11/Pedigri_11.txt' # Se crea el objeto "Pedigri_11", que corresponde al pedigrí 11 generado anteriormente.
+
+#Pob_11 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_11, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_11.inds)))
+
+#pickle.dump(Pob_11, open('Pob_11', 'wb'))
+
+############
+# Pedigrí 12
+############
+
+#Pedigri_12 = 'Pedigri_12/Pedigri_12.txt' # Se crea el objeto "Pedigri_12", que corresponde al pedigrí 12 generado anteriormente.
+
+#Pob_12 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_12, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_12.inds)))
+
+#pickle.dump(Pob_12, open('Pob_12', 'wb'))
+
+############
+# Pedigrí 13
+############
+
+#Pedigri_13 = 'Pedigri_13/Pedigri_13.txt' # Se crea el objeto "Pedigri_13", que corresponde al pedigrí 13 generado anteriormente.
+
+#Pob_13 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_13, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_13.inds)))
+
+#pickle.dump(Pob_13, open('Pob_13', 'wb'))
+
+############
+# Pedigrí 14
+############
+
+Pedigri_14 = 'Pedigri_14/Pedigri_14.txt' # Se crea el objeto "Pedigri_14", que corresponde al pedigrí 14 generado anteriormente.
+
+Pob_14 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_14, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+print('No. of individuals is ' + str(len(Pob_14.inds)))
+
+pickle.dump(Pob_14, open('Pob_14', 'wb'))
 ```
 
 <!--
@@ -21163,7 +21723,7 @@ os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que
 
 # Para el pedigrí 1 ----
 
-os.mkdir('Pedigri_1/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
+os.mkdir('Pedigri_1b/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
 
 ## 1. Se carga el objeto "Pob_1":
 
@@ -21173,7 +21733,7 @@ print('Num. de individuos es ' + str(len(Pob_1.inds))) # Se prueba si carga bien
 
 ## 2. Se realiza el aBLUP:
 
-ind_fen = np.arange(1291, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1291, esto es, ningún individuo de la generación F3 tiene fenotipo).
+ind_fen = np.arange(491, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1291, esto es, ningún individuo de la generación F3 tiene fenotipo).
 
 itrait = 0
 
@@ -21183,19 +21743,19 @@ sel.doEbv(Pob_1, criterion = 'blup', yIds = ind_fen, h2 = 0.7, itrait = itrait)
 
 ebv_aBLUP = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_aBLUP = pd.DataFrame(ebv_aBLUP)
-ebv_aBLUP.to_csv (r'Pedigri_1/chip_0/ebv.csv', index = False, header = True)
+ebv_aBLUP.to_csv (r'Pedigri_1b/chip_0/ebv.csv', index = False, header = True)
 
 y_aBLUP = np.array(list(Pob_1.inds[i].y[itrait] for i in range(Pob_1.n)))
 y_aBLUP = pd.DataFrame(y_aBLUP)
-y_aBLUP.to_csv (r'Pedigri_1/chip_0/Fenotipo.csv', index = False, header = True)
+y_aBLUP.to_csv (r'Pedigri_1b/chip_0/Fenotipo.csv', index = False, header = True)
 
 g_add = np.array(list(Pob_1.inds[i].g_add[itrait] for i in range(Pob_1.n)))
 g_add = pd.DataFrame(g_add)
-g_add.to_csv (r'Pedigri_1/chip_0/g_add.csv', index = False, header = True)
+g_add.to_csv (r'Pedigri_1b/chip_0/g_add.csv', index = False, header = True)
 
 # Para el pedigrí 2 ----
 
-os.mkdir('Pedigri_2/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
+os.mkdir('Pedigri_2b/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
 
 ## 1. Se carga el objeto "Pob_2":
 
@@ -21205,7 +21765,7 @@ print('Num. de individuos es ' + str(len(Pob_2.inds))) # Se prueba si carga bien
 
 ## 2. Se realiza el aBLUP:
 
-ind_fen = np.arange(1271, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1271, esto es, ningún individuo de la generación F3 tiene fenotipo).
+ind_fen = np.arange(471, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1271, esto es, ningún individuo de la generación F3 tiene fenotipo).
 
 itrait = 0
 
@@ -21215,19 +21775,19 @@ sel.doEbv(Pob_2, criterion = 'blup', yIds = ind_fen, h2 = 0.7, itrait = itrait)
 
 ebv_aBLUP = np.array(list(Pob_2.inds[i].ebv for i in range(Pob_2.n)))
 ebv_aBLUP = pd.DataFrame(ebv_aBLUP)
-ebv_aBLUP.to_csv (r'Pedigri_2/chip_0/ebv.csv', index = False, header = True)
+ebv_aBLUP.to_csv (r'Pedigri_2b/chip_0/ebv.csv', index = False, header = True)
 
 y_aBLUP = np.array(list(Pob_2.inds[i].y[itrait] for i in range(Pob_2.n)))
 y_aBLUP = pd.DataFrame(y_aBLUP)
-y_aBLUP.to_csv (r'Pedigri_2/chip_0/Fenotipo.csv', index = False, header = True)
+y_aBLUP.to_csv (r'Pedigri_2b/chip_0/Fenotipo.csv', index = False, header = True)
 
 g_add = np.array(list(Pob_2.inds[i].g_add[itrait] for i in range(Pob_2.n)))
 g_add = pd.DataFrame(g_add)
-g_add.to_csv (r'Pedigri_2/chip_0/g_add.csv', index = False, header = True)
+g_add.to_csv (r'Pedigri_2b/chip_0/g_add.csv', index = False, header = True)
 
 # Para el pedigrí 3 ----
 
-os.mkdir('Pedigri_3/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
+os.mkdir('Pedigri_3b/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
 
 ## 1. Se carga el objeto "Pob_3":
 
@@ -21237,7 +21797,7 @@ print('Num. de individuos es ' + str(len(Pob_3.inds))) # Se prueba si carga bien
 
 ## 2. Se realiza el aBLUP:
 
-ind_fen = np.arange(1261, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1261, esto es, ningún individuo de la generación F3 tiene fenotipo).
+ind_fen = np.arange(461, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1261, esto es, ningún individuo de la generación F3 tiene fenotipo).
 
 itrait = 0
 
@@ -21247,19 +21807,19 @@ sel.doEbv(Pob_3, criterion = 'blup', yIds = ind_fen, h2 = 0.7, itrait = itrait)
 
 ebv_aBLUP = np.array(list(Pob_3.inds[i].ebv for i in range(Pob_3.n)))
 ebv_aBLUP = pd.DataFrame(ebv_aBLUP)
-ebv_aBLUP.to_csv (r'Pedigri_3/chip_0/ebv.csv', index = False, header = True)
+ebv_aBLUP.to_csv (r'Pedigri_3b/chip_0/ebv.csv', index = False, header = True)
 
 y_aBLUP = np.array(list(Pob_3.inds[i].y[itrait] for i in range(Pob_3.n)))
 y_aBLUP = pd.DataFrame(y_aBLUP)
-y_aBLUP.to_csv (r'Pedigri_3/chip_0/Fenotipo.csv', index = False, header = True)
+y_aBLUP.to_csv (r'Pedigri_3b/chip_0/Fenotipo.csv', index = False, header = True)
 
 g_add = np.array(list(Pob_3.inds[i].g_add[itrait] for i in range(Pob_3.n)))
 g_add = pd.DataFrame(g_add)
-g_add.to_csv (r'Pedigri_3/chip_0/g_add.csv', index = False, header = True)
+g_add.to_csv (r'Pedigri_3b/chip_0/g_add.csv', index = False, header = True)
 
 # Para el pedigrí 4 ----
 
-os.mkdir('Pedigri_4/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
+os.mkdir('Pedigri_4b/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
 
 ## 1. Se carga el objeto "Pob_3":
 
@@ -21269,7 +21829,7 @@ print('Num. de individuos es ' + str(len(Pob_4.inds))) # Se prueba si carga bien
 
 ## 2. Se realiza el aBLUP:
 
-ind_fen = np.arange(1331, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
+ind_fen = np.arange(531, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
 
 itrait = 0
 
@@ -21279,15 +21839,15 @@ sel.doEbv(Pob_4, criterion = 'blup', yIds = ind_fen, h2 = 0.7, itrait = itrait)
 
 ebv_aBLUP = np.array(list(Pob_4.inds[i].ebv for i in range(Pob_4.n)))
 ebv_aBLUP = pd.DataFrame(ebv_aBLUP)
-ebv_aBLUP.to_csv (r'Pedigri_4/chip_0/ebv.csv', index = False, header = True)
+ebv_aBLUP.to_csv (r'Pedigri_4b/chip_0/ebv.csv', index = False, header = True)
 
 y_aBLUP = np.array(list(Pob_4.inds[i].y[itrait] for i in range(Pob_4.n)))
 y_aBLUP = pd.DataFrame(y_aBLUP)
-y_aBLUP.to_csv (r'Pedigri_4/chip_0/Fenotipo.csv', index = False, header = True)
+y_aBLUP.to_csv (r'Pedigri_4b/chip_0/Fenotipo.csv', index = False, header = True)
 
 g_add = np.array(list(Pob_4.inds[i].g_add[itrait] for i in range(Pob_4.n)))
 g_add = pd.DataFrame(g_add)
-g_add.to_csv (r'Pedigri_4/chip_0/g_add.csv', index = False, header = True)
+g_add.to_csv (r'Pedigri_4b/chip_0/g_add.csv', index = False, header = True)
 ```
 
 <!--
@@ -21300,120 +21860,120 @@ g_add.to_csv (r'Pedigri_4/chip_0/g_add.csv', index = False, header = True)
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y todos los individuos genotipados:
 
-Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_1_ped1 <- bind_cols(Fen_pred_1, Fen_obse_1) %>%
-  slice(1293:2092) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F0-F1-F2-F3')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de las generaciones F1 y F2 genotipados:
 
-Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_2_ped1 <- bind_cols(Fen_pred_2, Fen_obse_2) %>%
-  slice(1293:2092) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F1-F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de la generación F2 genotipados:
 
-Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_3_ped1 <- bind_cols(Fen_pred_3, Fen_obse_3) %>%
-  slice(1293:2092) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y todos los individuos genotipados:
 
-Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_4_ped1 <- bind_cols(Fen_pred_4, Fen_obse_4) %>%
-  slice(1293:2092) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F0-F1-F2-F3')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F1 y F2 genotipados:
 
-Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_5_ped1 <- bind_cols(Fen_pred_5, Fen_obse_5) %>%
-  slice(1293:2092) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F1-F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F2 genotipados:
 
-Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_6_ped1 <- bind_cols(Fen_pred_6, Fen_obse_6) %>%
-  slice(1293:2092) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y todos los individuos genotipados:
 
-Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_7_ped1 <- bind_cols(Fen_pred_7, Fen_obse_7) %>%
-  slice(1293:2092) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F0-F1-F2-F3')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de las generaciones F1 y F2 genotipados:
 
-Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_8_ped1 <- bind_cols(Fen_pred_8, Fen_obse_8) %>%
-  slice(1293:2092) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F1-F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de la generaciónes F2 genotipados:
 
-Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_9_ped1 <- bind_cols(Fen_pred_9, Fen_obse_9) %>%
-  slice(1293:2092) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando ningún individuo genotipado:
 
-Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1b', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_10_ped1 <- bind_cols(Fen_pred_10, Fen_obse_10) %>%
-  slice(1293:2092) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '0', Genotipados = 'Ninguno')
@@ -21442,120 +22002,120 @@ Cor_ped1 <- bind_rows(Cor_1_ped1, Cor_2_ped1, Cor_3_ped1, Cor_4_ped1, Cor_5_ped1
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y todos los individuos genotipados:
 
-Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_1_ped2 <- bind_cols(Fen_pred_1, Fen_obse_1) %>%
-  slice(1273:2072) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1271), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1271), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F0-F1-F2-F3')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de las generaciones F1 y F2 genotipados:
 
-Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_2_ped2 <- bind_cols(Fen_pred_2, Fen_obse_2) %>%
-  slice(1273:2072) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1271), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1271), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F1-F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de la generación F2 genotipados:
 
-Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_3_ped2 <- bind_cols(Fen_pred_3, Fen_obse_3) %>%
-  slice(1273:2072) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y todos los individuos genotipados:
 
-Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_4_ped2 <- bind_cols(Fen_pred_4, Fen_obse_4) %>%
-  slice(1273:2072) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F0-F1-F2-F3')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F1 y F2 genotipados:
 
-Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_5_ped2 <- bind_cols(Fen_pred_5, Fen_obse_5) %>%
-  slice(1273:2072) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F1-F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F2 genotipados:
 
-Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_6_ped2 <- bind_cols(Fen_pred_6, Fen_obse_6) %>%
-  slice(1273:2072) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y todos los individuos genotipados:
 
-Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_7_ped2 <- bind_cols(Fen_pred_7, Fen_obse_7) %>%
-  slice(1273:2072) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F0-F1-F2-F3')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de las generaciones F1 y F2 genotipados:
 
-Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_8_ped2 <- bind_cols(Fen_pred_8, Fen_obse_8) %>%
-  slice(1273:2072) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F1-F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de la generaciónes F2 genotipados:
 
-Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_9_ped2 <- bind_cols(Fen_pred_9, Fen_obse_9) %>%
-  slice(1273:2072) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando ningún individuo genotipado:
 
-Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2b', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_10_ped2 <- bind_cols(Fen_pred_10, Fen_obse_10) %>%
-  slice(1273:2072) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1 al 1291), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '0', Genotipados = 'Ninguno')
@@ -21589,120 +22149,120 @@ Cor_ped1_ped2 + plot_layout(guides = 'collect')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y todos los individuos genotipados:
 
-Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_1_ped3 <- bind_cols(Fen_pred_1, Fen_obse_1) %>%
-  slice(1263:2062) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F0-F1-F2-F3')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de las generaciones F1 y F2 genotipados:
 
-Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_2_ped3 <- bind_cols(Fen_pred_2, Fen_obse_2) %>%
-  slice(1263:2062) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F1-F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de la generación F2 genotipados:
 
-Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_3_ped3 <- bind_cols(Fen_pred_3, Fen_obse_3) %>%
-  slice(1263:2062) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y todos los individuos genotipados:
 
-Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_4_ped3 <- bind_cols(Fen_pred_4, Fen_obse_4) %>%
-  slice(1263:2062) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F0-F1-F2-F3')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F1 y F2 genotipados:
 
-Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_5_ped3 <- bind_cols(Fen_pred_5, Fen_obse_5) %>%
-  slice(1263:2062) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F1-F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F2 genotipados:
 
-Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_6_ped3 <- bind_cols(Fen_pred_6, Fen_obse_6) %>%
-  slice(1263:2062) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y todos los individuos genotipados:
 
-Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_7_ped3 <- bind_cols(Fen_pred_7, Fen_obse_7) %>%
-  slice(1263:2062) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F0-F1-F2-F3')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de las generaciones F1 y F2 genotipados:
 
-Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_8_ped3 <- bind_cols(Fen_pred_8, Fen_obse_8) %>%
-  slice(1263:2062) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F1-F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de la generaciónes F2 genotipados:
 
-Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_9_ped3 <- bind_cols(Fen_pred_9, Fen_obse_9) %>%
-  slice(1263:2062) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando ningún individuo genotipado:
 
-Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3b', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_10_ped3 <- bind_cols(Fen_pred_10, Fen_obse_10) %>%
-  slice(1263:2062) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1262 al 2061), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '0', Genotipados = 'Ninguno')
@@ -21731,120 +22291,120 @@ Cor_ped3 <- bind_rows(Cor_1_ped3, Cor_2_ped3, Cor_3_ped3, Cor_4_ped3, Cor_5_ped3
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y todos los individuos genotipados:
 
-Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_1_ped4 <- bind_cols(Fen_pred_1, Fen_obse_1) %>%
-  slice(1333:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F0-F1-F2-F3')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de las generaciones F1 y F2 genotipados:
 
-Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_2_ped4 <- bind_cols(Fen_pred_2, Fen_obse_2) %>%
-  slice(1333:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F1-F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de la generación F2 genotipados:
 
-Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_3_ped4 <- bind_cols(Fen_pred_3, Fen_obse_3) %>%
-  slice(1333:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y todos los individuos genotipados:
 
-Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_4_ped4 <- bind_cols(Fen_pred_4, Fen_obse_4) %>%
-  slice(1333:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F0-F1-F2-F3')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F1 y F2 genotipados:
 
-Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_5_ped4 <- bind_cols(Fen_pred_5, Fen_obse_5) %>%
-  slice(1333:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F1-F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F2 genotipados:
 
-Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_6_ped4 <- bind_cols(Fen_pred_6, Fen_obse_6) %>%
-  slice(1333:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y todos los individuos genotipados:
 
-Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_7_ped4 <- bind_cols(Fen_pred_7, Fen_obse_7) %>%
-  slice(1333:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F0-F1-F2-F3')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de las generaciones F1 y F2 genotipados:
 
-Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_8_ped4 <- bind_cols(Fen_pred_8, Fen_obse_8) %>%
-  slice(1333:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F1-F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de la generaciónes F2 genotipados:
 
-Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_9_ped4 <- bind_cols(Fen_pred_9, Fen_obse_9) %>%
-  slice(1333:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando ningún individuo genotipado:
 
-Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
 Cor_10_ped4 <- bind_cols(Fen_pred_10, Fen_obse_10) %>%
-  slice(1333:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '0', Genotipados = 'Ninguno')
@@ -22238,168 +22798,131 @@ g_add_3 = pd.DataFrame(g_add_3)
 g_add_3.to_csv (r'Pedigri_4b/chip_3/Geno_3/g_add_3.csv', index = False, header = True)
 ```
 
-```{python}
-
-os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que es donde estan los archivos para hacer el ablup.
-
-# Para el pedigrí 4b ----
-
-os.mkdir('Pedigri_4b/chip_0') # Se crea la carpeta que contendra los resultados al realizar aBLUP.
-
-## 1. Se carga el objeto "Pob_4":
-
-Pob_4 = pickle.load(open('Pob_4', 'rb')) # Se carga el archivo generado en pasos atras "Pob_4", que corresponde a los valores genotípicos y fenotipos de todos los individuos del pedigrí 4.
-
-print('Num. de individuos es ' + str(len(Pob_4.inds))) # Se prueba si carga bien indicando el número de individuos en el pedigrí que es de 2131.
-
-## 2. Se realiza el aBLUP:
-
-ind_fen = np.arange(531, dtype = np.int) # Aquí se crea el objeto "ind_fen" que indica que individuos tendrían medida fenotípica (del individuo 1 al 1331, esto es, ningún individuo de la generación F3 tiene fenotipo).
-
-itrait = 0
-
-sel.doEbv(Pob_4, criterion = 'blup', yIds = ind_fen, h2 = 0.7, itrait = itrait)
-
-## 3. Se calculan los valores genéticos aditivos fenotipos, los fenotipos y las varianzas genéticas aditivas:
-
-ebv_aBLUP = np.array(list(Pob_4.inds[i].ebv for i in range(Pob_4.n)))
-ebv_aBLUP = pd.DataFrame(ebv_aBLUP)
-ebv_aBLUP.to_csv (r'Pedigri_4b/chip_0/ebv.csv', index = False, header = True)
-
-y_aBLUP = np.array(list(Pob_4.inds[i].y[itrait] for i in range(Pob_4.n)))
-y_aBLUP = pd.DataFrame(y_aBLUP)
-y_aBLUP.to_csv (r'Pedigri_4b/chip_0/Fenotipo.csv', index = False, header = True)
-
-g_add = np.array(list(Pob_4.inds[i].g_add[itrait] for i in range(Pob_4.n)))
-g_add = pd.DataFrame(g_add)
-g_add.to_csv (r'Pedigri_4b/chip_0/g_add.csv', index = False, header = True)
-```
-
 ```{r}
 
-# Pedigrí 4b ----
+# Capacidad predictiva F2 Pedigrí 1 ----
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y todos los individuos genotipados:
 
-Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
-Cor_1_ped4b <- bind_cols(Fen_pred_1, Fen_obse_1) %>%
-  slice(533:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 531 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+Cor_1_ped1 <- bind_cols(Fen_pred_1, Fen_obse_1) %>%
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F2.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'Todos')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de las generaciones F1 y F2 genotipados:
 
-Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
-Cor_2_ped4b <- bind_cols(Fen_pred_2, Fen_obse_2) %>%
-  slice(533:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 531 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+Cor_2_ped1 <- bind_cols(Fen_pred_2, Fen_obse_2) %>%
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F2.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F1 y F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de la generación F2 genotipados:
 
-Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
-Cor_3_ped4b <- bind_cols(Fen_pred_3, Fen_obse_3) %>%
-  slice(533:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 531 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+Cor_3_ped1 <- bind_cols(Fen_pred_3, Fen_obse_3) %>%
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F2.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '1.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y todos los individuos genotipados:
 
-Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
-Cor_4_ped4b <- bind_cols(Fen_pred_4, Fen_obse_4) %>%
-  slice(533:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 531 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+Cor_4_ped1 <- bind_cols(Fen_pred_4, Fen_obse_4) %>%
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F2.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'Todos')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F1 y F2 genotipados:
 
-Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
-Cor_5_ped4b <- bind_cols(Fen_pred_5, Fen_obse_5) %>%
-  slice(533:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 531 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+Cor_5_ped1 <- bind_cols(Fen_pred_5, Fen_obse_5) %>%
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F2.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F1 y F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F2 genotipados:
 
-Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
-Cor_6_ped4b <- bind_cols(Fen_pred_6, Fen_obse_6) %>%
-  slice(533:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 531 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+Cor_6_ped1 <- bind_cols(Fen_pred_6, Fen_obse_6) %>%
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F2.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '10.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y todos los individuos genotipados:
 
-Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
-Cor_7_ped4b <- bind_cols(Fen_pred_7, Fen_obse_7) %>%
-  slice(533:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 531 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+Cor_7_ped1 <- bind_cols(Fen_pred_7, Fen_obse_7) %>%
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F2.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'Todos')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de las generaciones F1 y F2 genotipados:
 
-Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
-Cor_8_ped4b <- bind_cols(Fen_pred_8, Fen_obse_8) %>%
-  slice(533:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 531 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+Cor_8_ped1 <- bind_cols(Fen_pred_8, Fen_obse_8) %>%
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F2.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F1 y F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de la generaciónes F2 genotipados:
 
-Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
-Cor_9_ped4b <- bind_cols(Fen_pred_9, Fen_obse_9) %>%
-  slice(533:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 531 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+Cor_9_ped1 <- bind_cols(Fen_pred_9, Fen_obse_9) %>%
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F2.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '100.000', Genotipados = 'F2')
 
 ## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando ningún individuo genotipado:
 
-Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4b', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
 
-Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
 
-Cor_10_ped4b <- bind_cols(Fen_pred_10, Fen_obse_10) %>%
-  slice(533:2132) %>% # Se deja aquí solo los individuos de la generación F3 (del individuo 1331 al 2131), ya que en base a ellos se calcula la habilidad predictiva.
+Cor_10_ped1 <- bind_cols(Fen_pred_10, Fen_obse_10) %>%
+  slice(493:1292) %>% # Se deja aquí solo los individuos de la generación F2.
   #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
   rename(Predicho = X1...1, Observado = X1...2) %>%
   mutate(Densidad = '0', Genotipados = 'Ninguno')
 
-Cor_ped4b <- bind_rows(Cor_1_ped4b, Cor_2_ped4b, Cor_3_ped4b, Cor_4_ped4b, Cor_5_ped4b, Cor_6_ped4b, Cor_7_ped4b, Cor_8_ped4b, Cor_9_ped4b, Cor_10_ped4b) %>%
+Cor_ped1 <- bind_rows(Cor_1_ped1, Cor_2_ped1, Cor_3_ped1, Cor_4_ped1, Cor_5_ped1, Cor_6_ped1, Cor_7_ped1, Cor_8_ped1, Cor_9_ped1, Cor_10_ped1) %>%
   group_by(Densidad, Genotipados) %>%
   summarise(Correlación = round(cor(Predicho, Observado), digits =  2)) %>%
   ggplot(data = ., aes(x = Densidad, y = Correlación, fill = Genotipados, colour = Genotipados, label = Correlación)) +
@@ -22408,7 +22931,7 @@ Cor_ped4b <- bind_rows(Cor_1_ped4b, Cor_2_ped4b, Cor_3_ped4b, Cor_4_ped4b, Cor_5
   scale_colour_manual(values = c('yellow', 'cyan', 'black', 'red')) +
   scale_fill_manual(values = c('yellow', 'cyan', 'black', 'red')) +
   scale_y_continuous(limits = c(0.0, 1.0)) +
-  labs(y = 'Precisión de la predicción (r)', x = 'Densidad del marcador', title = 'Pedigrí 4 (prueba)') +
+  labs(y = 'Precisión de la predicción (r)', x = 'Densidad del marcador', title = 'Pedigrí 1 (predicción en F2)') +
   theme_bw() +
   theme(
     axis.text = element_text(size = 14),
@@ -22417,5 +22940,431 @@ Cor_ped4b <- bind_rows(Cor_1_ped4b, Cor_2_ped4b, Cor_3_ped4b, Cor_4_ped4b, Cor_5
     legend.text = element_text(size = 14),
     plot.title = element_text(size = 13, face = 'bold')
     )
+
+# Capacidad predictiva F2 Pedigrí 2 ----
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y todos los individuos genotipados:
+
+Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_1_ped2 <- bind_cols(Fen_pred_1, Fen_obse_1) %>%
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '1.000', Genotipados = 'Todos')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de las generaciones F1 y F2 genotipados:
+
+Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_2_ped2 <- bind_cols(Fen_pred_2, Fen_obse_2) %>%
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '1.000', Genotipados = 'F1 y F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de la generación F2 genotipados:
+
+Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_3_ped2 <- bind_cols(Fen_pred_3, Fen_obse_3) %>%
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '1.000', Genotipados = 'F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y todos los individuos genotipados:
+
+Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_4_ped2 <- bind_cols(Fen_pred_4, Fen_obse_4) %>%
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '10.000', Genotipados = 'Todos')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F1 y F2 genotipados:
+
+Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_5_ped2 <- bind_cols(Fen_pred_5, Fen_obse_5) %>%
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '10.000', Genotipados = 'F1 y F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F2 genotipados:
+
+Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_6_ped2 <- bind_cols(Fen_pred_6, Fen_obse_6) %>%
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '10.000', Genotipados = 'F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y todos los individuos genotipados:
+
+Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_7_ped2 <- bind_cols(Fen_pred_7, Fen_obse_7) %>%
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '100.000', Genotipados = 'Todos')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de las generaciones F1 y F2 genotipados:
+
+Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_8_ped2 <- bind_cols(Fen_pred_8, Fen_obse_8) %>%
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '100.000', Genotipados = 'F1 y F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de la generaciónes F2 genotipados:
+
+Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_9_ped2 <- bind_cols(Fen_pred_9, Fen_obse_9) %>%
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '100.000', Genotipados = 'F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando ningún individuo genotipado:
+
+Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_10_ped2 <- bind_cols(Fen_pred_10, Fen_obse_10) %>%
+  slice(473:1272) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '0', Genotipados = 'Ninguno')
+
+Cor_ped2 <- bind_rows(Cor_1_ped2, Cor_2_ped2, Cor_3_ped2, Cor_4_ped2, Cor_5_ped2, Cor_6_ped2, Cor_7_ped2, Cor_8_ped2, Cor_9_ped2, Cor_10_ped2) %>%
+  group_by(Densidad, Genotipados) %>%
+  summarise(Correlación = round(cor(Predicho, Observado), digits =  2)) %>%
+  ggplot(data = ., aes(x = Densidad, y = Correlación, fill = Genotipados, colour = Genotipados, label = Correlación)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6, alpha = 0.4) +
+  geom_label(colour = 'black', fill = 'white', size = 4, position = position_dodge2(width = 1.0), vjust=-0.3) +
+  scale_colour_manual(values = c('yellow', 'cyan', 'black', 'red')) +
+  scale_fill_manual(values = c('yellow', 'cyan', 'black', 'red')) +
+  scale_y_continuous(limits = c(0.0, 1.0)) +
+  labs(y = 'Precisión de la predicción (r)', x = 'Densidad del marcador', title = 'Pedigrí 2 (predicción en F2)') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 15, face = 'bold'),
+    legend.title = element_text(size = 15, face = 'bold'),
+    legend.text = element_text(size = 14),
+    plot.title = element_text(size = 13, face = 'bold')
+    )
+
+# Capacidad predictiva F2 Pedigrí 3 ----
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y todos los individuos genotipados:
+
+Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_1_ped3 <- bind_cols(Fen_pred_1, Fen_obse_1) %>%
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '1.000', Genotipados = 'Todos')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de las generaciones F1 y F2 genotipados:
+
+Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_2_ped3 <- bind_cols(Fen_pred_2, Fen_obse_2) %>%
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '1.000', Genotipados = 'F1 y F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de la generación F2 genotipados:
+
+Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_3_ped3 <- bind_cols(Fen_pred_3, Fen_obse_3) %>%
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '1.000', Genotipados = 'F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y todos los individuos genotipados:
+
+Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_4_ped3 <- bind_cols(Fen_pred_4, Fen_obse_4) %>%
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '10.000', Genotipados = 'Todos')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F1 y F2 genotipados:
+
+Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_5_ped3 <- bind_cols(Fen_pred_5, Fen_obse_5) %>%
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '10.000', Genotipados = 'F1 y F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F2 genotipados:
+
+Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_6_ped3 <- bind_cols(Fen_pred_6, Fen_obse_6) %>%
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '10.000', Genotipados = 'F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y todos los individuos genotipados:
+
+Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_7_ped3 <- bind_cols(Fen_pred_7, Fen_obse_7) %>%
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '100.000', Genotipados = 'Todos')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de las generaciones F1 y F2 genotipados:
+
+Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_8_ped3 <- bind_cols(Fen_pred_8, Fen_obse_8) %>%
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '100.000', Genotipados = 'F1 y F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de la generaciónes F2 genotipados:
+
+Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_9_ped3 <- bind_cols(Fen_pred_9, Fen_obse_9) %>%
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '100.000', Genotipados = 'F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando ningún individuo genotipado:
+
+Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_10_ped3 <- bind_cols(Fen_pred_10, Fen_obse_10) %>%
+  slice(463:1262) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '0', Genotipados = 'Ninguno')
+
+Cor_ped3 <- bind_rows(Cor_1_ped3, Cor_2_ped3, Cor_3_ped3, Cor_4_ped3, Cor_5_ped3, Cor_6_ped3, Cor_7_ped3, Cor_8_ped3, Cor_9_ped3, Cor_10_ped3) %>%
+  group_by(Densidad, Genotipados) %>%
+  summarise(Correlación = round(cor(Predicho, Observado), digits =  2)) %>%
+  ggplot(data = ., aes(x = Densidad, y = Correlación, fill = Genotipados, colour = Genotipados, label = Correlación)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6, alpha = 0.4) +
+  geom_label(colour = 'black', fill = 'white', size = 4, position = position_dodge2(width = 1.0), vjust=-0.3) +
+  scale_colour_manual(values = c('yellow', 'cyan', 'black', 'red')) +
+  scale_fill_manual(values = c('yellow', 'cyan', 'black', 'red')) +
+  scale_y_continuous(limits = c(0.0, 1.0)) +
+  labs(y = 'Precisión de la predicción (r)', x = 'Densidad del marcador', title = 'Pedigrí 3 (predicción en F2)') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 15, face = 'bold'),
+    legend.title = element_text(size = 15, face = 'bold'),
+    legend.text = element_text(size = 14),
+    plot.title = element_text(size = 13, face = 'bold')
+    )
+
+# Capacidad predictiva F2 Pedigrí 4 ----
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y todos los individuos genotipados:
+
+Fen_pred_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_1', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_1 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_1', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_1_ped4 <- bind_cols(Fen_pred_1, Fen_obse_1) %>%
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '1.000', Genotipados = 'Todos')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de las generaciones F1 y F2 genotipados:
+
+Fen_pred_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_1', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_1', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_2_ped4 <- bind_cols(Fen_pred_2, Fen_obse_2) %>%
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '1.000', Genotipados = 'F1 y F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 1.000 y los individuos de la generación F2 genotipados:
+
+Fen_pred_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_1', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_1', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_3_ped4 <- bind_cols(Fen_pred_3, Fen_obse_3) %>%
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '1.000', Genotipados = 'F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y todos los individuos genotipados:
+
+Fen_pred_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_2', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_2', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_4_ped4 <- bind_cols(Fen_pred_4, Fen_obse_4) %>%
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '10.000', Genotipados = 'Todos')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F1 y F2 genotipados:
+
+Fen_pred_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_2', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_5 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_2', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_5_ped4 <- bind_cols(Fen_pred_5, Fen_obse_5) %>%
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '10.000', Genotipados = 'F1 y F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 10.000 y los individuos de la generación F2 genotipados:
+
+Fen_pred_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_2', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_6 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_2', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_6_ped4 <- bind_cols(Fen_pred_6, Fen_obse_6) %>%
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '10.000', Genotipados = 'F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y todos los individuos genotipados:
+
+Fen_pred_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_3', 'Geno_1', 'ebv_1.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_7 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_3', 'Geno_1', 'Fenotipo_1.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_7_ped4 <- bind_cols(Fen_pred_7, Fen_obse_7) %>%
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '100.000', Genotipados = 'Todos')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de las generaciones F1 y F2 genotipados:
+
+Fen_pred_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_3', 'Geno_2', 'ebv_2.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_8 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_3', 'Geno_2', 'Fenotipo_2.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_8_ped4 <- bind_cols(Fen_pred_8, Fen_obse_8) %>%
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '100.000', Genotipados = 'F1 y F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando una densidad de SNPs de 100.000 y los individuos de la generaciónes F2 genotipados:
+
+Fen_pred_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_3', 'Geno_3', 'ebv_3.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_9 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_3', 'Geno_3', 'Fenotipo_3.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_9_ped4 <- bind_cols(Fen_pred_9, Fen_obse_9) %>%
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '100.000', Genotipados = 'F2')
+
+## Se calcula la correlación entre los fenotipos observados (y) y predichos (ebv) considerando ningún individuo genotipado:
+
+Fen_pred_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_0', 'ebv.csv'), delim = ' ', col_names = FALSE) # Se importan los fenotipos predichos.
+
+Fen_obse_10 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'chip_0', 'Fenotipo.csv'), delim = ' ', col_names = FALSE) # Se importa los fenotipos observados.
+
+Cor_10_ped4 <- bind_cols(Fen_pred_10, Fen_obse_10) %>%
+  slice(533:1332) %>% # Se deja aquí solo los individuos de la generación F2.
+  #summarise(cor(X1...1, X1...2)) %>% # Calculo de la correlación.
+  rename(Predicho = X1...1, Observado = X1...2) %>%
+  mutate(Densidad = '0', Genotipados = 'Ninguno')
+
+Cor_ped4 <- bind_rows(Cor_1_ped4, Cor_2_ped4, Cor_3_ped4, Cor_4_ped4, Cor_5_ped4, Cor_6_ped4, Cor_7_ped4, Cor_8_ped4, Cor_9_ped4, Cor_10_ped4) %>%
+  group_by(Densidad, Genotipados) %>%
+  summarise(Correlación = round(cor(Predicho, Observado), digits =  2)) %>%
+  ggplot(data = ., aes(x = Densidad, y = Correlación, fill = Genotipados, colour = Genotipados, label = Correlación)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6, alpha = 0.4) +
+  geom_label(colour = 'black', fill = 'white', size = 4, position = position_dodge2(width = 1.0), vjust=-0.3) +
+  scale_colour_manual(values = c('yellow', 'cyan', 'black', 'red')) +
+  scale_fill_manual(values = c('yellow', 'cyan', 'black', 'red')) +
+  scale_y_continuous(limits = c(0.0, 1.0)) +
+  labs(y = 'Precisión de la predicción (r)', x = 'Densidad del marcador', title = 'Pedigrí 4 (predicción en F2)') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 15, face = 'bold'),
+    legend.title = element_text(size = 15, face = 'bold'),
+    legend.text = element_text(size = 14),
+    plot.title = element_text(size = 13, face = 'bold')
+    )
+
+Cor_ped1_ped2_ped3_ped4 <- Cor_ped1 + Cor_ped2 + Cor_ped3 + Cor_ped4 & theme(legend.position = 'right')
+Cor_ped1_ped2_ped3_ped4 + plot_layout(guides = 'collect')
 ```
 
