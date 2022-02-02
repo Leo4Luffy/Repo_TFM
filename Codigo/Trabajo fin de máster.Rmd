@@ -19369,6 +19369,8 @@ Graf_Manhattan | Graf_qq
 
 res_GWAS <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'GWAS', 'gwas_IND_LD.mlma')) # Se importa el archivo con los resultados del GWAS.
 
+# Primera simulación ----
+
 # Se muestrearan los QTLs (o QTNs) proporcional a la varianza aditiva explicada (va=2*p*(1-p)*a^2): 
 
 va_GWAS <- res_GWAS %>%
@@ -19379,7 +19381,7 @@ va_GWAS <- res_GWAS %>%
   pull(cum_va) %>%
   as.matrix()
 
-# Se crea a continuación una instrucción que muestrea de forma aleatoria 50 QTLs (o QTNs) proporconal a la varianza aditiva calculada anteriormente:
+# Se crea a continuación una instrucción que muestrea de forma aleatoria 50 QTLs (o QTNs) proporcional a la varianza aditiva calculada anteriormente:
 
 nSNPs <- nrow(va_GWAS) # Se indica aquí el número de SNPs, que corresponde al número de filas en "va_GWAS".
 nQTLs <- 50 # Se indica aquí la cantidad de QTLs (o QTNs) que se consideraran.
@@ -19419,6 +19421,312 @@ res_GWAS %>%
     colour = 'black',
     box.padding = 0.7
     )
+
+# Segunda simulación ----
+
+# Se muestrearan los QTLs (o QTNs) proporcional a la varianza aditiva explicada (va=2*p*(1-p)*a^2): 
+
+va_GWAS <- res_GWAS %>%
+  mutate(
+    va = (2)*(Freq)*(1-Freq)*(b)^2, # Aqui se calcula la varianza aditiva explicada por cada locus, en base a la frecuencia alelica (Freq) y el efecto (b).
+    cum_va = cumsum(va)
+    ) %>%
+  pull(cum_va) %>%
+  as.matrix()
+
+# Se crea a continuación una instrucción que muestrea de forma aleatoria 50 QTLs (o QTNs) proporcional a la varianza aditiva calculada anteriormente:
+
+nSNPs <- nrow(va_GWAS) # Se indica aquí el número de SNPs, que corresponde al número de filas en "va_GWAS".
+nQTLs <- 50 # Se indica aquí la cantidad de QTLs (o QTNs) que se consideraran.
+pos <- vector(mode = 'integer', length = nQTLs) # Se crea un objeto (un vector) que contiene ceros con una longitud igual al número de QTLs que se desean seleccionar.
+
+for (iq in seq(nQTLs)) {
+  x = runif(n = 1, min = 0, max = va_GWAS[nSNPs]) # Se indica aquí generar un solo número (n = 1) de forma aleatoria dentro del intervalo 0 a 4.223640.
+  pos[iq] = 1 + length(va_GWAS[va_GWAS <= x]) # Se llena el objeto anterior "pos", indicando la posición dentro del objeto "va_GWAS" cuyos valores son menor o igual al número anterior generado de forma aleatoria.
+  }
+
+# Se seleccionan los QTLs (o QTNs) según la posiciones muestreadas anteriomente: 
+QTNs <- res_GWAS %>%
+  slice(pos) %>% # Del conjunto de datos resultante al hacer el GWAS, se seleccionan los 50 QTNs elegidos anteriormente.
+  select(Chr, bp, b) %>% # Se seleccionan las columnas del cromosoma, posición en pares de bases y efecto.
+  arrange(Chr, bp) %>%
+  mutate(
+    dom = 0.0,
+    Chr = as.factor(Chr)
+    ) %>% # Se crea una nueva columna con efecto igual a 0 para el efecto dominante.
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'QTNs_2.txt'), delim = ' ', col_names = FALSE) # Este sería el archivo de QTNs.
+
+# Tercera simulación ----
+
+# Se muestrearan los QTLs (o QTNs) proporcional a la varianza aditiva explicada (va=2*p*(1-p)*a^2): 
+
+va_GWAS <- res_GWAS %>%
+  mutate(
+    va = (2)*(Freq)*(1-Freq)*(b)^2, # Aqui se calcula la varianza aditiva explicada por cada locus, en base a la frecuencia alelica (Freq) y el efecto (b).
+    cum_va = cumsum(va)
+    ) %>%
+  pull(cum_va) %>%
+  as.matrix()
+
+# Se crea a continuación una instrucción que muestrea de forma aleatoria 50 QTLs (o QTNs) proporcional a la varianza aditiva calculada anteriormente:
+
+nSNPs <- nrow(va_GWAS) # Se indica aquí el número de SNPs, que corresponde al número de filas en "va_GWAS".
+nQTLs <- 50 # Se indica aquí la cantidad de QTLs (o QTNs) que se consideraran.
+pos <- vector(mode = 'integer', length = nQTLs) # Se crea un objeto (un vector) que contiene ceros con una longitud igual al número de QTLs que se desean seleccionar.
+
+for (iq in seq(nQTLs)) {
+  x = runif(n = 1, min = 0, max = va_GWAS[nSNPs]) # Se indica aquí generar un solo número (n = 1) de forma aleatoria dentro del intervalo 0 a 4.223640.
+  pos[iq] = 1 + length(va_GWAS[va_GWAS <= x]) # Se llena el objeto anterior "pos", indicando la posición dentro del objeto "va_GWAS" cuyos valores son menor o igual al número anterior generado de forma aleatoria.
+  }
+
+# Se seleccionan los QTLs (o QTNs) según la posiciones muestreadas anteriomente: 
+QTNs <- res_GWAS %>%
+  slice(pos) %>% # Del conjunto de datos resultante al hacer el GWAS, se seleccionan los 50 QTNs elegidos anteriormente.
+  select(Chr, bp, b) %>% # Se seleccionan las columnas del cromosoma, posición en pares de bases y efecto.
+  arrange(Chr, bp) %>%
+  mutate(
+    dom = 0.0,
+    Chr = as.factor(Chr)
+    ) %>% # Se crea una nueva columna con efecto igual a 0 para el efecto dominante.
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'QTNs_3.txt'), delim = ' ', col_names = FALSE) # Este sería el archivo de QTNs.
+
+# Cuarta simulación ----
+
+# Se muestrearan los QTLs (o QTNs) proporcional a la varianza aditiva explicada (va=2*p*(1-p)*a^2): 
+
+va_GWAS <- res_GWAS %>%
+  mutate(
+    va = (2)*(Freq)*(1-Freq)*(b)^2, # Aqui se calcula la varianza aditiva explicada por cada locus, en base a la frecuencia alelica (Freq) y el efecto (b).
+    cum_va = cumsum(va)
+    ) %>%
+  pull(cum_va) %>%
+  as.matrix()
+
+# Se crea a continuación una instrucción que muestrea de forma aleatoria 50 QTLs (o QTNs) proporcional a la varianza aditiva calculada anteriormente:
+
+nSNPs <- nrow(va_GWAS) # Se indica aquí el número de SNPs, que corresponde al número de filas en "va_GWAS".
+nQTLs <- 50 # Se indica aquí la cantidad de QTLs (o QTNs) que se consideraran.
+pos <- vector(mode = 'integer', length = nQTLs) # Se crea un objeto (un vector) que contiene ceros con una longitud igual al número de QTLs que se desean seleccionar.
+
+for (iq in seq(nQTLs)) {
+  x = runif(n = 1, min = 0, max = va_GWAS[nSNPs]) # Se indica aquí generar un solo número (n = 1) de forma aleatoria dentro del intervalo 0 a 4.223640.
+  pos[iq] = 1 + length(va_GWAS[va_GWAS <= x]) # Se llena el objeto anterior "pos", indicando la posición dentro del objeto "va_GWAS" cuyos valores son menor o igual al número anterior generado de forma aleatoria.
+  }
+
+# Se seleccionan los QTLs (o QTNs) según la posiciones muestreadas anteriomente: 
+QTNs <- res_GWAS %>%
+  slice(pos) %>% # Del conjunto de datos resultante al hacer el GWAS, se seleccionan los 50 QTNs elegidos anteriormente.
+  select(Chr, bp, b) %>% # Se seleccionan las columnas del cromosoma, posición en pares de bases y efecto.
+  arrange(Chr, bp) %>%
+  mutate(
+    dom = 0.0,
+    Chr = as.factor(Chr)
+    ) %>% # Se crea una nueva columna con efecto igual a 0 para el efecto dominante.
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'QTNs_4.txt'), delim = ' ', col_names = FALSE) # Este sería el archivo de QTNs.
+
+# Quinta simulación ----
+
+# Se muestrearan los QTLs (o QTNs) proporcional a la varianza aditiva explicada (va=2*p*(1-p)*a^2): 
+
+va_GWAS <- res_GWAS %>%
+  mutate(
+    va = (2)*(Freq)*(1-Freq)*(b)^2, # Aqui se calcula la varianza aditiva explicada por cada locus, en base a la frecuencia alelica (Freq) y el efecto (b).
+    cum_va = cumsum(va)
+    ) %>%
+  pull(cum_va) %>%
+  as.matrix()
+
+# Se crea a continuación una instrucción que muestrea de forma aleatoria 50 QTLs (o QTNs) proporcional a la varianza aditiva calculada anteriormente:
+
+nSNPs <- nrow(va_GWAS) # Se indica aquí el número de SNPs, que corresponde al número de filas en "va_GWAS".
+nQTLs <- 50 # Se indica aquí la cantidad de QTLs (o QTNs) que se consideraran.
+pos <- vector(mode = 'integer', length = nQTLs) # Se crea un objeto (un vector) que contiene ceros con una longitud igual al número de QTLs que se desean seleccionar.
+
+for (iq in seq(nQTLs)) {
+  x = runif(n = 1, min = 0, max = va_GWAS[nSNPs]) # Se indica aquí generar un solo número (n = 1) de forma aleatoria dentro del intervalo 0 a 4.223640.
+  pos[iq] = 1 + length(va_GWAS[va_GWAS <= x]) # Se llena el objeto anterior "pos", indicando la posición dentro del objeto "va_GWAS" cuyos valores son menor o igual al número anterior generado de forma aleatoria.
+  }
+
+# Se seleccionan los QTLs (o QTNs) según la posiciones muestreadas anteriomente: 
+QTNs <- res_GWAS %>%
+  slice(pos) %>% # Del conjunto de datos resultante al hacer el GWAS, se seleccionan los 50 QTNs elegidos anteriormente.
+  select(Chr, bp, b) %>% # Se seleccionan las columnas del cromosoma, posición en pares de bases y efecto.
+  arrange(Chr, bp) %>%
+  mutate(
+    dom = 0.0,
+    Chr = as.factor(Chr)
+    ) %>% # Se crea una nueva columna con efecto igual a 0 para el efecto dominante.
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'QTNs_5.txt'), delim = ' ', col_names = FALSE) # Este sería el archivo de QTNs.
+
+# Sexta simulación ----
+
+# Se muestrearan los QTLs (o QTNs) proporcional a la varianza aditiva explicada (va=2*p*(1-p)*a^2): 
+
+va_GWAS <- res_GWAS %>%
+  mutate(
+    va = (2)*(Freq)*(1-Freq)*(b)^2, # Aqui se calcula la varianza aditiva explicada por cada locus, en base a la frecuencia alelica (Freq) y el efecto (b).
+    cum_va = cumsum(va)
+    ) %>%
+  pull(cum_va) %>%
+  as.matrix()
+
+# Se crea a continuación una instrucción que muestrea de forma aleatoria 50 QTLs (o QTNs) proporcional a la varianza aditiva calculada anteriormente:
+
+nSNPs <- nrow(va_GWAS) # Se indica aquí el número de SNPs, que corresponde al número de filas en "va_GWAS".
+nQTLs <- 50 # Se indica aquí la cantidad de QTLs (o QTNs) que se consideraran.
+pos <- vector(mode = 'integer', length = nQTLs) # Se crea un objeto (un vector) que contiene ceros con una longitud igual al número de QTLs que se desean seleccionar.
+
+for (iq in seq(nQTLs)) {
+  x = runif(n = 1, min = 0, max = va_GWAS[nSNPs]) # Se indica aquí generar un solo número (n = 1) de forma aleatoria dentro del intervalo 0 a 4.223640.
+  pos[iq] = 1 + length(va_GWAS[va_GWAS <= x]) # Se llena el objeto anterior "pos", indicando la posición dentro del objeto "va_GWAS" cuyos valores son menor o igual al número anterior generado de forma aleatoria.
+  }
+
+# Se seleccionan los QTLs (o QTNs) según la posiciones muestreadas anteriomente: 
+QTNs <- res_GWAS %>%
+  slice(pos) %>% # Del conjunto de datos resultante al hacer el GWAS, se seleccionan los 50 QTNs elegidos anteriormente.
+  select(Chr, bp, b) %>% # Se seleccionan las columnas del cromosoma, posición en pares de bases y efecto.
+  arrange(Chr, bp) %>%
+  mutate(
+    dom = 0.0,
+    Chr = as.factor(Chr)
+    ) %>% # Se crea una nueva columna con efecto igual a 0 para el efecto dominante.
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'QTNs_6.txt'), delim = ' ', col_names = FALSE) # Este sería el archivo de QTNs.
+
+# Septima simulación ----
+
+# Se muestrearan los QTLs (o QTNs) proporcional a la varianza aditiva explicada (va=2*p*(1-p)*a^2): 
+
+va_GWAS <- res_GWAS %>%
+  mutate(
+    va = (2)*(Freq)*(1-Freq)*(b)^2, # Aqui se calcula la varianza aditiva explicada por cada locus, en base a la frecuencia alelica (Freq) y el efecto (b).
+    cum_va = cumsum(va)
+    ) %>%
+  pull(cum_va) %>%
+  as.matrix()
+
+# Se crea a continuación una instrucción que muestrea de forma aleatoria 50 QTLs (o QTNs) proporcional a la varianza aditiva calculada anteriormente:
+
+nSNPs <- nrow(va_GWAS) # Se indica aquí el número de SNPs, que corresponde al número de filas en "va_GWAS".
+nQTLs <- 50 # Se indica aquí la cantidad de QTLs (o QTNs) que se consideraran.
+pos <- vector(mode = 'integer', length = nQTLs) # Se crea un objeto (un vector) que contiene ceros con una longitud igual al número de QTLs que se desean seleccionar.
+
+for (iq in seq(nQTLs)) {
+  x = runif(n = 1, min = 0, max = va_GWAS[nSNPs]) # Se indica aquí generar un solo número (n = 1) de forma aleatoria dentro del intervalo 0 a 4.223640.
+  pos[iq] = 1 + length(va_GWAS[va_GWAS <= x]) # Se llena el objeto anterior "pos", indicando la posición dentro del objeto "va_GWAS" cuyos valores son menor o igual al número anterior generado de forma aleatoria.
+  }
+
+# Se seleccionan los QTLs (o QTNs) según la posiciones muestreadas anteriomente: 
+QTNs <- res_GWAS %>%
+  slice(pos) %>% # Del conjunto de datos resultante al hacer el GWAS, se seleccionan los 50 QTNs elegidos anteriormente.
+  select(Chr, bp, b) %>% # Se seleccionan las columnas del cromosoma, posición en pares de bases y efecto.
+  arrange(Chr, bp) %>%
+  mutate(
+    dom = 0.0,
+    Chr = as.factor(Chr)
+    ) %>% # Se crea una nueva columna con efecto igual a 0 para el efecto dominante.
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'QTNs_7.txt'), delim = ' ', col_names = FALSE) # Este sería el archivo de QTNs.
+
+# Octava simulación ----
+
+# Se muestrearan los QTLs (o QTNs) proporcional a la varianza aditiva explicada (va=2*p*(1-p)*a^2): 
+
+va_GWAS <- res_GWAS %>%
+  mutate(
+    va = (2)*(Freq)*(1-Freq)*(b)^2, # Aqui se calcula la varianza aditiva explicada por cada locus, en base a la frecuencia alelica (Freq) y el efecto (b).
+    cum_va = cumsum(va)
+    ) %>%
+  pull(cum_va) %>%
+  as.matrix()
+
+# Se crea a continuación una instrucción que muestrea de forma aleatoria 50 QTLs (o QTNs) proporcional a la varianza aditiva calculada anteriormente:
+
+nSNPs <- nrow(va_GWAS) # Se indica aquí el número de SNPs, que corresponde al número de filas en "va_GWAS".
+nQTLs <- 50 # Se indica aquí la cantidad de QTLs (o QTNs) que se consideraran.
+pos <- vector(mode = 'integer', length = nQTLs) # Se crea un objeto (un vector) que contiene ceros con una longitud igual al número de QTLs que se desean seleccionar.
+
+for (iq in seq(nQTLs)) {
+  x = runif(n = 1, min = 0, max = va_GWAS[nSNPs]) # Se indica aquí generar un solo número (n = 1) de forma aleatoria dentro del intervalo 0 a 4.223640.
+  pos[iq] = 1 + length(va_GWAS[va_GWAS <= x]) # Se llena el objeto anterior "pos", indicando la posición dentro del objeto "va_GWAS" cuyos valores son menor o igual al número anterior generado de forma aleatoria.
+  }
+
+# Se seleccionan los QTLs (o QTNs) según la posiciones muestreadas anteriomente: 
+QTNs <- res_GWAS %>%
+  slice(pos) %>% # Del conjunto de datos resultante al hacer el GWAS, se seleccionan los 50 QTNs elegidos anteriormente.
+  select(Chr, bp, b) %>% # Se seleccionan las columnas del cromosoma, posición en pares de bases y efecto.
+  arrange(Chr, bp) %>%
+  mutate(
+    dom = 0.0,
+    Chr = as.factor(Chr)
+    ) %>% # Se crea una nueva columna con efecto igual a 0 para el efecto dominante.
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'QTNs_8.txt'), delim = ' ', col_names = FALSE) # Este sería el archivo de QTNs.
+
+# Novena simulación ----
+
+# Se muestrearan los QTLs (o QTNs) proporcional a la varianza aditiva explicada (va=2*p*(1-p)*a^2): 
+
+va_GWAS <- res_GWAS %>%
+  mutate(
+    va = (2)*(Freq)*(1-Freq)*(b)^2, # Aqui se calcula la varianza aditiva explicada por cada locus, en base a la frecuencia alelica (Freq) y el efecto (b).
+    cum_va = cumsum(va)
+    ) %>%
+  pull(cum_va) %>%
+  as.matrix()
+
+# Se crea a continuación una instrucción que muestrea de forma aleatoria 50 QTLs (o QTNs) proporcional a la varianza aditiva calculada anteriormente:
+
+nSNPs <- nrow(va_GWAS) # Se indica aquí el número de SNPs, que corresponde al número de filas en "va_GWAS".
+nQTLs <- 50 # Se indica aquí la cantidad de QTLs (o QTNs) que se consideraran.
+pos <- vector(mode = 'integer', length = nQTLs) # Se crea un objeto (un vector) que contiene ceros con una longitud igual al número de QTLs que se desean seleccionar.
+
+for (iq in seq(nQTLs)) {
+  x = runif(n = 1, min = 0, max = va_GWAS[nSNPs]) # Se indica aquí generar un solo número (n = 1) de forma aleatoria dentro del intervalo 0 a 4.223640.
+  pos[iq] = 1 + length(va_GWAS[va_GWAS <= x]) # Se llena el objeto anterior "pos", indicando la posición dentro del objeto "va_GWAS" cuyos valores son menor o igual al número anterior generado de forma aleatoria.
+  }
+
+# Se seleccionan los QTLs (o QTNs) según la posiciones muestreadas anteriomente: 
+QTNs <- res_GWAS %>%
+  slice(pos) %>% # Del conjunto de datos resultante al hacer el GWAS, se seleccionan los 50 QTNs elegidos anteriormente.
+  select(Chr, bp, b) %>% # Se seleccionan las columnas del cromosoma, posición en pares de bases y efecto.
+  arrange(Chr, bp) %>%
+  mutate(
+    dom = 0.0,
+    Chr = as.factor(Chr)
+    ) %>% # Se crea una nueva columna con efecto igual a 0 para el efecto dominante.
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'QTNs_9.txt'), delim = ' ', col_names = FALSE) # Este sería el archivo de QTNs.
+
+# Decima simulación ----
+
+# Se muestrearan los QTLs (o QTNs) proporcional a la varianza aditiva explicada (va=2*p*(1-p)*a^2): 
+
+va_GWAS <- res_GWAS %>%
+  mutate(
+    va = (2)*(Freq)*(1-Freq)*(b)^2, # Aqui se calcula la varianza aditiva explicada por cada locus, en base a la frecuencia alelica (Freq) y el efecto (b).
+    cum_va = cumsum(va)
+    ) %>%
+  pull(cum_va) %>%
+  as.matrix()
+
+# Se crea a continuación una instrucción que muestrea de forma aleatoria 50 QTLs (o QTNs) proporcional a la varianza aditiva calculada anteriormente:
+
+nSNPs <- nrow(va_GWAS) # Se indica aquí el número de SNPs, que corresponde al número de filas en "va_GWAS".
+nQTLs <- 50 # Se indica aquí la cantidad de QTLs (o QTNs) que se consideraran.
+pos <- vector(mode = 'integer', length = nQTLs) # Se crea un objeto (un vector) que contiene ceros con una longitud igual al número de QTLs que se desean seleccionar.
+
+for (iq in seq(nQTLs)) {
+  x = runif(n = 1, min = 0, max = va_GWAS[nSNPs]) # Se indica aquí generar un solo número (n = 1) de forma aleatoria dentro del intervalo 0 a 4.223640.
+  pos[iq] = 1 + length(va_GWAS[va_GWAS <= x]) # Se llena el objeto anterior "pos", indicando la posición dentro del objeto "va_GWAS" cuyos valores son menor o igual al número anterior generado de forma aleatoria.
+  }
+
+# Se seleccionan los QTLs (o QTNs) según la posiciones muestreadas anteriomente: 
+QTNs <- res_GWAS %>%
+  slice(pos) %>% # Del conjunto de datos resultante al hacer el GWAS, se seleccionan los 50 QTNs elegidos anteriormente.
+  select(Chr, bp, b) %>% # Se seleccionan las columnas del cromosoma, posición en pares de bases y efecto.
+  arrange(Chr, bp) %>%
+  mutate(
+    dom = 0.0,
+    Chr = as.factor(Chr)
+    ) %>% # Se crea una nueva columna con efecto igual a 0 para el efecto dominante.
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'QTNs_10.txt'), delim = ' ', col_names = FALSE) # Este sería el archivo de QTNs.
 ```
 
 <!--
@@ -19429,7 +19737,7 @@ res_GWAS %>%
 
 os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que es donde estan los archivos anteriormente generados y guardados.
 
-QTNs = 'QTNs.txt' # Se crea el objeto "QTNs", que corresponde al archivo generado anteriormente con el cromosoma, la prosición y el efecto de los 50 QTNs seleccionados.
+QTNs = 'QTNs_10.txt' # Se crea el objeto "QTNs", que corresponde al archivo generado anteriormente con el cromosoma, la prosición y el efecto de los 50 QTNs seleccionados.
 
 QTN = gg.QTNs(h2 = [0.7], genome = Gen_caracteristicas, qtnFile = QTNs) # Se especifica la posición de los QTNs, sus efectos y se asume una heredabilidad de 0.7.
 
@@ -19444,9 +19752,9 @@ QTN.plot() # Aquí se observa la varianza en función de la frecuencia y la dist
 
 ```{r Generación del pedigrí}
 
-###########
-# Pedigrí 1
-###########
+#############
+# Pedigrí 1.1
+#############
 
 dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_1') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del primer pedigrí.
 
@@ -19509,9 +19817,594 @@ F3 <- F2 %>%
 Ped_1 <- bind_rows(Pob_fun, F1, F2, F3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
   write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1', 'Pedigri_1.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
 
-###########
-# Pedigrí 2
-###########
+#############
+# Pedigrí 1.2
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_1.2') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del primer pedigrí.
+
+# Población fundadora (F0) ----
+
+Pob_fun <- tibble(
+  id = 1:451,
+  Prog1 = rep(x = 0, times = 451),
+  Prog2 = rep(x = 0, times = 451)#,
+  #Gen = 0
+  ) # 451 individuos hacen parte de la población fundadora (estos serían todos los individuos IND).
+
+# Generación F1 ----
+
+fun_F1 <- function(x){
+  Pob_fun %>%
+    select(id) %>%
+    sample_n(2) %>%
+    mutate(Relacion = c('Prog1', 'Prog2')) %>%
+    pivot_wider(
+      names_from = Relacion,
+      values_from = id
+    )
+  }
+
+F1 <- replicate(n = 40, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1 <- plyr::ldply(F1, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:491#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 40 individuos como resultado de los 40 cruces en la F0.
+  
+# Generación F2 ----
+
+F2 <- F1 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 20) %>% # Se indica aquí la frecuencia con la que se debe repetir una fila (al ser 20, cada fila se repetiria 20 veces, sin embargo también es posible indica por ejemplo c(2, 3), es decir, la fila 1 repetedia 2 veces y la fila 2 repetida 3 veces).
+  uncount(count) %>%
+  mutate(
+    id = 492:1291#,
+    #Gen = 2
+  ) # Este correspondería a 20 descencientes para cada uno de los 40 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3 <- F2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1292:2091#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_1 <- bind_rows(Pob_fun, F1, F2, F3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1.2', 'Pedigri_1b.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 1.3
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_1.3') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del primer pedigrí.
+
+# Población fundadora (F0) ----
+
+Pob_fun <- tibble(
+  id = 1:451,
+  Prog1 = rep(x = 0, times = 451),
+  Prog2 = rep(x = 0, times = 451)#,
+  #Gen = 0
+  ) # 451 individuos hacen parte de la población fundadora (estos serían todos los individuos IND).
+
+# Generación F1 ----
+
+fun_F1 <- function(x){
+  Pob_fun %>%
+    select(id) %>%
+    sample_n(2) %>%
+    mutate(Relacion = c('Prog1', 'Prog2')) %>%
+    pivot_wider(
+      names_from = Relacion,
+      values_from = id
+    )
+  }
+
+F1 <- replicate(n = 40, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1 <- plyr::ldply(F1, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:491#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 40 individuos como resultado de los 40 cruces en la F0.
+  
+# Generación F2 ----
+
+F2 <- F1 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 20) %>% # Se indica aquí la frecuencia con la que se debe repetir una fila (al ser 20, cada fila se repetiria 20 veces, sin embargo también es posible indica por ejemplo c(2, 3), es decir, la fila 1 repetedia 2 veces y la fila 2 repetida 3 veces).
+  uncount(count) %>%
+  mutate(
+    id = 492:1291#,
+    #Gen = 2
+  ) # Este correspondería a 20 descencientes para cada uno de los 40 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3 <- F2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1292:2091#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_1 <- bind_rows(Pob_fun, F1, F2, F3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1.3', 'Pedigri_1c.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 1.4
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_1.4') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del primer pedigrí.
+
+# Población fundadora (F0) ----
+
+Pob_fun <- tibble(
+  id = 1:451,
+  Prog1 = rep(x = 0, times = 451),
+  Prog2 = rep(x = 0, times = 451)#,
+  #Gen = 0
+  ) # 451 individuos hacen parte de la población fundadora (estos serían todos los individuos IND).
+
+# Generación F1 ----
+
+fun_F1 <- function(x){
+  Pob_fun %>%
+    select(id) %>%
+    sample_n(2) %>%
+    mutate(Relacion = c('Prog1', 'Prog2')) %>%
+    pivot_wider(
+      names_from = Relacion,
+      values_from = id
+    )
+  }
+
+F1 <- replicate(n = 40, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1 <- plyr::ldply(F1, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:491#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 40 individuos como resultado de los 40 cruces en la F0.
+  
+# Generación F2 ----
+
+F2 <- F1 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 20) %>% # Se indica aquí la frecuencia con la que se debe repetir una fila (al ser 20, cada fila se repetiria 20 veces, sin embargo también es posible indica por ejemplo c(2, 3), es decir, la fila 1 repetedia 2 veces y la fila 2 repetida 3 veces).
+  uncount(count) %>%
+  mutate(
+    id = 492:1291#,
+    #Gen = 2
+  ) # Este correspondería a 20 descencientes para cada uno de los 40 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3 <- F2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1292:2091#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_1 <- bind_rows(Pob_fun, F1, F2, F3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1.4', 'Pedigri_1d.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 1.5
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_1.5') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del primer pedigrí.
+
+# Población fundadora (F0) ----
+
+Pob_fun <- tibble(
+  id = 1:451,
+  Prog1 = rep(x = 0, times = 451),
+  Prog2 = rep(x = 0, times = 451)#,
+  #Gen = 0
+  ) # 451 individuos hacen parte de la población fundadora (estos serían todos los individuos IND).
+
+# Generación F1 ----
+
+fun_F1 <- function(x){
+  Pob_fun %>%
+    select(id) %>%
+    sample_n(2) %>%
+    mutate(Relacion = c('Prog1', 'Prog2')) %>%
+    pivot_wider(
+      names_from = Relacion,
+      values_from = id
+    )
+  }
+
+F1 <- replicate(n = 40, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1 <- plyr::ldply(F1, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:491#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 40 individuos como resultado de los 40 cruces en la F0.
+  
+# Generación F2 ----
+
+F2 <- F1 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 20) %>% # Se indica aquí la frecuencia con la que se debe repetir una fila (al ser 20, cada fila se repetiria 20 veces, sin embargo también es posible indica por ejemplo c(2, 3), es decir, la fila 1 repetedia 2 veces y la fila 2 repetida 3 veces).
+  uncount(count) %>%
+  mutate(
+    id = 492:1291#,
+    #Gen = 2
+  ) # Este correspondería a 20 descencientes para cada uno de los 40 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3 <- F2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1292:2091#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_1 <- bind_rows(Pob_fun, F1, F2, F3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1.5', 'Pedigri_1e.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 1.6
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_1.6') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del primer pedigrí.
+
+# Población fundadora (F0) ----
+
+Pob_fun <- tibble(
+  id = 1:451,
+  Prog1 = rep(x = 0, times = 451),
+  Prog2 = rep(x = 0, times = 451)#,
+  #Gen = 0
+  ) # 451 individuos hacen parte de la población fundadora (estos serían todos los individuos IND).
+
+# Generación F1 ----
+
+fun_F1 <- function(x){
+  Pob_fun %>%
+    select(id) %>%
+    sample_n(2) %>%
+    mutate(Relacion = c('Prog1', 'Prog2')) %>%
+    pivot_wider(
+      names_from = Relacion,
+      values_from = id
+    )
+  }
+
+F1 <- replicate(n = 40, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1 <- plyr::ldply(F1, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:491#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 40 individuos como resultado de los 40 cruces en la F0.
+  
+# Generación F2 ----
+
+F2 <- F1 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 20) %>% # Se indica aquí la frecuencia con la que se debe repetir una fila (al ser 20, cada fila se repetiria 20 veces, sin embargo también es posible indica por ejemplo c(2, 3), es decir, la fila 1 repetedia 2 veces y la fila 2 repetida 3 veces).
+  uncount(count) %>%
+  mutate(
+    id = 492:1291#,
+    #Gen = 2
+  ) # Este correspondería a 20 descencientes para cada uno de los 40 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3 <- F2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1292:2091#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_1 <- bind_rows(Pob_fun, F1, F2, F3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1.6', 'Pedigri_1f.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 1.7
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_1.7') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del primer pedigrí.
+
+# Población fundadora (F0) ----
+
+Pob_fun <- tibble(
+  id = 1:451,
+  Prog1 = rep(x = 0, times = 451),
+  Prog2 = rep(x = 0, times = 451)#,
+  #Gen = 0
+  ) # 451 individuos hacen parte de la población fundadora (estos serían todos los individuos IND).
+
+# Generación F1 ----
+
+fun_F1 <- function(x){
+  Pob_fun %>%
+    select(id) %>%
+    sample_n(2) %>%
+    mutate(Relacion = c('Prog1', 'Prog2')) %>%
+    pivot_wider(
+      names_from = Relacion,
+      values_from = id
+    )
+  }
+
+F1 <- replicate(n = 40, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1 <- plyr::ldply(F1, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:491#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 40 individuos como resultado de los 40 cruces en la F0.
+  
+# Generación F2 ----
+
+F2 <- F1 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 20) %>% # Se indica aquí la frecuencia con la que se debe repetir una fila (al ser 20, cada fila se repetiria 20 veces, sin embargo también es posible indica por ejemplo c(2, 3), es decir, la fila 1 repetedia 2 veces y la fila 2 repetida 3 veces).
+  uncount(count) %>%
+  mutate(
+    id = 492:1291#,
+    #Gen = 2
+  ) # Este correspondería a 20 descencientes para cada uno de los 40 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3 <- F2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1292:2091#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_1 <- bind_rows(Pob_fun, F1, F2, F3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1.7', 'Pedigri_1g.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 1.8
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_1.8') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del primer pedigrí.
+
+# Población fundadora (F0) ----
+
+Pob_fun <- tibble(
+  id = 1:451,
+  Prog1 = rep(x = 0, times = 451),
+  Prog2 = rep(x = 0, times = 451)#,
+  #Gen = 0
+  ) # 451 individuos hacen parte de la población fundadora (estos serían todos los individuos IND).
+
+# Generación F1 ----
+
+fun_F1 <- function(x){
+  Pob_fun %>%
+    select(id) %>%
+    sample_n(2) %>%
+    mutate(Relacion = c('Prog1', 'Prog2')) %>%
+    pivot_wider(
+      names_from = Relacion,
+      values_from = id
+    )
+  }
+
+F1 <- replicate(n = 40, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1 <- plyr::ldply(F1, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:491#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 40 individuos como resultado de los 40 cruces en la F0.
+  
+# Generación F2 ----
+
+F2 <- F1 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 20) %>% # Se indica aquí la frecuencia con la que se debe repetir una fila (al ser 20, cada fila se repetiria 20 veces, sin embargo también es posible indica por ejemplo c(2, 3), es decir, la fila 1 repetedia 2 veces y la fila 2 repetida 3 veces).
+  uncount(count) %>%
+  mutate(
+    id = 492:1291#,
+    #Gen = 2
+  ) # Este correspondería a 20 descencientes para cada uno de los 40 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3 <- F2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1292:2091#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_1 <- bind_rows(Pob_fun, F1, F2, F3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1.8', 'Pedigri_1h.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 1.9
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_1.9') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del primer pedigrí.
+
+# Población fundadora (F0) ----
+
+Pob_fun <- tibble(
+  id = 1:451,
+  Prog1 = rep(x = 0, times = 451),
+  Prog2 = rep(x = 0, times = 451)#,
+  #Gen = 0
+  ) # 451 individuos hacen parte de la población fundadora (estos serían todos los individuos IND).
+
+# Generación F1 ----
+
+fun_F1 <- function(x){
+  Pob_fun %>%
+    select(id) %>%
+    sample_n(2) %>%
+    mutate(Relacion = c('Prog1', 'Prog2')) %>%
+    pivot_wider(
+      names_from = Relacion,
+      values_from = id
+    )
+  }
+
+F1 <- replicate(n = 40, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1 <- plyr::ldply(F1, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:491#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 40 individuos como resultado de los 40 cruces en la F0.
+  
+# Generación F2 ----
+
+F2 <- F1 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 20) %>% # Se indica aquí la frecuencia con la que se debe repetir una fila (al ser 20, cada fila se repetiria 20 veces, sin embargo también es posible indica por ejemplo c(2, 3), es decir, la fila 1 repetedia 2 veces y la fila 2 repetida 3 veces).
+  uncount(count) %>%
+  mutate(
+    id = 492:1291#,
+    #Gen = 2
+  ) # Este correspondería a 20 descencientes para cada uno de los 40 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3 <- F2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1292:2091#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_1 <- bind_rows(Pob_fun, F1, F2, F3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1.9', 'Pedigri_1i.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+##############
+# Pedigrí 1.10
+##############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_1.10') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del primer pedigrí.
+
+# Población fundadora (F0) ----
+
+Pob_fun <- tibble(
+  id = 1:451,
+  Prog1 = rep(x = 0, times = 451),
+  Prog2 = rep(x = 0, times = 451)#,
+  #Gen = 0
+  ) # 451 individuos hacen parte de la población fundadora (estos serían todos los individuos IND).
+
+# Generación F1 ----
+
+fun_F1 <- function(x){
+  Pob_fun %>%
+    select(id) %>%
+    sample_n(2) %>%
+    mutate(Relacion = c('Prog1', 'Prog2')) %>%
+    pivot_wider(
+      names_from = Relacion,
+      values_from = id
+    )
+  }
+
+F1 <- replicate(n = 40, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1 <- plyr::ldply(F1, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:491#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 40 individuos como resultado de los 40 cruces en la F0.
+  
+# Generación F2 ----
+
+F2 <- F1 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 20) %>% # Se indica aquí la frecuencia con la que se debe repetir una fila (al ser 20, cada fila se repetiria 20 veces, sin embargo también es posible indica por ejemplo c(2, 3), es decir, la fila 1 repetedia 2 veces y la fila 2 repetida 3 veces).
+  uncount(count) %>%
+  mutate(
+    id = 492:1291#,
+    #Gen = 2
+  ) # Este correspondería a 20 descencientes para cada uno de los 40 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3 <- F2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1292:2091#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_1 <- bind_rows(Pob_fun, F1, F2, F3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1.10', 'Pedigri_1j.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 2.1
+#############
 
 dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_2') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
 
@@ -19554,9 +20447,414 @@ F3_2 <- F2_2 %>%
 Ped_2 <- bind_rows(Pob_fun, F1_2, F2_2, F3_2) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
   write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2', 'Pedigri_2.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 2.
 
-###########
-# Pedigrí 3
-###########
+#############
+# Pedigrí 2.2
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_2.2') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_2 <- replicate(n = 20, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_2 <- plyr::ldply(F1_2, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:471#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 20 individuos como resultado de los 20 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_2 <- F1_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 40) %>%
+  uncount(count) %>%
+  mutate(
+    id = 472:1271#,
+    #Gen = 2
+  ) # Este correspondería a 40 descencientes para cada uno de los 20 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_2 <- F2_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1272:2071#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_2 <- bind_rows(Pob_fun, F1_2, F2_2, F3_2) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.2', 'Pedigri_2b.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 2.
+
+#############
+# Pedigrí 2.3
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_2.3') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_2 <- replicate(n = 20, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_2 <- plyr::ldply(F1_2, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:471#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 20 individuos como resultado de los 20 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_2 <- F1_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 40) %>%
+  uncount(count) %>%
+  mutate(
+    id = 472:1271#,
+    #Gen = 2
+  ) # Este correspondería a 40 descencientes para cada uno de los 20 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_2 <- F2_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1272:2071#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_2 <- bind_rows(Pob_fun, F1_2, F2_2, F3_2) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.3', 'Pedigri_2c.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 2.
+
+#############
+# Pedigrí 2.4
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_2.4') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_2 <- replicate(n = 20, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_2 <- plyr::ldply(F1_2, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:471#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 20 individuos como resultado de los 20 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_2 <- F1_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 40) %>%
+  uncount(count) %>%
+  mutate(
+    id = 472:1271#,
+    #Gen = 2
+  ) # Este correspondería a 40 descencientes para cada uno de los 20 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_2 <- F2_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1272:2071#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_2 <- bind_rows(Pob_fun, F1_2, F2_2, F3_2) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.4', 'Pedigri_2d.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 2.
+
+#############
+# Pedigrí 2.5
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_2.5') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_2 <- replicate(n = 20, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_2 <- plyr::ldply(F1_2, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:471#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 20 individuos como resultado de los 20 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_2 <- F1_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 40) %>%
+  uncount(count) %>%
+  mutate(
+    id = 472:1271#,
+    #Gen = 2
+  ) # Este correspondería a 40 descencientes para cada uno de los 20 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_2 <- F2_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1272:2071#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_2 <- bind_rows(Pob_fun, F1_2, F2_2, F3_2) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.5', 'Pedigri_2e.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 2.
+
+#############
+# Pedigrí 2.6
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_2.6') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_2 <- replicate(n = 20, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_2 <- plyr::ldply(F1_2, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:471#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 20 individuos como resultado de los 20 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_2 <- F1_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 40) %>%
+  uncount(count) %>%
+  mutate(
+    id = 472:1271#,
+    #Gen = 2
+  ) # Este correspondería a 40 descencientes para cada uno de los 20 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_2 <- F2_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1272:2071#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_2 <- bind_rows(Pob_fun, F1_2, F2_2, F3_2) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.6', 'Pedigri_2f.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 2.
+
+#############
+# Pedigrí 2.7
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_2.7') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_2 <- replicate(n = 20, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_2 <- plyr::ldply(F1_2, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:471#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 20 individuos como resultado de los 20 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_2 <- F1_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 40) %>%
+  uncount(count) %>%
+  mutate(
+    id = 472:1271#,
+    #Gen = 2
+  ) # Este correspondería a 40 descencientes para cada uno de los 20 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_2 <- F2_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1272:2071#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_2 <- bind_rows(Pob_fun, F1_2, F2_2, F3_2) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.7', 'Pedigri_2g.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 2.
+
+#############
+# Pedigrí 2.8
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_2.8') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_2 <- replicate(n = 20, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_2 <- plyr::ldply(F1_2, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:471#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 20 individuos como resultado de los 20 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_2 <- F1_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 40) %>%
+  uncount(count) %>%
+  mutate(
+    id = 472:1271#,
+    #Gen = 2
+  ) # Este correspondería a 40 descencientes para cada uno de los 20 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_2 <- F2_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1272:2071#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_2 <- bind_rows(Pob_fun, F1_2, F2_2, F3_2) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.8', 'Pedigri_2h.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 2.
+
+#############
+# Pedigrí 2.9
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_2.9') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_2 <- replicate(n = 20, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_2 <- plyr::ldply(F1_2, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:471#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 20 individuos como resultado de los 20 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_2 <- F1_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 40) %>%
+  uncount(count) %>%
+  mutate(
+    id = 472:1271#,
+    #Gen = 2
+  ) # Este correspondería a 40 descencientes para cada uno de los 20 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_2 <- F2_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1272:2071#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_2 <- bind_rows(Pob_fun, F1_2, F2_2, F3_2) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.9', 'Pedigri_2i.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 2.
+
+##############
+# Pedigrí 2.10
+##############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_2.10') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_2 <- replicate(n = 20, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_2 <- plyr::ldply(F1_2, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:471#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 20 individuos como resultado de los 20 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_2 <- F1_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 40) %>%
+  uncount(count) %>%
+  mutate(
+    id = 472:1271#,
+    #Gen = 2
+  ) # Este correspondería a 40 descencientes para cada uno de los 20 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_2 <- F2_2 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1272:2071#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_2 <- bind_rows(Pob_fun, F1_2, F2_2, F3_2) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.10', 'Pedigri_2j.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 2.
+
+#############
+# Pedigrí 3.1
+#############
 
 dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_3') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
 
@@ -19599,9 +20897,414 @@ F3_3 <- F2_3 %>%
 Ped_3 <- bind_rows(Pob_fun, F1_3, F2_3, F3_3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
   write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3', 'Pedigri_3.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
 
-###########
-# Pedigrí 4
-###########
+#############
+# Pedigrí 3.2
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_3.2') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_3 <- replicate(n = 10, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_3 <- plyr::ldply(F1_3, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:461#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 10 individuos como resultado de los 10 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_3 <- F1_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 80) %>%
+  uncount(count) %>%
+  mutate(
+    id = 462:1261#,
+    #Gen = 2
+  ) # Este correspondería a 80 descencientes para cada uno de los 10 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_3 <- F2_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1262:2061#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_3 <- bind_rows(Pob_fun, F1_3, F2_3, F3_3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.2', 'Pedigri_3b.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 3.3
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_3.3') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_3 <- replicate(n = 10, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_3 <- plyr::ldply(F1_3, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:461#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 10 individuos como resultado de los 10 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_3 <- F1_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 80) %>%
+  uncount(count) %>%
+  mutate(
+    id = 462:1261#,
+    #Gen = 2
+  ) # Este correspondería a 80 descencientes para cada uno de los 10 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_3 <- F2_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1262:2061#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_3 <- bind_rows(Pob_fun, F1_3, F2_3, F3_3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.3', 'Pedigri_3c.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 3.4
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_3.4') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_3 <- replicate(n = 10, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_3 <- plyr::ldply(F1_3, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:461#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 10 individuos como resultado de los 10 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_3 <- F1_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 80) %>%
+  uncount(count) %>%
+  mutate(
+    id = 462:1261#,
+    #Gen = 2
+  ) # Este correspondería a 80 descencientes para cada uno de los 10 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_3 <- F2_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1262:2061#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_3 <- bind_rows(Pob_fun, F1_3, F2_3, F3_3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.4', 'Pedigri_3d.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 3.5
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_3.5') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_3 <- replicate(n = 10, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_3 <- plyr::ldply(F1_3, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:461#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 10 individuos como resultado de los 10 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_3 <- F1_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 80) %>%
+  uncount(count) %>%
+  mutate(
+    id = 462:1261#,
+    #Gen = 2
+  ) # Este correspondería a 80 descencientes para cada uno de los 10 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_3 <- F2_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1262:2061#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_3 <- bind_rows(Pob_fun, F1_3, F2_3, F3_3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.5', 'Pedigri_3e.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 3.6
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_3.6') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_3 <- replicate(n = 10, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_3 <- plyr::ldply(F1_3, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:461#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 10 individuos como resultado de los 10 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_3 <- F1_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 80) %>%
+  uncount(count) %>%
+  mutate(
+    id = 462:1261#,
+    #Gen = 2
+  ) # Este correspondería a 80 descencientes para cada uno de los 10 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_3 <- F2_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1262:2061#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_3 <- bind_rows(Pob_fun, F1_3, F2_3, F3_3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.6', 'Pedigri_3f.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 3.7
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_3.7') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_3 <- replicate(n = 10, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_3 <- plyr::ldply(F1_3, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:461#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 10 individuos como resultado de los 10 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_3 <- F1_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 80) %>%
+  uncount(count) %>%
+  mutate(
+    id = 462:1261#,
+    #Gen = 2
+  ) # Este correspondería a 80 descencientes para cada uno de los 10 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_3 <- F2_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1262:2061#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_3 <- bind_rows(Pob_fun, F1_3, F2_3, F3_3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.7', 'Pedigri_3g.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 3.8
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_3.8') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_3 <- replicate(n = 10, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_3 <- plyr::ldply(F1_3, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:461#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 10 individuos como resultado de los 10 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_3 <- F1_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 80) %>%
+  uncount(count) %>%
+  mutate(
+    id = 462:1261#,
+    #Gen = 2
+  ) # Este correspondería a 80 descencientes para cada uno de los 10 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_3 <- F2_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1262:2061#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_3 <- bind_rows(Pob_fun, F1_3, F2_3, F3_3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.8', 'Pedigri_3h.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 3.9
+#############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_3.9') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_3 <- replicate(n = 10, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_3 <- plyr::ldply(F1_3, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:461#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 10 individuos como resultado de los 10 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_3 <- F1_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 80) %>%
+  uncount(count) %>%
+  mutate(
+    id = 462:1261#,
+    #Gen = 2
+  ) # Este correspondería a 80 descencientes para cada uno de los 10 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_3 <- F2_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1262:2061#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_3 <- bind_rows(Pob_fun, F1_3, F2_3, F3_3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.9', 'Pedigri_3i.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+##############
+# Pedigrí 3.10
+##############
+
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_3.10') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
+
+# Generación F1 ----
+
+F1_3 <- replicate(n = 10, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+
+F1_3 <- plyr::ldply(F1_3, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+  mutate(
+    id = 452:461#,
+    #Gen = 1
+    ) # En la F1 se tendria un total de 10 individuos como resultado de los 10 cruces en la F0.
+  
+# Generación F2 ----
+
+F2_3 <- F1_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(Prog2 = Prog1) %>%
+  mutate(count = 80) %>%
+  uncount(count) %>%
+  mutate(
+    id = 462:1261#,
+    #Gen = 2
+  ) # Este correspondería a 80 descencientes para cada uno de los 10 individuos (id) de la F1, dando un total de 800 individuos.
+
+# Generación F3 ----
+
+F3_3 <- F2_3 %>%
+  select(id) %>%
+  dplyr::rename(Prog1 = id) %>%
+  mutate(
+    Prog2 = Prog1,
+    id = 1262:2061#,
+    #Gen = 3
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+
+# Población total ----
+
+Ped_3 <- bind_rows(Pob_fun, F1_3, F2_3, F3_3) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.10', 'Pedigri_3j.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 1.
+
+#############
+# Pedigrí 4.1
+#############
 
 dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_4') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
 
@@ -19644,455 +21347,410 @@ F3_4 <- F2_4 %>%
 Ped_4 <- bind_rows(Pob_fun, F1_4, F2_4, F3_4) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
   write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4', 'Pedigri_4.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 4.
 
-###########
-# Pedigrí 5
-###########
+#############
+# Pedigrí 4.2
+#############
 
-dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_5') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del cinco pedigrí.
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_4.2') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
 
 # Generación F1 ----
 
-F1_5 <- replicate(n = 200, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+F1_4 <- replicate(n = 80, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
 
-F1_5 <- plyr::ldply(F1_5, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+F1_4 <- plyr::ldply(F1_4, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
   mutate(
-    id = 452:651#,
+    id = 452:531#,
     #Gen = 1
-    ) # En la F1 se tendria un total de 200 individuos como resultado de los 200 cruces en la F0.
-
+    ) # En la F1 se tendria un total de 80 individuos como resultado de los 80 cruces en la F0.
+  
 # Generación F2 ----
 
-F2_5 <- F1_5 %>%
+F2_4 <- F1_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(Prog2 = Prog1) %>%
-  mutate(count = 4) %>%
+  mutate(count = 10) %>%
   uncount(count) %>%
   mutate(
-    id = 652:1451#,
+    id = 532:1331#,
     #Gen = 2
-  ) # Este correspondería a 4 descencientes para cada uno de los 200 individuos (id) de la F1, dando un total de 800 individuos.
+  ) # Este correspondería a 10 descencientes para cada uno de los 80 individuos (id) de la F1, dando un total de 800 individuos.
 
 # Generación F3 ----
 
-F3_5 <- F2_5 %>%
+F3_4 <- F2_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(
     Prog2 = Prog1,
-    id = 1452:2251#,
+    id = 1332:2131#,
     #Gen = 3
-    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
 
 # Población total ----
 
-Ped_5 <- bind_rows(Pob_fun, F1_5, F2_5, F3_5) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
-  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_5', 'Pedigri_5.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 5.
+Ped_4 <- bind_rows(Pob_fun, F1_4, F2_4, F3_4) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.2', 'Pedigri_4b.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 4.
 
-###########
-# Pedigrí 6
-###########
+#############
+# Pedigrí 4.3
+#############
 
-dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_6') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_4.3') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
 
 # Generación F1 ----
 
-F1_6 <- replicate(n = 400, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+F1_4 <- replicate(n = 80, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
 
-F1_6 <- plyr::ldply(F1_6, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+F1_4 <- plyr::ldply(F1_4, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
   mutate(
-    id = 452:851#,
+    id = 452:531#,
     #Gen = 1
-    ) # En la F1 se tendria un total de 400 individuos como resultado de los 400 cruces en la F0.
-
+    ) # En la F1 se tendria un total de 80 individuos como resultado de los 80 cruces en la F0.
+  
 # Generación F2 ----
 
-F2_6 <- F1_6 %>%
+F2_4 <- F1_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(Prog2 = Prog1) %>%
-  mutate(count = 2) %>%
+  mutate(count = 10) %>%
   uncount(count) %>%
   mutate(
-    id = 852:1651#,
+    id = 532:1331#,
     #Gen = 2
-  ) # Este correspondería a 2 descencientes para cada uno de los 400 individuos (id) de la F1, dando un total de 800 individuos.
+  ) # Este correspondería a 10 descencientes para cada uno de los 80 individuos (id) de la F1, dando un total de 800 individuos.
 
 # Generación F3 ----
 
-F3_6 <- F2_6 %>%
+F3_4 <- F2_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(
     Prog2 = Prog1,
-    id = 1652:2451#,
+    id = 1332:2131#,
     #Gen = 3
-    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
 
 # Población total ----
 
-Ped_6 <- bind_rows(Pob_fun, F1_6, F2_6, F3_6) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
-  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_6', 'Pedigri_6.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 6.
+Ped_4 <- bind_rows(Pob_fun, F1_4, F2_4, F3_4) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.3', 'Pedigri_4c.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 4.
 
-###########
-# Pedigrí 7
-###########
+#############
+# Pedigrí 4.4
+#############
 
-dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_7') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_4.4') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
 
 # Generación F1 ----
 
-F1_7 <- replicate(n = 100, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+F1_4 <- replicate(n = 80, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
 
-F1_7 <- plyr::ldply(F1_7, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+F1_4 <- plyr::ldply(F1_4, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
   mutate(
-    id = 452:551#,
+    id = 452:531#,
     #Gen = 1
-    ) # En la F1 se tendria un total de 100 individuos como resultado de los 100 cruces en la F0.
-
+    ) # En la F1 se tendria un total de 80 individuos como resultado de los 80 cruces en la F0.
+  
 # Generación F2 ----
 
-F2_7 <- F1_7 %>%
+F2_4 <- F1_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(Prog2 = Prog1) %>%
-  mutate(count = 8) %>%
+  mutate(count = 10) %>%
   uncount(count) %>%
   mutate(
-    id = 552:1351#,
+    id = 532:1331#,
     #Gen = 2
-  ) # Este correspondería a 8 descencientes para cada uno de los 100 individuos (id) de la F1, dando un total de 800 individuos.
+  ) # Este correspondería a 10 descencientes para cada uno de los 80 individuos (id) de la F1, dando un total de 800 individuos.
 
 # Generación F3 ----
 
-F3_7 <- F2_7 %>%
+F3_4 <- F2_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(
     Prog2 = Prog1,
-    id = 1352:2151#,
+    id = 1332:2131#,
     #Gen = 3
-    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
 
 # Población total ----
 
-Ped_7 <- bind_rows(Pob_fun, F1_7, F2_7, F3_7) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
-  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_7', 'Pedigri_7.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 7.
+Ped_4 <- bind_rows(Pob_fun, F1_4, F2_4, F3_4) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.4', 'Pedigri_4d.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 4.
 
-###########
-# Pedigrí 8
-###########
+#############
+# Pedigrí 4.5
+#############
 
-dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_8') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_4.5') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
 
 # Generación F1 ----
 
-F1_8 <- replicate(n = 25, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+F1_4 <- replicate(n = 80, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
 
-F1_8 <- plyr::ldply(F1_8, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+F1_4 <- plyr::ldply(F1_4, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
   mutate(
-    id = 452:476#,
+    id = 452:531#,
     #Gen = 1
-    ) # En la F1 se tendria un total de 25 individuos como resultado de los 25 cruces en la F0.
-
+    ) # En la F1 se tendria un total de 80 individuos como resultado de los 80 cruces en la F0.
+  
 # Generación F2 ----
 
-F2_8 <- F1_8 %>%
+F2_4 <- F1_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(Prog2 = Prog1) %>%
-  mutate(count = 32) %>%
+  mutate(count = 10) %>%
   uncount(count) %>%
   mutate(
-    id = 477:1276#,
+    id = 532:1331#,
     #Gen = 2
-  ) # Este correspondería a 32 descencientes para cada uno de los 25 individuos (id) de la F1, dando un total de 800 individuos.
+  ) # Este correspondería a 10 descencientes para cada uno de los 80 individuos (id) de la F1, dando un total de 800 individuos.
 
 # Generación F3 ----
 
-F3_8 <- F2_8 %>%
+F3_4 <- F2_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(
     Prog2 = Prog1,
-    id = 1277:2076#,
+    id = 1332:2131#,
     #Gen = 3
-    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
 
 # Población total ----
 
-Ped_8 <- bind_rows(Pob_fun, F1_8, F2_8, F3_8) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
-  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_8', 'Pedigri_8.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 8.
+Ped_4 <- bind_rows(Pob_fun, F1_4, F2_4, F3_4) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.5', 'Pedigri_4e.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 4.
 
-###########
-# Pedigrí 9
-###########
+#############
+# Pedigrí 4.6
+#############
 
-dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_9') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_4.6') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
 
 # Generación F1 ----
 
-F1_9 <- replicate(n = 32, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+F1_4 <- replicate(n = 80, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
 
-F1_9 <- plyr::ldply(F1_9, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+F1_4 <- plyr::ldply(F1_4, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
   mutate(
-    id = 452:483#,
+    id = 452:531#,
     #Gen = 1
-    ) # En la F1 se tendria un total de 32 individuos como resultado de los 32 cruces en la F0.
-
+    ) # En la F1 se tendria un total de 80 individuos como resultado de los 80 cruces en la F0.
+  
 # Generación F2 ----
 
-F2_9 <- F1_9 %>%
+F2_4 <- F1_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(Prog2 = Prog1) %>%
-  mutate(count = 25) %>%
+  mutate(count = 10) %>%
   uncount(count) %>%
   mutate(
-    id = 484:1283#,
+    id = 532:1331#,
     #Gen = 2
-  ) # Este correspondería a 32 descencientes para cada uno de los 25 individuos (id) de la F1, dando un total de 800 individuos.
+  ) # Este correspondería a 10 descencientes para cada uno de los 80 individuos (id) de la F1, dando un total de 800 individuos.
 
 # Generación F3 ----
 
-F3_9 <- F2_9 %>%
+F3_4 <- F2_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(
     Prog2 = Prog1,
-    id = 1284:2083#,
+    id = 1332:2131#,
     #Gen = 3
-    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
 
 # Población total ----
 
-Ped_9 <- bind_rows(Pob_fun, F1_9, F2_9, F3_9) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
-  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_9', 'Pedigri_9.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 9.
+Ped_4 <- bind_rows(Pob_fun, F1_4, F2_4, F3_4) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.6', 'Pedigri_4f.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 4.
 
-############
-# Pedigrí 10
-############
+#############
+# Pedigrí 4.7
+#############
 
-dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_10') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_4.7') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
 
 # Generación F1 ----
 
-F1_10 <- replicate(n = 50, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+F1_4 <- replicate(n = 80, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
 
-F1_10 <- plyr::ldply(F1_10, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+F1_4 <- plyr::ldply(F1_4, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
   mutate(
-    id = 452:501#,
+    id = 452:531#,
     #Gen = 1
-    ) # En la F1 se tendria un total de 50 individuos como resultado de los 50 cruces en la F0.
-
+    ) # En la F1 se tendria un total de 80 individuos como resultado de los 80 cruces en la F0.
+  
 # Generación F2 ----
 
-F2_10 <- F1_10 %>%
+F2_4 <- F1_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(Prog2 = Prog1) %>%
-  mutate(count = 16) %>%
+  mutate(count = 10) %>%
   uncount(count) %>%
   mutate(
-    id = 502:1301#,
+    id = 532:1331#,
     #Gen = 2
-  ) # Este correspondería a 16 descencientes para cada uno de los 50 individuos (id) de la F1, dando un total de 800 individuos.
+  ) # Este correspondería a 10 descencientes para cada uno de los 80 individuos (id) de la F1, dando un total de 800 individuos.
 
 # Generación F3 ----
 
-F3_10 <- F2_10 %>%
+F3_4 <- F2_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(
     Prog2 = Prog1,
-    id = 1302:2101#,
+    id = 1332:2131#,
     #Gen = 3
-    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
 
 # Población total ----
 
-Ped_10 <- bind_rows(Pob_fun, F1_10, F2_10, F3_10) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
-  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_10', 'Pedigri_10.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 10.
+Ped_4 <- bind_rows(Pob_fun, F1_4, F2_4, F3_4) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.7', 'Pedigri_4g.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 4.
 
-############
-# Pedigrí 11
-############
+#############
+# Pedigrí 4.8
+#############
 
-dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_11') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_4.8') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
 
 # Generación F1 ----
 
-F1_11 <- replicate(n = 16, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+F1_4 <- replicate(n = 80, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
 
-F1_11 <- plyr::ldply(F1_11, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+F1_4 <- plyr::ldply(F1_4, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
   mutate(
-    id = 452:467#,
+    id = 452:531#,
     #Gen = 1
-    ) # En la F1 se tendria un total de 50 individuos como resultado de los 50 cruces en la F0.
-
+    ) # En la F1 se tendria un total de 80 individuos como resultado de los 80 cruces en la F0.
+  
 # Generación F2 ----
 
-F2_11 <- F1_11 %>%
+F2_4 <- F1_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(Prog2 = Prog1) %>%
-  mutate(count = 50) %>%
+  mutate(count = 10) %>%
   uncount(count) %>%
   mutate(
-    id = 468:1267#,
+    id = 532:1331#,
     #Gen = 2
-  ) # Este correspondería a 50 descencientes para cada uno de los 16 individuos (id) de la F1, dando un total de 800 individuos.
+  ) # Este correspondería a 10 descencientes para cada uno de los 80 individuos (id) de la F1, dando un total de 800 individuos.
 
 # Generación F3 ----
 
-F3_11 <- F2_11 %>%
+F3_4 <- F2_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(
     Prog2 = Prog1,
-    id = 1268:2067#,
+    id = 1332:2131#,
     #Gen = 3
-    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
 
 # Población total ----
 
-Ped_11 <- bind_rows(Pob_fun, F1_11, F2_11, F3_11) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
-  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_11', 'Pedigri_11.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 11.
+Ped_4 <- bind_rows(Pob_fun, F1_4, F2_4, F3_4) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.8', 'Pedigri_4h.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 4.
 
-############
-# Pedigrí 12
-############
+#############
+# Pedigrí 4.9
+#############
 
-dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_12') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_4.9') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
 
 # Generación F1 ----
 
-F1_12 <- replicate(n = 160, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+F1_4 <- replicate(n = 80, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
 
-F1_12 <- plyr::ldply(F1_12, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+F1_4 <- plyr::ldply(F1_4, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
   mutate(
-    id = 452:611#,
+    id = 452:531#,
     #Gen = 1
-    ) # En la F1 se tendria un total de 160 individuos como resultado de los 160 cruces en la F0.
-
+    ) # En la F1 se tendria un total de 80 individuos como resultado de los 80 cruces en la F0.
+  
 # Generación F2 ----
 
-F2_12 <- F1_12 %>%
+F2_4 <- F1_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(Prog2 = Prog1) %>%
-  mutate(count = 5) %>%
+  mutate(count = 10) %>%
   uncount(count) %>%
   mutate(
-    id = 612:1411#,
+    id = 532:1331#,
     #Gen = 2
-  ) # Este correspondería a 5 descencientes para cada uno de los 160 individuos (id) de la F1, dando un total de 800 individuos.
+  ) # Este correspondería a 10 descencientes para cada uno de los 80 individuos (id) de la F1, dando un total de 800 individuos.
 
 # Generación F3 ----
 
-F3_12 <- F2_12 %>%
+F3_4 <- F2_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(
     Prog2 = Prog1,
-    id = 1412:2211#,
+    id = 1332:2131#,
     #Gen = 3
-    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
 
 # Población total ----
 
-Ped_12 <- bind_rows(Pob_fun, F1_12, F2_12, F3_12) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
-  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_12', 'Pedigri_12.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 12.
+Ped_4 <- bind_rows(Pob_fun, F1_4, F2_4, F3_4) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.9', 'Pedigri_4i.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 4.
 
-############
-# Pedigrí 13
-############
+##############
+# Pedigrí 4.10
+##############
 
-dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_13') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
+dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_4.10') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del segundo pedigrí.
 
 # Generación F1 ----
 
-F1_13 <- replicate(n = 5, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
+F1_4 <- replicate(n = 80, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
 
-F1_13 <- plyr::ldply(F1_13, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
+F1_4 <- plyr::ldply(F1_4, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
   mutate(
-    id = 452:456#,
+    id = 452:531#,
     #Gen = 1
-    ) # En la F1 se tendria un total de 5 individuos como resultado de los 5 cruces en la F0.
-
+    ) # En la F1 se tendria un total de 80 individuos como resultado de los 80 cruces en la F0.
+  
 # Generación F2 ----
 
-F2_13 <- F1_13 %>%
+F2_4 <- F1_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(Prog2 = Prog1) %>%
-  mutate(count = 160) %>%
+  mutate(count = 10) %>%
   uncount(count) %>%
   mutate(
-    id = 457:1256#,
+    id = 532:1331#,
     #Gen = 2
-  ) # Este correspondería a 160 descencientes para cada uno de los 5 individuos (id) de la F1, dando un total de 800 individuos.
+  ) # Este correspondería a 10 descencientes para cada uno de los 80 individuos (id) de la F1, dando un total de 800 individuos.
 
 # Generación F3 ----
 
-F3_13 <- F2_13 %>%
+F3_4 <- F2_4 %>%
   select(id) %>%
   dplyr::rename(Prog1 = id) %>%
   mutate(
     Prog2 = Prog1,
-    id = 1257:2056#,
+    id = 1332:2131#,
     #Gen = 3
-    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
+    )# Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
 
 # Población total ----
 
-Ped_13 <- bind_rows(Pob_fun, F1_13, F2_13, F3_13) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
-  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_13', 'Pedigri_13.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 13.
-
-############
-# Pedigrí 14
-############
-
-dir.create('../Datos/Datos_IND/SeqBreed/Pedigri_14') # Se crea el directorio de trabajo donde se guardaran los archivos y resultados que obtengan del sexto pedigrí.
-
-# Generación F1 ----
-
-F1_14 <- replicate(n = 8, fun_F1(), simplify = FALSE) # Con replicate se indicaria el número de cruces por cada pareja.
-
-F1_14 <- plyr::ldply(F1_14, tibble) %>% # Con la función ldply() indico que los elementos de la lista anterior los devuelva como un conjunto de datos.
-  mutate(
-    id = 452:459#,
-    #Gen = 1
-    ) # En la F1 se tendria un total de 5 individuos como resultado de los 5 cruces en la F0.
-
-# Generación F2 ----
-
-F2_14 <- F1_14 %>%
-  select(id) %>%
-  dplyr::rename(Prog1 = id) %>%
-  mutate(Prog2 = Prog1) %>%
-  mutate(count = 100) %>%
-  uncount(count) %>%
-  mutate(
-    id = 460:1259#,
-    #Gen = 2
-  ) # Este correspondería a 160 descencientes para cada uno de los 5 individuos (id) de la F1, dando un total de 800 individuos.
-
-# Generación F3 ----
-
-F3_14 <- F2_14 %>%
-  select(id) %>%
-  dplyr::rename(Prog1 = id) %>%
-  mutate(
-    Prog2 = Prog1,
-    id = 1260:2059#,
-    #Gen = 3
-    ) # Este correspondería a un solo descenciente para cada uno de los 800 individuos (id) de la F2, dando un total de 800 individuos.
-
-# Población total ----
-
-Ped_14 <- bind_rows(Pob_fun, F1_14, F2_14, F3_14) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
-  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_14', 'Pedigri_14.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 14.
+Ped_4 <- bind_rows(Pob_fun, F1_4, F2_4, F3_4) %>% # Aquí se juntan todas las generaciones anteriores (F0, F1, F2 y F3).
+  write_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.10', 'Pedigri_4j.txt'), delim = ' ', col_names = FALSE) # Se guarda el archivo que contiene el pedigrí 4.
 ```
 
 <!--
@@ -20103,11 +21761,11 @@ Ped_14 <- bind_rows(Pob_fun, F1_14, F2_14, F3_14) %>% # Aquí se juntan todas la
 
 os.chdir(dir_tr) # Se indica aquí el cambio hacia el directorio de trabajo, que es donde estan los archivos de pedigríes.
 
-Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo generado anteriormente "Gen_pob_base", que corresponde al genotipo de la población base.
+#Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo generado anteriormente "Gen_pob_base", que corresponde al genotipo de la población base.
 
-###########
-# Pedigrí 1
-###########
+#############
+# Pedigrí 1.1
+#############
 
 #Pedigri_1 = 'Pedigri_1/Pedigri_1.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
 
@@ -20116,9 +21774,108 @@ Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo gen
 
 #pickle.dump(Pob_1, open('Pob_1', 'wb'))
 
-###########
-# Pedigrí 2
-###########
+#############
+# Pedigrí 1.2
+#############
+
+#Pedigri_1 = 'Pedigri_1.2/Pedigri_1b.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
+
+#Pob_1b = gg.Population(Gen_caracteristicas, pedFile = Pedigri_1, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_1b.inds)))
+
+#pickle.dump(Pob_1b, open('Pob_1b', 'wb'))
+
+#############
+# Pedigrí 1.3
+#############
+
+#Pedigri_1 = 'Pedigri_1.3/Pedigri_1c.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
+
+#Pob_1c = gg.Population(Gen_caracteristicas, pedFile = Pedigri_1, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_1c.inds)))
+
+#pickle.dump(Pob_1c, open('Pob_1c', 'wb'))
+
+#############
+# Pedigrí 1.4
+#############
+
+#Pedigri_1 = 'Pedigri_1.4/Pedigri_1d.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
+
+#Pob_1d = gg.Population(Gen_caracteristicas, pedFile = Pedigri_1, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_1d.inds)))
+
+#pickle.dump(Pob_1d, open('Pob_1d', 'wb'))
+
+#############
+# Pedigrí 1.5
+#############
+
+#Pedigri_1 = 'Pedigri_1.5/Pedigri_1e.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
+
+#Pob_1e = gg.Population(Gen_caracteristicas, pedFile = Pedigri_1, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_1e.inds)))
+
+#pickle.dump(Pob_1e, open('Pob_1e', 'wb'))
+
+#############
+# Pedigrí 1.6
+#############
+
+#Pedigri_1 = 'Pedigri_1.6/Pedigri_1f.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
+
+#Pob_1f = gg.Population(Gen_caracteristicas, pedFile = Pedigri_1, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_1f.inds)))
+
+#pickle.dump(Pob_1f, open('Pob_1f', 'wb'))
+
+#############
+# Pedigrí 1.7
+#############
+
+#Pedigri_1 = 'Pedigri_1.7/Pedigri_1g.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
+
+#Pob_1g = gg.Population(Gen_caracteristicas, pedFile = Pedigri_1, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_1g.inds)))
+
+#pickle.dump(Pob_1g, open('Pob_1g', 'wb'))
+
+#############
+# Pedigrí 1.8
+#############
+
+#Pedigri_1 = 'Pedigri_1.8/Pedigri_1h.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
+
+#Pob_1h = gg.Population(Gen_caracteristicas, pedFile = Pedigri_1, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_1h.inds)))
+
+#pickle.dump(Pob_1h, open('Pob_1h', 'wb'))
+
+#############
+# Pedigrí 1.9
+#############
+
+#Pedigri_1 = 'Pedigri_1.9/Pedigri_1i.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
+
+#Pob_1i = gg.Population(Gen_caracteristicas, pedFile = Pedigri_1, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_1i.inds)))
+
+#pickle.dump(Pob_1i, open('Pob_1i', 'wb'))
+
+##############
+# Pedigrí 1.10
+##############
+
+Pedigri_1 = 'Pedigri_1.10/Pedigri_1j.txt' # Se crea el objeto "Pedigri_1", que corresponde al pedigrí 1 generado anteriormente.
+
+Pob_1j = gg.Population(Gen_caracteristicas, pedFile = Pedigri_1, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+print('No. of individuals is ' + str(len(Pob_1j.inds)))
+
+pickle.dump(Pob_1j, open('Pob_1j', 'wb'))
+
+#############
+# Pedigrí 2.1
+#############
 
 #Pedigri_2 = 'Pedigri_2/Pedigri_2.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
 
@@ -20127,9 +21884,108 @@ Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo gen
 
 #pickle.dump(Pob_2, open('Pob_2', 'wb'))
 
-###########
-# Pedigrí 3
-###########
+#############
+# Pedigrí 2.2
+#############
+
+#Pedigri_2 = 'Pedigri_2.2/Pedigri_2b.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
+
+#Pob_2b = gg.Population(Gen_caracteristicas, pedFile = Pedigri_2, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_2b.inds)))
+
+#pickle.dump(Pob_2b, open('Pob_2b', 'wb'))
+
+#############
+# Pedigrí 2.3
+#############
+
+#Pedigri_2 = 'Pedigri_2.3/Pedigri_2c.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
+
+#Pob_2c = gg.Population(Gen_caracteristicas, pedFile = Pedigri_2, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_2c.inds)))
+
+#pickle.dump(Pob_2c, open('Pob_2c', 'wb'))
+
+#############
+# Pedigrí 2.4
+#############
+
+#Pedigri_2 = 'Pedigri_2.4/Pedigri_2d.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
+
+#Pob_2d = gg.Population(Gen_caracteristicas, pedFile = Pedigri_2, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_2d.inds)))
+
+#pickle.dump(Pob_2d, open('Pob_2d', 'wb'))
+
+#############
+# Pedigrí 2.5
+#############
+
+#Pedigri_2 = 'Pedigri_2.5/Pedigri_2e.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
+
+#Pob_2e = gg.Population(Gen_caracteristicas, pedFile = Pedigri_2, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_2e.inds)))
+
+#pickle.dump(Pob_2e, open('Pob_2e', 'wb'))
+
+#############
+# Pedigrí 2.6
+#############
+
+#Pedigri_2 = 'Pedigri_2.6/Pedigri_2f.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
+
+#Pob_2f = gg.Population(Gen_caracteristicas, pedFile = Pedigri_2, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_2f.inds)))
+
+#pickle.dump(Pob_2f, open('Pob_2f', 'wb'))
+
+#############
+# Pedigrí 2.7
+#############
+
+#Pedigri_2 = 'Pedigri_2.7/Pedigri_2g.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
+
+#Pob_2g = gg.Population(Gen_caracteristicas, pedFile = Pedigri_2, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_2g.inds)))
+
+#pickle.dump(Pob_2g, open('Pob_2g', 'wb'))
+
+#############
+# Pedigrí 2.8
+#############
+
+#Pedigri_2 = 'Pedigri_2.8/Pedigri_2h.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
+
+#Pob_2h = gg.Population(Gen_caracteristicas, pedFile = Pedigri_2, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_2h.inds)))
+
+#pickle.dump(Pob_2h, open('Pob_2h', 'wb'))
+
+#############
+# Pedigrí 2.9
+#############
+
+#Pedigri_2 = 'Pedigri_2.9/Pedigri_2i.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
+
+#Pob_2i = gg.Population(Gen_caracteristicas, pedFile = Pedigri_2, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_2i.inds)))
+
+#pickle.dump(Pob_2i, open('Pob_2i', 'wb'))
+
+##############
+# Pedigrí 2.10
+##############
+
+Pedigri_2 = 'Pedigri_2.10/Pedigri_2j.txt' # Se crea el objeto "Pedigri_2", que corresponde al pedigrí 2 generado anteriormente.
+
+Pob_2j = gg.Population(Gen_caracteristicas, pedFile = Pedigri_2, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+print('No. of individuals is ' + str(len(Pob_2j.inds)))
+
+pickle.dump(Pob_2j, open('Pob_2j', 'wb'))
+
+#############
+# Pedigrí 3.1
+#############
 
 #Pedigri_3 = 'Pedigri_3/Pedigri_3.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 3 generado anteriormente.
 
@@ -20138,9 +21994,108 @@ Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo gen
 
 #pickle.dump(Pob_3, open('Pob_3', 'wb'))
 
-###########
-# Pedigrí 4
-###########
+#############
+# Pedigrí 3.2
+#############
+
+#Pedigri_3 = 'Pedigri_3.2/Pedigri_3b.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 3 generado anteriormente.
+
+#Pob_3b = gg.Population(Gen_caracteristicas, pedFile = Pedigri_3, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_3b.inds)))
+
+#pickle.dump(Pob_3b, open('Pob_3b', 'wb'))
+
+#############
+# Pedigrí 3.3
+#############
+
+#Pedigri_3 = 'Pedigri_3.3/Pedigri_3c.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 3 generado anteriormente.
+
+#Pob_3c = gg.Population(Gen_caracteristicas, pedFile = Pedigri_3, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_3c.inds)))
+
+#pickle.dump(Pob_3c, open('Pob_3c', 'wb'))
+
+#############
+# Pedigrí 3.4
+#############
+
+#Pedigri_3 = 'Pedigri_3.4/Pedigri_3d.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 3 generado anteriormente.
+
+#Pob_3d = gg.Population(Gen_caracteristicas, pedFile = Pedigri_3, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_3d.inds)))
+
+#pickle.dump(Pob_3d, open('Pob_3d', 'wb'))
+
+#############
+# Pedigrí 3.5
+#############
+
+#Pedigri_3 = 'Pedigri_3.5/Pedigri_3e.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 3 generado anteriormente.
+
+#Pob_3e = gg.Population(Gen_caracteristicas, pedFile = Pedigri_3, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_3e.inds)))
+
+#pickle.dump(Pob_3e, open('Pob_3e', 'wb'))
+
+#############
+# Pedigrí 3.6
+#############
+
+#Pedigri_3 = 'Pedigri_3.6/Pedigri_3f.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 3 generado anteriormente.
+
+#Pob_3f = gg.Population(Gen_caracteristicas, pedFile = Pedigri_3, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_3f.inds)))
+
+#pickle.dump(Pob_3f, open('Pob_3f', 'wb'))
+
+#############
+# Pedigrí 3.7
+#############
+
+#Pedigri_3 = 'Pedigri_3.7/Pedigri_3g.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 3 generado anteriormente.
+
+#Pob_3g = gg.Population(Gen_caracteristicas, pedFile = Pedigri_3, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_3g.inds)))
+
+#pickle.dump(Pob_3g, open('Pob_3g', 'wb'))
+
+#############
+# Pedigrí 3.8
+#############
+
+#Pedigri_3 = 'Pedigri_3.8/Pedigri_3h.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 3 generado anteriormente.
+
+#Pob_3h = gg.Population(Gen_caracteristicas, pedFile = Pedigri_3, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_3h.inds)))
+
+#pickle.dump(Pob_3h, open('Pob_3h', 'wb'))
+
+#############
+# Pedigrí 3.9
+#############
+
+#Pedigri_3 = 'Pedigri_3.9/Pedigri_3i.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 3 generado anteriormente.
+
+#Pob_3i = gg.Population(Gen_caracteristicas, pedFile = Pedigri_3, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_3i.inds)))
+
+#pickle.dump(Pob_3i, open('Pob_3i', 'wb'))
+
+##############
+# Pedigrí 3.10
+##############
+
+Pedigri_3 = 'Pedigri_3.10/Pedigri_3j.txt' # Se crea el objeto "Pedigri_3", que corresponde al pedigrí 3 generado anteriormente.
+
+Pob_3j = gg.Population(Gen_caracteristicas, pedFile = Pedigri_3, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+print('No. of individuals is ' + str(len(Pob_3j.inds)))
+
+pickle.dump(Pob_3j, open('Pob_3j', 'wb'))
+
+#############
+# Pedigrí 4.1
+#############
 
 #Pedigri_4 = 'Pedigri_4/Pedigri_4.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 4 generado anteriormente.
 
@@ -20149,115 +22104,104 @@ Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb')) # Se carga el archivo gen
 
 #pickle.dump(Pob_4, open('Pob_4', 'wb'))
 
-###########
-# Pedigrí 5
-###########
+#############
+# Pedigrí 4.2
+#############
 
-#Pedigri_5 = 'Pedigri_5/Pedigri_5.txt' # Se crea el objeto "Pedigri_5", que corresponde al pedigrí 5 generado anteriormente.
+#Pedigri_4 = 'Pedigri_4.2/Pedigri_4b.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 4 generado anteriormente.
 
-#Pob_5 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_5, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(Pob_5.inds)))
+#Pob_4b = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_4b.inds)))
 
-#pickle.dump(Pob_5, open('Pob_5', 'wb'))
+#pickle.dump(Pob_4b, open('Pob_4b', 'wb'))
 
-###########
-# Pedigrí 6
-###########
+#############
+# Pedigrí 4.3
+#############
 
-#Pedigri_6 = 'Pedigri_6/Pedigri_6.txt' # Se crea el objeto "Pedigri_6", que corresponde al pedigrí 6 generado anteriormente.
+#Pedigri_4 = 'Pedigri_4.3/Pedigri_4c.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 4 generado anteriormente.
 
-#Pob_6 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_6, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(Pob_6.inds)))
+#Pob_4c = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_4c.inds)))
 
-#pickle.dump(Pob_6, open('Pob_6', 'wb'))
+#pickle.dump(Pob_4c, open('Pob_4c', 'wb'))
 
-###########
-# Pedigrí 7
-###########
+#############
+# Pedigrí 4.4
+#############
 
-#Pedigri_7 = 'Pedigri_7/Pedigri_7.txt' # Se crea el objeto "Pedigri_7", que corresponde al pedigrí 7 generado anteriormente.
+#Pedigri_4 = 'Pedigri_4.4/Pedigri_4d.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 4 generado anteriormente.
 
-#Pob_7 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_7, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(Pob_7.inds)))
+#Pob_4d = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_4d.inds)))
 
-#pickle.dump(Pob_7, open('Pob_7', 'wb'))
+#pickle.dump(Pob_4d, open('Pob_4d', 'wb'))
 
-###########
-# Pedigrí 8
-###########
+#############
+# Pedigrí 4.5
+#############
 
-#Pedigri_8 = 'Pedigri_8/Pedigri_8.txt' # Se crea el objeto "Pedigri_8", que corresponde al pedigrí 8 generado anteriormente.
+#Pedigri_4 = 'Pedigri_4.5/Pedigri_4e.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 4 generado anteriormente.
 
-#Pob_8 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_8, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(Pob_8.inds)))
+#Pob_4e = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_4e.inds)))
 
-#pickle.dump(Pob_8, open('Pob_8', 'wb'))
+#pickle.dump(Pob_4e, open('Pob_4e', 'wb'))
 
-###########
-# Pedigrí 9
-###########
+#############
+# Pedigrí 4.6
+#############
 
-#Pedigri_9 = 'Pedigri_9/Pedigri_9.txt' # Se crea el objeto "Pedigri_9", que corresponde al pedigrí 9 generado anteriormente.
+#Pedigri_4 = 'Pedigri_4.6/Pedigri_4f.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 4 generado anteriormente.
 
-#Pob_9 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_9, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(Pob_9.inds)))
+#Pob_4f = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_4f.inds)))
 
-#pickle.dump(Pob_9, open('Pob_9', 'wb'))
+#pickle.dump(Pob_4f, open('Pob_4f', 'wb'))
 
-############
-# Pedigrí 10
-############
+#############
+# Pedigrí 4.7
+#############
 
-#Pedigri_10 = 'Pedigri_10/Pedigri_10.txt' # Se crea el objeto "Pedigri_10", que corresponde al pedigrí 10 generado anteriormente.
+#Pedigri_4 = 'Pedigri_4.7/Pedigri_4g.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 4 generado anteriormente.
 
-#Pob_10 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_10, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(Pob_10.inds)))
+#Pob_4g = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_4g.inds)))
 
-#pickle.dump(Pob_10, open('Pob_10', 'wb'))
+#pickle.dump(Pob_4g, open('Pob_4g', 'wb'))
 
-############
-# Pedigrí 11
-############
+#############
+# Pedigrí 4.8
+#############
 
-#Pedigri_11 = 'Pedigri_11/Pedigri_11.txt' # Se crea el objeto "Pedigri_11", que corresponde al pedigrí 11 generado anteriormente.
+#Pedigri_4 = 'Pedigri_4.8/Pedigri_4h.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 4 generado anteriormente.
 
-#Pob_11 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_11, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(Pob_11.inds)))
+#Pob_4h = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_4h.inds)))
 
-#pickle.dump(Pob_11, open('Pob_11', 'wb'))
+#pickle.dump(Pob_4h, open('Pob_4h', 'wb'))
 
-############
-# Pedigrí 12
-############
+#############
+# Pedigrí 4.9
+#############
 
-#Pedigri_12 = 'Pedigri_12/Pedigri_12.txt' # Se crea el objeto "Pedigri_12", que corresponde al pedigrí 12 generado anteriormente.
+#Pedigri_4 = 'Pedigri_4.9/Pedigri_4i.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 4 generado anteriormente.
 
-#Pob_12 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_12, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(Pob_12.inds)))
+#Pob_4i = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+#print('No. of individuals is ' + str(len(Pob_4i.inds)))
 
-#pickle.dump(Pob_12, open('Pob_12', 'wb'))
+#pickle.dump(Pob_4i, open('Pob_4i', 'wb'))
 
-############
-# Pedigrí 13
-############
+##############
+# Pedigrí 4.10
+##############
 
-#Pedigri_13 = 'Pedigri_13/Pedigri_13.txt' # Se crea el objeto "Pedigri_13", que corresponde al pedigrí 13 generado anteriormente.
+Pedigri_4 = 'Pedigri_4.10/Pedigri_4j.txt' # Se crea el objeto "Pedigri_4", que corresponde al pedigrí 4 generado anteriormente.
 
-#Pob_13 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_13, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-#print('No. of individuals is ' + str(len(Pob_13.inds)))
+Pob_4j = gg.Population(Gen_caracteristicas, pedFile = Pedigri_4, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
+print('No. of individuals is ' + str(len(Pob_4j.inds)))
 
-#pickle.dump(Pob_13, open('Pob_13', 'wb'))
-
-############
-# Pedigrí 14
-############
-
-Pedigri_14 = 'Pedigri_14/Pedigri_14.txt' # Se crea el objeto "Pedigri_14", que corresponde al pedigrí 14 generado anteriormente.
-
-Pob_14 = gg.Population(Gen_caracteristicas, pedFile = Pedigri_14, generation = None, qtns = QTN, gfounders = Gen_Pob_base)
-print('No. of individuals is ' + str(len(Pob_14.inds)))
-
-pickle.dump(Pob_14, open('Pob_14', 'wb'))
+pickle.dump(Pob_4j, open('Pob_4j', 'wb'))
 ```
 
 <!--
