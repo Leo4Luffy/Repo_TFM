@@ -19158,7 +19158,7 @@ $ echo $?
 
 ```{r Carga del paquete reticulate para usar Python en R y de otros paquetes de interés}
 
-pacman::p_load(reticulate, dplyr, qqman, here, readr, tibble, tidyr, ggplot2, ggrepel, patchwork, genio, BEDMatrix)
+pacman::p_load(reticulate, dplyr, qqman, here, readr, tibble, tidyr, ggplot2, ggrepel, patchwork, genio, BEDMatrix, ggtext)
 
 use_condaenv(conda = '/home/leo/anaconda3/bin/python') # Se uso el entorno conda (indicando la ruta donde reside la carpeta de Python), como la versión de Python que se quiere usar.
 
@@ -39104,7 +39104,8 @@ Cor_ped1.10 <- bind_rows(Cor_1_ped1, Cor_2_ped1, Cor_3_ped1, Cor_4_ped1, Cor_5_p
 #Cor_ped1 <- (Cor_ped1.1 | Cor_ped1.2 | Cor_ped1.3 | Cor_ped1.4 | Cor_ped1.5) / (Cor_ped1.6 | Cor_ped1.7 | Cor_ped1.8 | Cor_ped1.9 | Cor_ped1.10) & theme(legend.position = 'right')
 #Cor_ped1 + plot_layout(guides = 'collect')
 
-Cor_ped1 <- bind_rows(Cor_ped1.1, Cor_ped1.2, Cor_ped1.3, Cor_ped1.4, Cor_ped1.5, Cor_ped1.6, Cor_ped1.7, Cor_ped1.8, Cor_ped1.9, Cor_ped1.10) 
+Cor_ped1 <- bind_rows(Cor_ped1.1, Cor_ped1.2, Cor_ped1.3, Cor_ped1.4, Cor_ped1.5, Cor_ped1.6, Cor_ped1.7, Cor_ped1.8, Cor_ped1.9, Cor_ped1.10) #%>%
+  #write_csv(here('Datos', 'Datos_IND', 'Resultados', 'Ped_1.csv'))
 
 Cor_ped1_est <- Cor_ped1 %>%
   group_by(Densidad, Genotipados) %>%
@@ -39114,10 +39115,11 @@ Cor_ped1_est <- Cor_ped1 %>%
     ) %>%
   ungroup()
 
-ggplot(data = Cor_ped1, aes(x = Densidad, y = Correlación, fill = Genotipados, colour = Genotipados)) +
+ped1 <- ggplot(data = Cor_ped1, aes(x = Densidad, y = Correlación, fill = Genotipados, colour = Genotipados)) +
   geom_col(data = Cor_ped1_est, position = position_dodge(width = 0.7), width = 0.6, alpha = 0.4) +
   #geom_jitter(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.8), alpha = 0.4) +
   geom_errorbar(aes(ymin = Correlación - des, ymax = Correlación + des), data = Cor_ped1_est, width = 0.2, position = position_dodge(width = 0.7)) +
+  geom_richtext(data = Cor_ped1_est, aes(x = Densidad, y = Correlación, label = (paste(round(Correlación, 2), '±', round(des, 2)))), colour = 'black', fill = 'white', size = 2.8, position = position_dodge2(width = 0.7), angle = 90, hjust = -0.5) +
   scale_y_continuous(limits = c(0.0, 1.0)) +
   labs(y = 'Precisión de la predicción (r)', x = 'Densidad del marcador', title = 'Pedigrí 1') +
   scale_colour_manual(values = c('yellow', 'cyan', 'red', 'black')) +
