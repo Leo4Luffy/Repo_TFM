@@ -1126,6 +1126,9 @@ mG_2_esc <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000', 'mG', 'mG_2', 'mG_
 m_G_IND_2 <- tcrossprod(mG_2_esc)/ncol(mG_2_esc)
 diag(m_G_IND_2) = diag(m_G_IND_2) + 0.05
 
+m_G_IND_2 %>%
+  saveRDS(here('Datos', 'Datos_IND', 'Den_100.000', 'mG', 'mG_2', 'mG_2.RDS'))
+
 ## 3. Subpoblación con 198 individuos genotipados
 
 mG_3_esc <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000', 'mG', 'mG_3', 'mG_3_esc.RDS')) # Se carga la matriz de SPNs escalada de los 198 individuos genotipados de la población IND. 
@@ -1147,6 +1150,9 @@ mG_5_esc <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000', 'mG', 'mG_5', 'mG_
 m_G_IND_5 <- tcrossprod(mG_5_esc)/ncol(mG_5_esc)
 diag(m_G_IND_5) = diag(m_G_IND_5) + 0.05
 
+m_G_IND_5 %>%
+  saveRDS(here('Datos', 'Datos_IND', 'Den_100.000', 'mG', 'mG_5', 'mG_5.RDS'))
+
 ## 6. Subpoblación con 348 individuos genotipados
 
 mG_6_esc <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000', 'mG', 'mG_6', 'mG_6_esc.RDS')) # Se carga la matriz de SPNs escalada de los 348 individuos genotipados de la población IND. 
@@ -1167,6 +1173,9 @@ mG_8_esc <- readRDS(here('Datos', 'Datos_IND', 'Den_100.000', 'mG', 'mG_8', 'mG_
 
 m_G_IND_8 <- tcrossprod(mG_8_esc)/ncol(mG_8_esc)
 diag(m_G_IND_8) = diag(m_G_IND_8) + 0.05
+
+m_G_IND_8 %>%
+  saveRDS(here('Datos', 'Datos_IND', 'Den_100.000', 'mG', 'mG_8', 'mG_8.RDS'))
 
 #### Población JAP ----
 
@@ -19121,7 +19130,2071 @@ Resultado_9 <- Resultados_corr %>% # Resultados con el pedigrí 1, con 148 y 0 i
 Resultado_9 | Resultado_8 | Resultado_7
 ```
 
-# 24. A continuación se usa el módulo SeqBreed escrito en Python, especificando mediante numerales dentro de los comentarios (<!-- -->) que se hizo.
+# 24. A continuación se analizan los resultados obtenidos al correr los datos con los paquetes de R BGLR y lme4GS para los distintos pedigríes (y sus replicas) y diferentes densidades de SNPs.
+
+```{r Resultados con los paquetes BGLR y lme4GS para los distintos pedigríes y diferentes densidades de SNPs}
+
+#################
+# a) Paquete BGLR
+#################
+
+# 1. Se importan las bases de datos de feotipos y de linea mejorada.
+
+lin_mej <- read_delim(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'iris_pedigree.csv'), delim = ',')
+Fenotipos <- read_delim(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'all.phenotypes.csv'), delim = ',')
+
+#########################################################
+# Pedigrí 1.1: 300 individuos simulados en 3 generaciones
+#########################################################
+
+# 2. Se importa el archivo .fam obtenido usando plink y que posteriomente se uso para crear la hoja de parámetros para ejecutar el software molcoanc.
+
+famsnps_IND <- read_fam(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'nSNPs_IND.fam')) %>% 
+  select(fam) %>%
+  mutate(id = 301:751) %>%
+  rename(Variety = fam)
+
+# 3. Se crea un conjunto de datos que contiene solo los individuos mejorados.
+
+Pob_mej <- lin_mej %>%
+  filter(Status_with_Pedigree.plus.knowledge == 'I') %>% # Conjunto de datos solo con los individuos mejorados (los que se clasificaron como "I").
+  select(X3K_DNA_IRIS_UNIQUE_ID) %>%
+  rename(Variety = X3K_DNA_IRIS_UNIQUE_ID)
+
+escalado <- function(x) { # Función usada para escalar el fenotipo.
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+  }
+
+Pob_IND <- Fenotipos %>%
+  filter(SNPsubsp == 'IND') %>% # Conjunto de datos solo con la especie IND.
+  mutate(
+    Variety_2 = Variety,
+    Fen_escalado = escalado(Time.to.flowering..from.sowing)
+    ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  '-'
+  ) %>%
+  unite(
+    col = Variety,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  separate(
+    col = Variety_2,
+    into =  c('Columna_1', 'Columna_2'),
+    sep  =  ' '
+  ) %>%
+  unite(
+    col = Variety_2,
+    sep = '_',
+    Columna_1:Columna_2
+  ) %>%
+  inner_join(y = Pob_mej, by = 'Variety') %>%
+  select(Variety_2, Fen_escalado) %>% # Se creo el conjunto de datos con los individuos mejorados de la población indica.
+  rename(Variety = Variety_2)
+
+Pob_IND_2 <- Pob_IND %>%
+  left_join(y = famsnps_IND, by = 'Variety') # Se unen al conjunto de datos famsnps_IND debido a que aquí esta la identificación numérica como esta en el pedigrí.
+
+#### Población de arroz IND (100.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.1_c <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '100.000', Replica = 'Ped_1.1')
+
+#### Población de arroz IND (10.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.1_b <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '10.000', Replica = 'Ped_1.1')
+
+#### Población de arroz IND (1.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.1', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.1_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '1.000', Replica = 'Ped_1.1')
+
+Cor_ped_1.1 <- bind_rows(Cor_ped_1.1_a, Cor_ped_1.1_b, Cor_ped_1.1_c)
+
+#########################################################
+# Pedigrí 1.2: 300 individuos simulados en 3 generaciones
+#########################################################
+
+#### Población de arroz IND (100.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.2', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.2', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.2', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.2', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.2_c <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '100.000', Replica = 'Ped_1.2')
+
+#### Población de arroz IND (10.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.2', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.2', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.2', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.2', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.2_b <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '10.000', Replica = 'Ped_1.2')
+
+#### Población de arroz IND (1.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.2', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.2', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.2', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.2', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.2_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '1.000', Replica = 'Ped_1.2')
+
+Cor_ped_1.2 <- bind_rows(Cor_ped_1.2_a, Cor_ped_1.2_b, Cor_ped_1.2_c)
+
+#########################################################
+# Pedigrí 1.3: 300 individuos simulados en 3 generaciones
+#########################################################
+
+#### Población de arroz IND (100.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.3', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.3', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.3', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.3', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.3_c <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '100.000', Replica = 'Ped_1.3')
+
+#### Población de arroz IND (10.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.3', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.3', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.3', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.3', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.3_b <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '10.000', Replica = 'Ped_1.3')
+
+#### Población de arroz IND (1.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.3', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.3', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.3', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.3', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.3_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '1.000', Replica = 'Ped_1.3')
+
+Cor_ped_1.3 <- bind_rows(Cor_ped_1.3_a, Cor_ped_1.3_b, Cor_ped_1.3_c)
+
+#########################################################
+# Pedigrí 1.4: 300 individuos simulados en 3 generaciones
+#########################################################
+
+#### Población de arroz IND (100.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.4', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.4', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.4', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.4', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.4_c <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '100.000', Replica = 'Ped_1.4')
+
+#### Población de arroz IND (10.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.4', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.4', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.4', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.4', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.4_b <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '10.000', Replica = 'Ped_1.4')
+
+#### Población de arroz IND (1.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.4', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.4', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.4', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.4', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.4_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '1.000', Replica = 'Ped_1.4')
+
+Cor_ped_1.4 <- bind_rows(Cor_ped_1.4_a, Cor_ped_1.4_b, Cor_ped_1.4_c)
+
+#########################################################
+# Pedigrí 1.5: 300 individuos simulados en 3 generaciones
+#########################################################
+
+#### Población de arroz IND (100.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.5', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.5', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.5', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.5', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.5_c <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '100.000', Replica = 'Ped_1.5')
+
+#### Población de arroz IND (10.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.5', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.5', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.5', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.5', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.5_b <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '10.000', Replica = 'Ped_1.5')
+
+#### Población de arroz IND (1.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.5', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.5', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.5', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.5', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.5_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '1.000', Replica = 'Ped_1.5')
+
+Cor_ped_1.5 <- bind_rows(Cor_ped_1.5_a, Cor_ped_1.5_b, Cor_ped_1.5_c)
+
+#########################################################
+# Pedigrí 1.6: 300 individuos simulados en 3 generaciones
+#########################################################
+
+#### Población de arroz IND (100.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.6', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.6', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.6', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.6', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.6_c <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '100.000', Replica = 'Ped_1.6')
+
+#### Población de arroz IND (10.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.6', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.6', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.6', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.6', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.6_b <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '10.000', Replica = 'Ped_1.6')
+
+#### Población de arroz IND (1.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.6', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.6', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.6', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.6', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.6_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '1.000', Replica = 'Ped_1.6')
+
+Cor_ped_1.6 <- bind_rows(Cor_ped_1.6_a, Cor_ped_1.6_b, Cor_ped_1.6_c)
+
+#########################################################
+# Pedigrí 1.7: 300 individuos simulados en 3 generaciones
+#########################################################
+
+#### Población de arroz IND (100.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.7', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.7', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.7', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.7', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.7_c <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '100.000', Replica = 'Ped_1.7')
+
+#### Población de arroz IND (10.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.7', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.7', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.7', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.7', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.7_b <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '10.000', Replica = 'Ped_1.7')
+
+#### Población de arroz IND (1.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.7', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.7', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.7', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.7', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.7_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '1.000', Replica = 'Ped_1.7')
+
+Cor_ped_1.7 <- bind_rows(Cor_ped_1.7_a, Cor_ped_1.7_b, Cor_ped_1.7_c)
+
+#########################################################
+# Pedigrí 1.8: 300 individuos simulados en 3 generaciones
+#########################################################
+
+#### Población de arroz IND (100.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.8', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.8', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.8', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.8', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.8_c <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '100.000', Replica = 'Ped_1.8')
+
+#### Población de arroz IND (10.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.8', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.8', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.8', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.8', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.8_b <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '10.000', Replica = 'Ped_1.8')
+
+#### Población de arroz IND (1.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.8', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.8', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.8', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.8', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.8_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '1.000', Replica = 'Ped_1.8')
+
+Cor_ped_1.8 <- bind_rows(Cor_ped_1.8_a, Cor_ped_1.8_b, Cor_ped_1.8_c)
+
+#########################################################
+# Pedigrí 1.9: 300 individuos simulados en 3 generaciones
+#########################################################
+
+#### Población de arroz IND (100.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.9', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.9', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.9', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.9', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.9_c <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '100.000', Replica = 'Ped_1.9')
+
+#### Población de arroz IND (10.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.9', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.9', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.9', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.9', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.9_b <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '10.000', Replica = 'Ped_1.9')
+
+#### Población de arroz IND (1.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.9', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.9', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.9', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.9', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.9_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '1.000', Replica = 'Ped_1.9')
+
+Cor_ped_1.9 <- bind_rows(Cor_ped_1.9_a, Cor_ped_1.9_b, Cor_ped_1.9_c)
+
+##########################################################
+# Pedigrí 1.10: 300 individuos simulados en 3 generaciones
+##########################################################
+
+#### Población de arroz IND (100.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.10', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.10', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.10', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.10', 'Den_100.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.10_c <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '100.000', Replica = 'Ped_1.10')
+
+#### Población de arroz IND (10.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.10', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.10', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.10', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.10', 'Den_10.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.10_b <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '10.000', Replica = 'Ped_1.10')
+
+#### Población de arroz IND (1.000 SNPs) ----
+
+## 1. Subpoblación con 148 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.10', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_1', 'mod_BGLR_1.RData'))
+
+Pred_IND_1 <- mod_IND_1$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '148') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 2. Subpoblación con 298 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.10', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_2', 'mod_BGLR_2.RData'))
+
+Pred_IND_2 <- mod_IND_2$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '298') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 3. Subpoblación con 451 individuos genotipados
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.10', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_3', 'mod_BGLR_3.RData'))
+
+Pred_IND_3 <- mod_IND_3$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '451') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+## 4. Subpoblación con ningún individuo genotipado
+
+load(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_1.10', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'mod_BGLR_4.RData'))
+
+Pred_IND_4 <- mod_IND_4$yHat %>%
+  as_tibble() %>%
+  mutate(Subpoblación = '0') %>%
+  rowid_to_column(var = 'id') %>%
+  right_join(y = Pob_IND_2, by = 'id')  %>%
+  rename(
+    'Fenotipo_predicho' = value,
+    'Fenotipo_observado' = Fen_escalado
+    )
+
+Cor_ped_1.10_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
+  filter(!is.na(Fenotipo_observado)) %>%
+  group_by(Subpoblación) %>%
+  summarise(Correlación = cor(Fenotipo_observado, Fenotipo_predicho)) %>% # Calculo de la correlación.
+  mutate(Densidad = '1.000', Replica = 'Ped_1.10')
+
+Cor_ped_1.10 <- bind_rows(Cor_ped_1.10_a, Cor_ped_1.10_b, Cor_ped_1.10_c)
+
+Cor_ped_1_Pen <- bind_rows(Cor_ped_1.1, Cor_ped_1.2, Cor_ped_1.3, Cor_ped_1.4, Cor_ped_1.5, Cor_ped_1.6, Cor_ped_1.7, Cor_ped_1.8, Cor_ped_1.9, Cor_ped_1.10) %>%
+  mutate(Enfoque = 'Penalizado') %>%
+  group_by(Densidad, Subpoblación) %>%
+  summarise(
+    des = round(sd(Correlación, na.rm = TRUE), digits = 3),
+    Correlación = round(mean(Correlación), digits = 3)
+    ) %>%
+  ungroup()
+```
+
+# 25. A continuación se usa el módulo SeqBreed escrito en Python, especificando mediante numerales dentro de los comentarios (<!-- -->) que se hizo.
 
 <!--
 1. El modulo SeqBreed requiere que el archivo de genotipos este en formato variant call (VCF), por lo que a continuación se paso de formato plink a VCF siguiendo las instrucciones del tutorial de Genomics Boot Camp (https://www.youtube.com/watch?v=EJDknrHAkXs) y lo que se indica en plink (https://www.cog-genomics.org/plink/1.9/input#vcf).
