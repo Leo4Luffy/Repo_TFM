@@ -33190,6 +33190,16 @@ Cor_ped_2.1_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
 
 Cor_ped_2.1 <- bind_rows(Cor_ped_2.1_a, Cor_ped_2.1_b, Cor_ped_2.1_c)
 
+varE_1 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.1', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_1 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.1', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_1 <- varU_1/(varU_1 + varE_1) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
+
 #########################################################
 # Pedigrí 2.2: 300 individuos simulados en 3 generaciones
 #########################################################
@@ -33387,6 +33397,16 @@ Cor_ped_2.2_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
   mutate(Densidad = '1.000', Replica = 'Ped_1.2')
 
 Cor_ped_2.2 <- bind_rows(Cor_ped_2.2_a, Cor_ped_2.2_b, Cor_ped_2.2_c)
+
+varE_2 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.2', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_2 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.2', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_2 <- varU_2/(varU_2 + varE_2) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
 
 #########################################################
 # Pedigrí 2.3: 300 individuos simulados en 3 generaciones
@@ -33586,6 +33606,16 @@ Cor_ped_2.3_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
 
 Cor_ped_2.3 <- bind_rows(Cor_ped_2.3_a, Cor_ped_2.3_b, Cor_ped_2.3_c)
 
+varE_3 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.3', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_3 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.3', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_3 <- varU_3/(varU_3 + varE_3) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
+
 #########################################################
 # Pedigrí 2.4: 300 individuos simulados en 3 generaciones
 #########################################################
@@ -33783,6 +33813,16 @@ Cor_ped_2.4_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
   mutate(Densidad = '1.000', Replica = 'Ped_1.4')
 
 Cor_ped_2.4 <- bind_rows(Cor_ped_2.4_a, Cor_ped_2.4_b, Cor_ped_2.4_c)
+
+varE_4 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.4', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_4 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.4', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_4 <- varU_4/(varU_4 + varE_4) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
 
 #########################################################
 # Pedigrí 2.5: 300 individuos simulados en 3 generaciones
@@ -33982,6 +34022,16 @@ Cor_ped_2.5_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
 
 Cor_ped_2.5 <- bind_rows(Cor_ped_2.5_a, Cor_ped_2.5_b, Cor_ped_2.5_c)
 
+varE_5 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.5', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_5 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.5', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_5 <- varU_5/(varU_5 + varE_5) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
+
 #########################################################
 # Pedigrí 2.6: 300 individuos simulados en 3 generaciones
 #########################################################
@@ -34179,6 +34229,16 @@ Cor_ped_2.6_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
   mutate(Densidad = '1.000', Replica = 'Ped_1.6')
 
 Cor_ped_2.6 <- bind_rows(Cor_ped_2.6_a, Cor_ped_2.6_b, Cor_ped_2.6_c)
+
+varE_6 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.6', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_6 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.6', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_6 <- varU_6/(varU_6 + varE_6) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
 
 #########################################################
 # Pedigrí 2.7: 300 individuos simulados en 3 generaciones
@@ -34378,6 +34438,16 @@ Cor_ped_2.7_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
 
 Cor_ped_2.7 <- bind_rows(Cor_ped_2.7_a, Cor_ped_2.7_b, Cor_ped_2.7_c)
 
+varE_7 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.7', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_7 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.7', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_7 <- varU_7/(varU_7 + varE_7) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
+
 #########################################################
 # Pedigrí 2.8: 300 individuos simulados en 3 generaciones
 #########################################################
@@ -34575,6 +34645,16 @@ Cor_ped_2.8_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
   mutate(Densidad = '1.000', Replica = 'Ped_1.8')
 
 Cor_ped_2.8 <- bind_rows(Cor_ped_2.8_a, Cor_ped_2.8_b, Cor_ped_2.8_c)
+
+varE_8 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.8', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_8 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.8', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_8 <- varU_8/(varU_8 + varE_8) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
 
 #########################################################
 # Pedigrí 2.9: 300 individuos simulados en 3 generaciones
@@ -34774,6 +34854,16 @@ Cor_ped_2.9_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
 
 Cor_ped_2.9 <- bind_rows(Cor_ped_2.9_a, Cor_ped_2.9_b, Cor_ped_2.9_c)
 
+varE_9 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.9', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_9 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.9', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_9 <- varU_9/(varU_9 + varE_9) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
+
 ##########################################################
 # Pedigrí 2.10: 300 individuos simulados en 3 generaciones
 ##########################################################
@@ -34971,6 +35061,25 @@ Cor_ped_2.10_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
   mutate(Densidad = '1.000', Replica = 'Ped_1.10')
 
 Cor_ped_2.10 <- bind_rows(Cor_ped_2.10_a, Cor_ped_2.10_b, Cor_ped_2.10_c)
+
+varE_10 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.10', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_10 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_2.10', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_10 <- varU_10/(varU_10 + varE_10) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_5 = mean(value)
+    #)
+
+varU_ped2 <- bind_cols(varU_1, varU_2, varU_3, varU_4, varU_5, varU_6, varU_7, varU_8, varU_9, varU_10) %>%
+  write_tsv(here('Datos', 'Datos_IND', 'Resultados', 'varU_ped2.txt'))
+
+varE_ped2 <- bind_cols(varE_1, varE_2, varE_3, varE_4, varE_5, varE_6, varE_7, varE_8, varE_9, varE_10) %>%
+  write_tsv(here('Datos', 'Datos_IND', 'Resultados', 'varE_ped2.txt'))
+
+h2_ped2 <- bind_cols(h2_1, h2_2, h2_3, h2_4, h2_5, h2_6, h2_7, h2_8, h2_9, h2_10) %>%
+  write_tsv(here('Datos', 'Datos_IND', 'Resultados', 'h2_ped2.txt'))
 
 recode_if <- function(x, condition, ...) {
   if_else(condition, recode(x, ...), x)
@@ -38959,6 +39068,16 @@ Cor_ped_3.1_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
 
 Cor_ped_3.1 <- bind_rows(Cor_ped_3.1_a, Cor_ped_3.1_b, Cor_ped_3.1_c)
 
+varE_1 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.1', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_1 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.1', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_1 <- varU_1/(varU_1 + varE_1) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
+
 #########################################################
 # Pedigrí 3.2: 300 individuos simulados en 3 generaciones
 #########################################################
@@ -39156,6 +39275,16 @@ Cor_ped_3.2_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
   mutate(Densidad = '1.000', Replica = 'Ped_1.2')
 
 Cor_ped_3.2 <- bind_rows(Cor_ped_3.2_a, Cor_ped_3.2_b, Cor_ped_3.2_c)
+
+varE_2 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.2', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_2 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.2', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_2 <- varU_2/(varU_2 + varE_2) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
 
 #########################################################
 # Pedigrí 3.3: 300 individuos simulados en 3 generaciones
@@ -39355,6 +39484,16 @@ Cor_ped_3.3_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
 
 Cor_ped_3.3 <- bind_rows(Cor_ped_3.3_a, Cor_ped_3.3_b, Cor_ped_3.3_c)
 
+varE_3 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.3', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_3 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.3', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_3 <- varU_3/(varU_3 + varE_3) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
+
 #########################################################
 # Pedigrí 3.4: 300 individuos simulados en 3 generaciones
 #########################################################
@@ -39552,6 +39691,16 @@ Cor_ped_3.4_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
   mutate(Densidad = '1.000', Replica = 'Ped_1.4')
 
 Cor_ped_3.4 <- bind_rows(Cor_ped_3.4_a, Cor_ped_3.4_b, Cor_ped_3.4_c)
+
+varE_4 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.4', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_4 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.4', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_4 <- varU_4/(varU_4 + varE_4) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
 
 #########################################################
 # Pedigrí 3.5: 300 individuos simulados en 3 generaciones
@@ -39751,6 +39900,16 @@ Cor_ped_3.5_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
 
 Cor_ped_3.5 <- bind_rows(Cor_ped_3.5_a, Cor_ped_3.5_b, Cor_ped_3.5_c)
 
+varE_5 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.5', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_5 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.5', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_5 <- varU_5/(varU_5 + varE_5) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
+
 #########################################################
 # Pedigrí 3.6: 300 individuos simulados en 3 generaciones
 #########################################################
@@ -39948,6 +40107,16 @@ Cor_ped_3.6_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
   mutate(Densidad = '1.000', Replica = 'Ped_1.6')
 
 Cor_ped_3.6 <- bind_rows(Cor_ped_3.6_a, Cor_ped_3.6_b, Cor_ped_3.6_c)
+
+varE_6 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.6', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_6 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.6', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_6 <- varU_6/(varU_6 + varE_6) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
 
 #########################################################
 # Pedigrí 3.7: 300 individuos simulados en 3 generaciones
@@ -40147,6 +40316,16 @@ Cor_ped_3.7_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
 
 Cor_ped_3.7 <- bind_rows(Cor_ped_3.7_a, Cor_ped_3.7_b, Cor_ped_3.7_c)
 
+varE_7 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.7', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_7 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.7', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_7 <- varU_7/(varU_7 + varE_7) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
+
 #########################################################
 # Pedigrí 3.8: 300 individuos simulados en 3 generaciones
 #########################################################
@@ -40344,6 +40523,16 @@ Cor_ped_3.8_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
   mutate(Densidad = '1.000', Replica = 'Ped_1.8')
 
 Cor_ped_3.8 <- bind_rows(Cor_ped_3.8_a, Cor_ped_3.8_b, Cor_ped_3.8_c)
+
+varE_8 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.8', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_8 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.8', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_8 <- varU_8/(varU_8 + varE_8) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
 
 #########################################################
 # Pedigrí 3.9: 300 individuos simulados en 3 generaciones
@@ -40543,6 +40732,16 @@ Cor_ped_3.9_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
 
 Cor_ped_3.9 <- bind_rows(Cor_ped_3.9_a, Cor_ped_3.9_b, Cor_ped_3.9_c)
 
+varE_9 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.9', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_9 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.9', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_9 <- varU_9/(varU_9 + varE_9) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_1 = mean(value)
+    #)
+
 ##########################################################
 # Pedigrí 3.10: 300 individuos simulados en 3 generaciones
 ##########################################################
@@ -40740,6 +40939,25 @@ Cor_ped_3.10_a <- bind_rows(Pred_IND_1, Pred_IND_2, Pred_IND_3, Pred_IND_4) %>%
   mutate(Densidad = '1.000', Replica = 'Ped_1.10')
 
 Cor_ped_3.10 <- bind_rows(Cor_ped_3.10_a, Cor_ped_3.10_b, Cor_ped_3.10_c)
+
+varE_10 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.10', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_varE.dat')) %>%
+  as_tibble()
+varU_10 <- scan(here('Datos', 'Datos_IND', 'BGLR', 'Molcoanc_3.10', 'Den_1.000', 'mod_BGLR', 'mod_BGLR_4', 'ablup_ETA_1_varU.dat')) %>%
+  as_tibble()
+h2_10 <- varU_10/(varU_10 + varE_10) %>%
+  as_tibble() #%>%
+  #summarise(
+    #h2_5 = mean(value)
+    #)
+
+varU_ped3 <- bind_cols(varU_1, varU_2, varU_3, varU_4, varU_5, varU_6, varU_7, varU_8, varU_9, varU_10) %>%
+  write_tsv(here('Datos', 'Datos_IND', 'Resultados', 'varU_ped3.txt'))
+
+varE_ped3 <- bind_cols(varE_1, varE_2, varE_3, varE_4, varE_5, varE_6, varE_7, varE_8, varE_9, varE_10) %>%
+  write_tsv(here('Datos', 'Datos_IND', 'Resultados', 'varE_ped3.txt'))
+
+h2_ped3 <- bind_cols(h2_1, h2_2, h2_3, h2_4, h2_5, h2_6, h2_7, h2_8, h2_9, h2_10) %>%
+  write_tsv(here('Datos', 'Datos_IND', 'Resultados', 'h2_ped3.txt'))
 
 recode_if <- function(x, condition, ...) {
   if_else(condition, recode(x, ...), x)
