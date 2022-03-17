@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Titulo del TFM
+# Selección genómica en arroz: efecto del número de marcadores y de individuos genotipados sobre la precisión de la predicción
 > Trabajo de fin de máster desarrollado para obtener el grado de máster en mejora genética.
 >
 > [UPV/UAB/IAMZ-CIHEAM](http://www.mastermejorageneticaanimal.es/)

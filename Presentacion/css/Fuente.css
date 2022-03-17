@@ -138,8 +138,8 @@ h1, h2, h3 {
 .bold { font-weight: bold; }
 .bolder { font-weight: bolder; }
 
-.primary {
-  background-image: url(https://raw.githubusercontent.com/Leo4Luffy/Presentacion_TFM/main/Imagen/gif_ADN.gif);
+/*.primary {
+  #background-image: url(https://raw.githubusercontent.com/Leo4Luffy/Presentacion_TFM/main/Imagen/gif_ADN.gif);
   background-size: 47%;
   background-position: 470px 180px
-}
+}*/

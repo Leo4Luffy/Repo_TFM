@@ -1,23 +1,26 @@
 ---
-title: "Titulo"
-subtitle: "Subtitulo"
+title: "Selección genómica en arroz: efecto del número de marcadores y de individuos genotipados sobre la precisión de la predicción"
 output:
   xaringan::moon_reader:
-    css: [default, css/Fuente.css, css/cc-fonts.css, css/Cajitas.css]
+    css: [default, css/cc-fonts.css, css/Cajitas.css]
     lib_dir: libs
     seal: false
     nature:
+      #titleSlideClass: ["center", "top", "my-title"]
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
       slideNumberFormat: "%current%<br>"
 ---
-name: title-slide
-class: primary
+class: center
 
-```{r Paquetes usados y general, eval = TRUE, echo = FALSE}
+```{r Paquetes usados, general y bibliografia, load_refs, eval = TRUE, echo = FALSE, include = FALSE, cache = FALSE}
 
-pacman::p_load(metathis, xaringanExtra, fontawesome)
+# Paquetes usados ----
+
+pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, readr, ggplot2, dplyr)
+
+# Opciones generales de la presentación ----
 
 workshop_day <- format(as.Date("2022-06-01"), format = "%B/%d/%Y")
 
@@ -31,6 +34,15 @@ xaringanExtra::use_extra_styles(
   hover_code_line = TRUE,
   mute_unhighlighted_code = FALSE
 )
+
+# Opciones de bibliografía ----
+
+options(htmltools.dir.version = FALSE)
+
+BibOptions(check.entries = FALSE, bib.style = "authoryear", style = "markdown",
+           dashed = TRUE)
+
+mi_Bib <- ReadBib(here('Presentacion', 'Bibliografia', 'mi_Bib.bib'), check = FALSE)
 ```
 
 ```{r metathis, eval = TRUE, echo = FALSE}
@@ -51,38 +63,99 @@ meta() %>%
   )
 ```
 
-```{r xaringanExtra-share-again, eval = TRUE, echo = FALSE}
+```{r xaringanExtra-share-again, eval = FALSE, echo = FALSE}
 
 xaringanExtra::use_share_again()
 ```
 
-#.fancy[`r rmarkdown::metadata$title`] 
+###.fancy[`r rmarkdown::metadata$title`] 
 
-###.fancy[`r rmarkdown::metadata$subtitle`]
-
-<br>
-<br>
-<br>
-<br>
-
-Jorge Leonardo López Martínez
-
-[`r fa(name = "github", fill = "black")` Leo4Luffy](https://github.com/Leo4Luffy)<br>
-
-`r workshop_day`
+<!--###.fancy[`r rmarkdown::metadata$subtitle`]-->
 
 <br>
 <br>
 
-.fifty[Acceso al repositorio de la presentación [aquí](https://github.com/Leo4Luffy/Presentacion_TFM)]
+<P align="justify"> **Estudiante:** Jorge Leonardo López Martínez <p>
+<P align="justify">[`r fa(name = "github", fill = "black")` Leo4Luffy](https://github.com/Leo4Luffy)<p>
+
+<br>
+
+<P align="justify">**Director:** Miguel Pérez-Enciso<p>
+<P align="justify">[`r fa(name = "github", fill = "black")` miguelperezenciso](https://github.com/miguelperezenciso)<p>
+
+
+<br>
+<br>
+
+<P align="justify">`r workshop_day`<p>
 
 ---
+class: center
 
+### Índice general
 
+- <P align="justify">Hola.</p>
+
+<br>
+- <P align="justify">Hola.</p>
 
 ---
+class: center
 
+### Revisión de literatura
 
+.pull-left[
+
+<P align="justify">El arroz proporciona aproximadamente el 20 % de la energía alimentaria mundial<sup>1</sup>.</p>
+
+<P align="justify">La tercera revolución agrícola tiene como objetivo aumentar la producción mundial de cultivos mediante el empleo de métodos de mejora genética<sup>2</sup>.</p>
+
+.footnote[
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:55")`.</FONT></p>
+<P align="justify"><FONT SIZE=2>[2] `r Citet(mi_Bib, "cite:7")`.</FONT></p>
+]
+
+]
+
+.pull-right[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.showtext = TRUE, message = FALSE, warning=FALSE}
+
+Arroz <- read_delim(here('Presentacion', 'Imagen', 'datos_arroz.csv'), delim = ',')
+
+Arroz %>%
+  select(Elemento, Año, Valor, Unidad) %>%
+  filter(Elemento == 'Producción') %>%
+  group_by(Elemento, Año) %>%
+  summarise(Total = sum(Valor, na.rm = TRUE)) %>%
+  ungroup() %>%
+  ggplot(data = ., aes(x = Año, y = Total, colour = Elemento, fill = Elemento)) +
+  geom_area(alpha = 0.2, position = position_dodge(0.8), size = 1.4) +
+  labs(title = 'Evolución de la producción de arroz') +
+  scale_color_manual(values = c('yellow', 'cyan')) +
+  scale_fill_manual(values = c('yellow', 'cyan')) +
+  theme_bw() +
+  theme(
+    legend.position = 'none',
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size = 18),
+    axis.ticks.y = element_blank(),
+    axis.title = element_blank(),
+    plot.title = element_text(size = 18, face = 'bold')
+    )
+```
+
+]
+
+---
+class: center
+
+### Bibliografía
+
+```{r refs, echo=FALSE, results="asis"}
+
+PrintBibliography(mi_Bib)
+```
 
 ---
 
