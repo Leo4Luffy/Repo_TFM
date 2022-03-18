@@ -18,7 +18,7 @@ class: center
 
 # Paquetes usados ----
 
-pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, readr, ggplot2, dplyr)
+pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, readr, ggplot2, dplyr, latex2exp)
 
 # Opciones generales de la presentación ----
 
@@ -80,7 +80,7 @@ xaringanExtra::use_share_again()
 
 <br>
 
-<P align="justify">**Director:** Miguel Pérez-Enciso<p>
+<P align="justify">**Director:** prof. dr. Miguel Pérez-Enciso<p>
 <P align="justify">[`r fa(name = "github", fill = "black")` miguelperezenciso](https://github.com/miguelperezenciso)<p>
 
 
@@ -119,6 +119,8 @@ class: center
 
 .pull-right[
 
+<br>
+
 ```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.showtext = TRUE, message = FALSE, warning=FALSE}
 
 Arroz <- read_delim(here('Presentacion', 'Imagen', 'datos_arroz.csv'), delim = ',')
@@ -145,10 +147,76 @@ Arroz %>%
     )
 ```
 
+<P align="center"><FONT SIZE=2>Figura hecha con las bases de datos de la FAOSTAT.</small></FONT></p>
+
 ]
 
 ---
 class: center
+
+### Revisión de literatura
+
+.pull-left[
+
+<P align="justify">Con la mejora genética se identifican y seleccionan individuos con mayor merito genético, en busca de lograr un progreso genético en la siguiente generación<sup>1</sup>.</p>
+
+<P align="justify">Con la mejora genética, los genotipos que exhiben fenotipos deseables son seleccionados, lo que conduce a la acumulación de alelos favorables.<sup>1</sup>.</p>
+
+.footnote[
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:7")`.</FONT></p>
+]
+
+]
+
+.pull-right[
+
+<br>
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.showtext = TRUE, message = FALSE, warning=FALSE}
+
+ggplot(data.frame(x = c(0, 180)), aes(x)) + # Saque esta figura de esta página: https://ggplot2tutor.com/tutorials/sampling_distributions
+  stat_function(fun = dnorm,
+                geom = "area",
+                fill = 'yellow',
+                colour = 'yellow',
+                alpha = 0.2,
+                args = list(
+                  mean = 120,
+                  sd = 20
+                )) +
+  stat_function(fun = dnorm,
+                geom = "area",
+                fill = 'yellow',
+                colour = 'yellow',
+                alpha = 0.2,
+                args = list(
+                  mean = 70,
+                  sd = 20
+                )) +
+  annotate(geom = 'segment', x = 120, xend = 120, y = -0.001, yend = 0.02, colour = 'black', linetype = 'dashed') +
+  annotate(geom = 'segment', x = 70, xend = 70, y = -0.001, yend = 0.02, colour = 'black', linetype = 'dashed') +
+  annotate(geom = 'segment', x = 70, xend = 120, y = 0.02, yend = 0.02, colour = 'black', linetype = 'solid') +
+  annotate(geom = 'text', x = 95, y = 0.021, label = TeX('$\\Delta G$'), size = 6.8) +
+  scale_y_continuous(limits = c(-0.02, 0.021)) +
+  annotate(geom = 'text', x = 70, y = -0.002, label = TeX('$\\mu_{0}$'), size = 6.8) +
+  annotate(geom = 'text', x = 120, y = -0.002, label = TeX('$\\mu_{1}$'), size = 6.8) +
+  scale_y_continuous(limits = c(-0.0025, 0.021)) +
+  labs(title = 'Ganancia genética en una generación') +
+  theme_bw() +
+  theme(
+    legend.position = 'none',
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_blank(),
+    plot.title = element_text(size = 18, face = 'bold')
+    )
+```
+
+<P align="center"><FONT SIZE=2>Figura adaptada de `r Citet(mi_Bib, "cite:56")`.</FONT></p>
+
+]
+
+---
 
 ### Bibliografía
 
@@ -156,6 +224,7 @@ class: center
 
 PrintBibliography(mi_Bib)
 ```
+
 
 ---
 
