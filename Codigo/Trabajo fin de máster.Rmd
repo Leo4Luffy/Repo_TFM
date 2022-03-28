@@ -22369,7 +22369,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.1/Den_100.000/mod_lme4GS_4') # 
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.1/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.1/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 10.000 SNPs ----
 
@@ -22449,7 +22449,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.1/Den_10.000/mod_lme4GS_4') # S
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.1/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.1/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 1.000 SNPs ----
 
@@ -22529,7 +22529,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.1/Den_1.000/mod_lme4GS_4') # Se
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.1/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.1/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 #########################################################
 # Pedigrí 3.2: 300 individuos simulados en 3 generaciones
@@ -22619,7 +22619,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.2/Den_100.000/mod_lme4GS_4') # 
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.2/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.2/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 10.000 SNPs ----
 
@@ -22699,7 +22699,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.2/Den_10.000/mod_lme4GS_4') # S
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.2/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.2/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 1.000 SNPs ----
 
@@ -22779,7 +22779,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.2/Den_1.000/mod_lme4GS_4') # Se
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.2/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.2/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 #########################################################
 # Pedigrí 3.3: 300 individuos simulados en 3 generaciones
@@ -22869,7 +22869,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.3/Den_100.000/mod_lme4GS_4') # 
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.3/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.3/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 10.000 SNPs ----
 
@@ -22949,7 +22949,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.3/Den_10.000/mod_lme4GS_4') # S
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.3/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.3/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 1.000 SNPs ----
 
@@ -23029,7 +23029,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.3/Den_1.000/mod_lme4GS_4') # Se
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.3/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.3/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 #########################################################
 # Pedigrí 3.4: 300 individuos simulados en 3 generaciones
@@ -23119,7 +23119,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.4/Den_100.000/mod_lme4GS_4') # 
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.4/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.4/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 10.000 SNPs ----
 
@@ -23199,7 +23199,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.4/Den_10.000/mod_lme4GS_4') # S
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.4/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.4/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 1.000 SNPs ----
 
@@ -23279,7 +23279,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.4/Den_1.000/mod_lme4GS_4') # Se
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.4/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.4/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 #########################################################
 # Pedigrí 3.5: 300 individuos simulados en 3 generaciones
@@ -23369,7 +23369,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.5/Den_100.000/mod_lme4GS_4') # 
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.5/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.5/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 10.000 SNPs ----
 
@@ -23449,7 +23449,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.5/Den_10.000/mod_lme4GS_4') # S
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.5/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.5/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 1.000 SNPs ----
 
@@ -23529,7 +23529,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.5/Den_1.000/mod_lme4GS_4') # Se
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.5/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.5/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 #########################################################
 # Pedigrí 3.6: 300 individuos simulados en 3 generaciones
@@ -23619,7 +23619,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.6/Den_100.000/mod_lme4GS_4') # 
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.6/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.6/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 10.000 SNPs ----
 
@@ -23699,7 +23699,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.6/Den_10.000/mod_lme4GS_4') # S
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.6/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.6/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 1.000 SNPs ----
 
@@ -23779,7 +23779,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.6/Den_1.000/mod_lme4GS_4') # Se
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.6/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.6/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 #########################################################
 # Pedigrí 3.7: 300 individuos simulados en 3 generaciones
@@ -23869,7 +23869,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.7/Den_100.000/mod_lme4GS_4') # 
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.7/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.7/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 10.000 SNPs ----
 
@@ -23949,7 +23949,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.7/Den_10.000/mod_lme4GS_4') # S
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.7/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.7/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 1.000 SNPs ----
 
@@ -24029,7 +24029,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.7/Den_1.000/mod_lme4GS_4') # Se
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.7/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.7/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 #########################################################
 # Pedigrí 3.8: 300 individuos simulados en 3 generaciones
@@ -24119,7 +24119,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.8/Den_100.000/mod_lme4GS_4') # 
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.8/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.8/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 10.000 SNPs ----
 
@@ -24199,7 +24199,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.8/Den_10.000/mod_lme4GS_4') # S
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.8/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.8/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 1.000 SNPs ----
 
@@ -24279,7 +24279,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.8/Den_1.000/mod_lme4GS_4') # Se
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.8/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.8/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 #########################################################
 # Pedigrí 3.9: 300 individuos simulados en 3 generaciones
@@ -24369,7 +24369,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.9/Den_100.000/mod_lme4GS_4') # 
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.9/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.9/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 10.000 SNPs ----
 
@@ -24449,7 +24449,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.9/Den_10.000/mod_lme4GS_4') # S
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.9/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.9/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 1.000 SNPs ----
 
@@ -24529,7 +24529,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.9/Den_1.000/mod_lme4GS_4') # Se
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.9/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.9/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 #########################################################
 # Pedigrí 3.10: 300 individuos simulados en 3 generaciones
@@ -24619,7 +24619,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.10/Den_100.000/mod_lme4GS_4') #
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.10/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.10/Den_100.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 10.000 SNPs ----
 
@@ -24699,7 +24699,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.10/Den_10.000/mod_lme4GS_4') # 
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.10/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.10/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 
 ## Densidad de 1.000 SNPs ----
 
@@ -24779,7 +24779,7 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.10/Den_1.000/mod_lme4GS_4') # S
 
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
-save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.10/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.10/Den_1.000/mod_lme4GS_4/mod_lme4GS_4.RData')
 ```
 
 # 23. A continuación se analizan los resultados obtenidos al correr los datos con el paquete de R lme4GS para distintos pedigríes y diferentes densidades de SNPs.
