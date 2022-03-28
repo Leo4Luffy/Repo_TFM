@@ -160,7 +160,7 @@ class: center
 
 <P align="justify">Con la mejora genética se identifican y seleccionan individuos con mayor merito genético, en busca de lograr un progreso genético en la siguiente generación<sup>1</sup>.</p>
 
-<P align="justify">Con la mejora genética, los genotipos que exhiben fenotipos deseables son seleccionados, lo que conduce a la acumulación de alelos favorables.<sup>1</sup>.</p>
+<P align="justify">Con la mejora genética, los genotipos que exhiben fenotipos deseables son seleccionados, lo que conduce a la acumulación de alelos favorables<sup>1</sup>.</p>
 
 .footnote[
 <P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:7")`.</FONT></p>
@@ -224,7 +224,6 @@ ggplot(data.frame(x = c(0, 180)), aes(x)) + # Saque esta figura de esta página:
 
 PrintBibliography(mi_Bib)
 ```
-
 
 ---
 
