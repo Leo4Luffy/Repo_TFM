@@ -1,5 +1,5 @@
 ---
-title: "Selección genómica en arroz: efecto del número de marcadores y de individuos genotipados sobre la precisión de la predicción"
+title: "Titulo"
 output:
   xaringan::moon_reader:
     css: [default, css/cc-fonts.css, css/Cajitas.css]
@@ -18,7 +18,9 @@ class: center
 
 # Paquetes usados ----
 
-pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, readr, ggplot2, dplyr, latex2exp)
+pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, readr, ggplot2, dplyr, latex2exp, showtext, ggforce)
+font_add_google('Gochi Hand', 'gochi')
+showtext_auto()
 
 # Opciones generales de la presentación ----
 
@@ -104,75 +106,9 @@ class: center
 
 ### Revisión de literatura
 
-.pull-left[
+<P align="justify">El (**B**)est (**L**)inear (**U**)nbiased (**P**)rediction, es un método utilizado para predecir el valor genético de los individuos en una población<sup>1</sup>.</p>
 
-<P align="justify">El arroz proporciona aproximadamente el 20 % de la energía alimentaria mundial<sup>1</sup>.</p>
-
-<P align="justify">La tercera revolución agrícola tiene como objetivo aumentar la producción mundial de cultivos mediante el empleo de métodos de mejora genética<sup>2</sup>.</p>
-
-.footnote[
-<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:55")`.</FONT></p>
-<P align="justify"><FONT SIZE=2>[2] `r Citet(mi_Bib, "cite:7")`.</FONT></p>
-]
-
-]
-
-.pull-right[
-
-<br>
-
-```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.showtext = TRUE, message = FALSE, warning=FALSE}
-
-Arroz <- read_delim(here('Presentacion', 'Imagen', 'datos_arroz.csv'), delim = ',')
-
-Arroz %>%
-  select(Elemento, Año, Valor, Unidad) %>%
-  filter(Elemento == 'Producción') %>%
-  group_by(Elemento, Año) %>%
-  summarise(Total = sum(Valor, na.rm = TRUE)) %>%
-  ungroup() %>%
-  ggplot(data = ., aes(x = Año, y = Total, colour = Elemento, fill = Elemento)) +
-  geom_area(alpha = 0.2, position = position_dodge(0.8), size = 1.4) +
-  labs(title = 'Evolución de la producción de arroz') +
-  scale_color_manual(values = c('yellow', 'cyan')) +
-  scale_fill_manual(values = c('yellow', 'cyan')) +
-  theme_bw() +
-  theme(
-    legend.position = 'none',
-    axis.text.y = element_blank(),
-    axis.text.x = element_text(size = 18),
-    axis.ticks.y = element_blank(),
-    axis.title = element_blank(),
-    plot.title = element_text(size = 18, face = 'bold')
-    )
-```
-
-<P align="center"><FONT SIZE=2>Figura hecha con las bases de datos de la FAOSTAT.</small></FONT></p>
-
-]
-
----
-class: center
-
-### Revisión de literatura
-
-.pull-left[
-
-<P align="justify">Con la mejora genética se identifican y seleccionan individuos con mayor merito genético, en busca de lograr un progreso genético en la siguiente generación<sup>1</sup>.</p>
-
-<P align="justify">Con la mejora genética, los genotipos que exhiben fenotipos deseables son seleccionados, lo que conduce a la acumulación de alelos favorables<sup>1</sup>.</p>
-
-.footnote[
-<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:7")`.</FONT></p>
-]
-
-]
-
-.pull-right[
-
-<br>
-
-```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.showtext = TRUE, message = FALSE, warning=FALSE}
+```{r, echo = FALSE, out.width = "50%", fig.align = 'center', fig.showtext = TRUE, message = FALSE, warning=FALSE}
 
 ggplot(data.frame(x = c(0, 180)), aes(x)) + # Saque esta figura de esta página: https://ggplot2tutor.com/tutorials/sampling_distributions
   stat_function(fun = dnorm,
@@ -214,7 +150,113 @@ ggplot(data.frame(x = c(0, 180)), aes(x)) + # Saque esta figura de esta página:
 
 <P align="center"><FONT SIZE=2>Figura adaptada de `r Citet(mi_Bib, "cite:56")`.</FONT></p>
 
+.footnote[
+
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:21")`.</FONT></p>
+
 ]
+
+<!--
+NOTA: El desarrollo del BLUP permitió una predicciÛn de los valores genéticos mucho más ajustada a las situaciones reales que los índices de selección, pues con estos se obtenía el mejor estimador lineal insesgado, el cual se puede obtener si se conoce la media real de los efectos fjos, hecho que en la práctica rara vez se tiene, pues estos se estiman a partir de los datos. Existen diferentes tipos de modelos animales según la situación biológica y estructura de los datos.
+
+NOTA: El acrónimo de BLUP significa "Mejor predicción lineal insesgado" porque maximiza la correlación entre el valor genético real y el predicho o minimiza la varianza del error de predicción.
+
+NOTA: El BLUP - Modelo Animal, esta basado en el concepto de modelo infinitesimal, que supone que las características están determinadas por un número infinito de loci, cada uno con efectos infinitesimalmente pequeños, independientes y aditivos, ha mostrado un enorme éxito en la mejora genética de las más variadas especies, razas y rasgos, mostrando una enorme robustez incluso en rasgos controlados por un número reducido de loci.
+-->
+
+---
+class: center
+
+### Revisión de literatura
+
+.pull-left[
+
+<div class="math">
+\[
+\begin{equation}
+\begin{bmatrix}
+X'X & X'Z \\
+Z'X & Z'Z + A^{-1} \lambda
+\end{bmatrix}
+\begin{bmatrix}
+\hat{b} \\
+\hat{a}
+\end{bmatrix}
+=
+\begin{bmatrix}
+X'y \\
+Z'y
+\end{bmatrix}
+,
+\end{equation}
+\]
+</div>
+
+]
+
+.pull-right[
+
+<br>
+<br>
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.showtext = TRUE}
+
+Punto <- data.frame(x = 6.05, y = 3.8)
+Puntos <- data.frame(x = c(6.05, 5.75, 6.35, 5.9, 6.2), y = c(5.0, 5.0, 5.0, 4.6, 4.6))
+
+data.frame(
+  x = 4.5, y = 3.75
+  ) %>%
+  ggplot(aes(x0 = x, y0 = y, r = 0.8)) +
+  #geom_blank() +
+  
+  annotate(geom = 'rect', xmin = 2.5, xmax = 4.75, ymin = 7.0, ymax = 9.5, colour = 'yellow', fill = 'yellow', alpha = 0.2) +
+  annotate(geom = 'text', x = 3.625, y = 8.25, label = 'A', size = 9.4, colour = 'black') +
+  annotate(geom = 'text', x = 2.1, y = 8.25, label = 'Matriz A', size = 7.6, angle = 90, colour = 'black') +
+  geom_curve(x = 3.625, xend = 4.5, y = 6.7, yend = 5.3, arrow = arrow(length = unit(0.05, 'inch')), size = 1.2, color = 'black', curvature = 0.0) +
+  
+  annotate(geom = 'text', x = 8.25, y = 8.45, label = 'Datos de', size = 9.4, colour = 'black') +
+  annotate(geom = 'text', x = 8.25, y = 7.95, label = 'Rendimiento', size = 9.4, colour = 'black') +
+  geom_curve(x = 8.25, xend = 4.8, y = 7.55, yend = 5.3, arrow = arrow(length = unit(0.05, 'inch')), size = 1.2, color = 'black', curvature = 0.0) +
+  
+  annotate(geom = 'rect', xmin = 3.75, xmax = 5.25, ymin = 5.0, ymax = 4.0, colour = 'black', fill = 'black', alpha = 0.4) +
+  annotate(geom = 'rect', xmin = 4.4, xmax = 4.6, ymin = 3.75, ymax = 4.0, colour = 'black', fill = 'black', alpha = 0.7) +
+  geom_circle(aes(x0 = x, y0 = y, r = 0.2), colour = 'black', fill = 'black', alpha = 0.7, size = 0.8) +
+  annotate(geom = 'rect', xmin = 5.55, xmax = 6.55, ymin = 3.5, ymax = 5.2, colour = 'black', fill = 'black', alpha = 0.2) +
+  geom_point(aes(x = x, y = y), data = Punto, size = 1.6, shape = 21, color = 'black', fill = 'black', alpha = 0.9) +
+  geom_point(aes(x = x, y = y), data = Puntos, size = 0.6, shape = 21, color = 'black', fill = 'black', alpha = 0.9) +
+  annotate(geom = 'text', x = 3.35, y = 4.25, label = 'BLUP', size = 7.6, angle = 90, colour = 'black') +
+  
+  geom_curve(x = 6.85, xend = 8.35, y = 4.35, yend = 4.35, arrow = arrow(length = unit(0.08, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'dashed') +
+  annotate(geom = 'text', x = 9.15, y = 4.55, label = 'Valor', size = 7.8, colour = 'black') +
+  annotate(geom = 'text', x = 9.15, y = 4.15, label = 'genético', size = 7.8, colour = 'black') +
+  
+  scale_x_continuous(limits = c(1.0, 11.0)) +
+  scale_y_continuous(limits = c(2.85, 10.0)) +
+  
+  theme_bw() +
+  #labs(title = 'BLUP') +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 11, face = 'bold')) #-> ablup
+```
+
+]
+
+---
+class: center
+
+### Revisión de literatura
+
+
+
+---
+class: center
+
+### Revisión de literatura
+
+
 
 ---
 
