@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Selección genómica en arroz: efecto del número de marcadores y de individuos genotipados sobre la precisión de la predicción
+# Evaluación de la selección genómica de un solo paso en arroz
 > Trabajo de fin de máster desarrollado para obtener el grado de máster en mejora genética.
 >
 > [UPV/UAB/IAMZ-CIHEAM](http://www.mastermejorageneticaanimal.es/)
