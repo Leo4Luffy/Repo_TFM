@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Titulo</title>
+    <title>Evaluación de la selección genómica de un solo paso en arroz</title>
     <meta charset="utf-8" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
@@ -46,7 +46,7 @@ class: center
 
 
 
-###.fancy[Titulo] 
+###.fancy[Evaluación de la selección genómica de un solo paso en arroz] 
 
 &lt;!--###.fancy[]--&gt;
 
@@ -107,37 +107,43 @@ class: center
 
 ### Revisión de literatura
 
-.pull-left[
+.panelset.sideways[
 
-&lt;div class="math"&gt;
-\[
-`\begin{equation}
-`\begin{bmatrix}
-X'X &amp; X'Z \\
-Z'X &amp; Z'Z + A^{-1} \lambda
-\end{bmatrix}`
-`\begin{bmatrix}
-\hat{b} \\
-\hat{a}
-\end{bmatrix}`
-=
-`\begin{bmatrix}
-X'y \\
-Z'y
-\end{bmatrix}`
-,
-\end{equation}`
-\]
-&lt;/div&gt;
+.panel[.panel-name[Ecuaciones del modelo mixto] 
+
+&lt;P align="justify"&gt;Los valores genéticos de los individuos son obtenidos resolviendo este sistema de ecuaciones:&lt;/p&gt;
+
+&lt;img src="index_files/figure-html/unnamed-chunk-2-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+&lt;!--
+NOTA: X y Z son las matrices de incidencia o matrices diseño de los efectos fijos y aleatorios, matrices de ceros y unos (excepto para variables regresoras o covariables) e y es el vector de datos que contiene simplemente las observaciones.
+--&gt;
+
+&lt;br&gt;
+
+
 
 ]
 
-.pull-right[
+.panel[.panel-name[Matriz de parentesco (A)] 
 
-&lt;br&gt;
-&lt;br&gt;
+&lt;P align="justify"&gt;La matriz **A**, contiene la aportación de los parentescos entre individuos a las evaluaciones genéticas, y los elementos fuera de la diagonal indican la relación entre individuos&lt;sup&gt;1&lt;/sup&gt;.&lt;/p&gt;
 
-&lt;img src="index_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.panel[.panel-name[Parentesco observado] 
+
+&lt;img src="index_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+]
+
+.footnote[
+
+&lt;P align="justify"&gt;&lt;FONT SIZE=2&gt;[1] &lt;a name=cite-citejpgg&gt;&lt;/a&gt;[Gutiérrez (2010)](#bib-citejpgg).&lt;/FONT&gt;&lt;/p&gt;
 
 ]
 
@@ -165,6 +171,10 @@ breeding, principles_. 2nd edition. Vol. 2. Elsevier Ltd, p. 236.
 &lt;a name=bib-cite21&gt;&lt;/a&gt;[Blasco, A.](#cite-cite21) (2021). _Mejora
 genética animal_. 1st edition. EDITORIAL SÍNTESIS, S. A, p. 206. ISBN:
 978-84-1357-116-4.
+
+&lt;a name=bib-citejpgg&gt;&lt;/a&gt;[Gutiérrez, J.](#cite-citejpgg) (2010).
+_Iniciación a la valoración genética animal_. 1st edition. EDITORIAL
+COMPLUTENSE, p. 221. ISBN: 978-84-9938-021-6.
 
 ---
 
