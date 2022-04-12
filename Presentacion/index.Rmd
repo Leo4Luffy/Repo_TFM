@@ -439,7 +439,9 @@ class: center
 
 ### Revisión de literatura
 
-
+<!--
+En teoría, el uso de marcadores puede proporcionar la relación genética realizada teniendo en cuenta el muestreo mendeliano, a diferencia de la relación genética esperada a partir de una matriz de relación derivada del pedigrí.
+-->
 
 ---
 class: center
