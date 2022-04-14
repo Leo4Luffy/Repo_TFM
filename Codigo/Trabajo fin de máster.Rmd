@@ -17195,8 +17195,7 @@ mH_IND_1_1_g148 <- melt(mH_IND_1) # Usando la función melt() del paquete "resha
 Rela_1_1_g148_a <- ggplot(data = mH_IND_1_1_g148, aes(x = Var1, y = Var2, fill = value)) +
   geom_tile() +
   scale_fill_gradient(high = 'red', low = 'yellow') +
-  facet_zoom(xlim = c(1, 50)) +
-  facet_zoom(ylim = c(1, 50)) +
+  #facet_zoom(xlim = c(1, 50), ylim = c(1, 50)) +
   labs(x = 'Individuos', y = 'Individuos', fill = 'Relación') + # Pedigrí 1, replica 1
   theme_bw() +
   theme(
@@ -17208,7 +17207,7 @@ Rela_1_1_g148_a <- ggplot(data = mH_IND_1_1_g148, aes(x = Var1, y = Var2, fill =
 
 Rela_1_1_g148_b <-ggplot(data = mH_IND_1_1_g148, aes(x = value, after_stat(density))) +
   geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2) +
-  labs(title = 'Pedigrí 1', x = 'relación', y = ' ') + # Pedigrí 1, replica 1
+  labs(title = '148 individuos genotipados', x = 'relación', y = ' ') + # Pedigrí 1, replica 1
   theme_bw() +
   theme(
     axis.text.x = element_text(size = 10, face = 'bold'),
@@ -17216,6 +17215,19 @@ Rela_1_1_g148_b <-ggplot(data = mH_IND_1_1_g148, aes(x = value, after_stat(densi
     plot.title = element_text(size = 10, face = 'bold'),
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank(),
+    )
+
+Rela_1_1_g148_c <- ggplot(data = mH_IND_1_1_g148, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(high = 'red', low = 'yellow') +
+  facet_zoom(xlim = c(1, 50), ylim = c(1, 50)) +
+  labs(x = '148 individuos genotipados', y = 'Individuos', fill = 'Relación') + # Pedigrí 1, replica 1
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    legend.title = element_text(size = 10, face = 'bold')
     )
 
 (Rela_1_1_g148_b | Rela_1_1_g148_a)
@@ -17257,7 +17269,7 @@ Rela_1_1_g298_a <- ggplot(data = mH_IND_1_1_g298, aes(x = Var1, y = Var2, fill =
 
 Rela_1_1_g298_b <-ggplot(data = mH_IND_1_1_g298, aes(x = value, after_stat(density))) +
   geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2) +
-  labs(title = 'Pedigrí 1', x = 'relación', y = ' ') + # Pedigrí 1, replica 1
+  labs(title = '298 individuos genotipados', x = 'relación', y = ' ') + # Pedigrí 1, replica 1
   theme_bw() +
   theme(
     axis.text.x = element_text(size = 10, face = 'bold'),
@@ -17265,6 +17277,19 @@ Rela_1_1_g298_b <-ggplot(data = mH_IND_1_1_g298, aes(x = value, after_stat(densi
     plot.title = element_text(size = 10, face = 'bold'),
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank(),
+    )
+
+Rela_1_1_g298_c <- ggplot(data = mH_IND_1_1_g298, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(high = 'red', low = 'yellow') +
+  facet_zoom(xlim = c(1, 50), ylim = c(1, 50)) +
+  labs(x = '298 individuos genotipados', y = 'Individuos', fill = 'Relación') + # Pedigrí 1, replica 1
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    legend.title = element_text(size = 10, face = 'bold')
     )
 
 (Rela_1_1_g298_b | Rela_1_1_g298_a)
@@ -17306,7 +17331,8 @@ Rela_1_1_g451_a <- ggplot(data = mH_IND_1_1_g451, aes(x = Var1, y = Var2, fill =
 
 Rela_1_1_g451_b <-ggplot(data = mH_IND_1_1_g451, aes(x = value, after_stat(density))) +
   geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2) +
-  labs(title = 'Pedigrí 1', x = 'relación', y = ' ') + # Pedigrí 1, replica 1
+  #labs(title = '451 individuos genotipados', x = 'relación', y = ' ') + # Pedigrí 1, replica 1
+  labs(title = '451 individuos genotipados', x = 'relación', y = ' ') +
   theme_bw() +
   theme(
     axis.text.x = element_text(size = 10, face = 'bold'),
@@ -17314,6 +17340,19 @@ Rela_1_1_g451_b <-ggplot(data = mH_IND_1_1_g451, aes(x = value, after_stat(densi
     plot.title = element_text(size = 10, face = 'bold'),
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank(),
+    )
+
+Rela_1_1_g451_c <- ggplot(data = mH_IND_1_1_g451, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(high = 'red', low = 'yellow') +
+  facet_zoom(xlim = c(1, 50), ylim = c(1, 50)) +
+  labs(x = '451 individuos genotipados', y = 'Individuos', fill = 'Relación') + # Pedigrí 1, replica 1
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    legend.title = element_text(size = 10, face = 'bold')
     )
 
 (Rela_1_1_g451_b | Rela_1_1_g451_a)
@@ -17355,7 +17394,7 @@ Rela_1_1_g0_a <- ggplot(data = mA_IND_1_1_g0, aes(x = Var1, y = Var2, fill = val
 
 Rela_1_1_g0_b <-ggplot(data = mA_IND_1_1_g0, aes(x = value, after_stat(density))) +
   geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2) +
-  labs(title = 'Pedigrí 1', x = 'relación', y = ' ') + # Pedigrí 1, replica 1
+  labs(title = '0 individuos genotipados', x = 'relación', y = ' ') + # Pedigrí 1, replica 1
   theme_bw() +
   theme(
     axis.text.x = element_text(size = 10, face = 'bold'),
@@ -17365,7 +17404,22 @@ Rela_1_1_g0_b <-ggplot(data = mA_IND_1_1_g0, aes(x = value, after_stat(density))
     axis.ticks.y = element_blank(),
     )
 
+Rela_1_1_g0_c <- ggplot(data = mA_IND_1_1_g0, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(high = 'red', low = 'yellow') +
+  facet_zoom(xlim = c(1, 50), ylim = c(1, 50)) +
+  labs(x = 'Individuos', y = 'Individuos', fill = 'Relación') + # Pedigrí 1, replica 1
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    legend.title = element_text(size = 10, face = 'bold')
+    )
+
 (Rela_1_1_g0_b | Rela_1_1_g0_a)
+
+(Rela_1_1_g0_b | Rela_1_1_g0_a) / (Rela_1_1_g148_b | Rela_1_1_g148_a) / (Rela_1_1_g298_b | Rela_1_1_g298_a) / (Rela_1_1_g451_b | Rela_1_1_g451_a)
 
 ## Densidad de 1.000 SNPs ----
 
@@ -19981,6 +20035,50 @@ mod_IND_1 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov 
 
 save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_2.1/Den_10.000/mod_lme4GS_3/mod_lme4GS_3.RData')
 
+# Se hara un gráfico para ver cómo el método de un solo paso modela la relación entre individuos:
+
+mH_IND_2_1_g451 <- melt(mH_IND_3) # Usando la función melt() del paquete "reshape2" se convertie la matriz H al formato largo.
+
+Rela_2_1_g451_a <- ggplot(data = mH_IND_2_1_g451, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(high = 'red', low = 'yellow') +
+  labs(x = 'Individuos', y = 'Individuos', fill = 'Relación') + # Pedigrí 1, replica 1
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    legend.title = element_text(size = 10, face = 'bold')
+    )
+
+Rela_2_1_g451_b <-ggplot(data = mH_IND_2_1_g451, aes(x = value, after_stat(density))) +
+  geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  #labs(title = '451 individuos genotipados', x = 'relación', y = ' ') + # Pedigrí 1, replica 1
+  labs(title = 'Pedigrí 2', x = 'relación', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    )
+
+Rela_2_1_g451_c <- ggplot(data = mH_IND_2_1_g451, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(high = 'red', low = 'yellow') +
+  facet_zoom(xlim = c(1, 50), ylim = c(1, 50)) +
+  labs(x = '451 individuos genotipados', y = 'Individuos', fill = 'Relación') + # Pedigrí 1, replica 1
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    legend.title = element_text(size = 10, face = 'bold')
+    )
+
+(Rela_2_1_g451_b | Rela_2_1_g451_a)
+
 ## 4. Subpoblación con ningún individuo genotipado
 
 # a) Se preparan los datos de entrada ----
@@ -19999,6 +20097,50 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_2.1/Den_10.000/mod_lme4GS_4') # S
 mod_IND_4 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mA_IND)))
 
 save(mod_IND_4, file = '../Datos/Datos_IND/lme4GS/Molcoanc_2.1/Den_10.000/mod_lme4GS_4/mod_lme4GS_4.RData')
+
+# Se hara un gráfico para ver cómo el método de un solo paso modela la relación entre individuos:
+
+mA_IND_2_1_g0 <- melt(mA_IND) # Usando la función melt() del paquete "reshape2" se convertie la matriz H al formato largo.
+
+Rela_2_1_g0_a <- ggplot(data = mA_IND_2_1_g0, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(high = 'red', low = 'yellow') +
+  labs(x = 'Individuos', y = 'Individuos', fill = 'Relación') + # Pedigrí 1, replica 1
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    legend.title = element_text(size = 10, face = 'bold')
+    )
+
+Rela_2_1_g0_b <-ggplot(data = mA_IND_2_1_g0, aes(x = value, after_stat(density))) +
+  geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  #labs(title = '451 individuos genotipados', x = 'relación', y = ' ') + # Pedigrí 1, replica 1
+  labs(title = 'Pedigrí 2', x = 'relación', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    )
+
+Rela_2_1_g0_c <- ggplot(data = mA_IND_2_1_g0, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(high = 'red', low = 'yellow') +
+  facet_zoom(xlim = c(1, 50), ylim = c(1, 50)) +
+  labs(x = '451 individuos genotipados', y = 'Individuos', fill = 'Relación') + # Pedigrí 1, replica 1
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    legend.title = element_text(size = 10, face = 'bold')
+    )
+
+(Rela_2_1_g0_b | Rela_2_1_g0_a)
 
 ## Densidad de 1.000 SNPs ----
 
@@ -22613,6 +22755,50 @@ dir.create('../Datos/Datos_IND/lme4GS/Molcoanc_3.1/Den_10.000/mod_lme4GS_3') # S
 mod_IND_1 <- lmerUvcov(formula = Fen_escalado ~ (1 | id), data = Fen_IND, Uvcov = list(id = list(K = mH_IND_3)))
 
 save(mod_IND_1, file = '../Datos/Datos_IND/lme4GS/Molcoanc_3.1/Den_10.000/mod_lme4GS_3/mod_lme4GS_3.RData')
+
+# Se hara un gráfico para ver cómo el método de un solo paso modela la relación entre individuos:
+
+mH_IND_3_1_g451 <- melt(mH_IND_3) # Usando la función melt() del paquete "reshape2" se convertie la matriz H al formato largo.
+
+Rela_3_1_g451_a <- ggplot(data = mH_IND_3_1_g451, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(high = 'red', low = 'yellow') +
+  labs(x = 'Individuos', y = 'Individuos', fill = 'Relación') + # Pedigrí 1, replica 1
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    legend.title = element_text(size = 10, face = 'bold')
+    )
+
+Rela_3_1_g451_b <-ggplot(data = mH_IND_3_1_g451, aes(x = value, after_stat(density))) +
+  geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  #labs(title = '451 individuos genotipados', x = 'relación', y = ' ') + # Pedigrí 1, replica 1
+  labs(title = 'Pedigrí 2', x = 'relación', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    )
+
+Rela_3_1_g451_c <- ggplot(data = mH_IND_3_1_g451, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(high = 'red', low = 'yellow') +
+  facet_zoom(xlim = c(1, 50), ylim = c(1, 50)) +
+  labs(x = '451 individuos genotipados', y = 'Individuos', fill = 'Relación') + # Pedigrí 1, replica 1
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    legend.title = element_text(size = 10, face = 'bold')
+    )
+
+(Rela_3_1_g451_b | Rela_3_1_g451_a)
 
 ## 4. Subpoblación con ningún individuo genotipado
 
@@ -45234,7 +45420,7 @@ $ echo $?
 
 ```{r Carga del paquete reticulate para usar Python en R y de otros paquetes de interés}
 
-pacman::p_load(reticulate, dplyr, qqman, here, readr, tibble, tidyr, ggplot2, ggrepel, patchwork, genio, BEDMatrix, ggtext, gt)
+pacman::p_load(reticulate, qqman, here, readr, tibble, tidyverse, ggrepel, patchwork, genio, BEDMatrix, ggtext, gt, AGHmatrix)
 
 use_condaenv(conda = '/home/leo/anaconda3/bin/python') # Se uso el entorno conda (indicando la ruta donde reside la carpeta de Python), como la versión de Python que se quiere usar.
 
@@ -69622,7 +69808,7 @@ Cor_ped1_ped2_ped3_ped4 + plot_layout(guides = 'collect')
 
 Cor_ped1_ped2_ped3_ped4 <- bind_rows(Cor_ped1_est, Cor_ped2_est, Cor_ped3_est, Cor_ped4_est) %>%
   rename(Desvio = des, Media = Correlación) %>%
-  write_tsv(here('Datos', 'Datos_IND', 'Resultados', 'Ped_F3.txt')) %>%
+  write_tsv(here('Datos', 'Datos_IND', 'Resultados', 'Ped_F2.txt')) %>%
   gt() %>%
   tab_row_group(
     label = 'Pedigrí 4',
@@ -75548,3 +75734,36 @@ Cor_ped1_ped2_ped3_ped4 <- bind_rows(Cor_ped1_est, Cor_ped2_est, Cor_ped3_est, C
     rows = 1:10
     )
 ```
+
+<!--
+26. Se realizan algunos análisis que ayudaran con el análisis de los resultados.
+-->
+
+```{r}
+
+###########
+# Pedigrí 1
+###########
+
+###################
+# Densidad de 1.000
+###################
+
+# Con todos los individuos genotipados (F0-F1-F2-F3):
+
+## 1. Se importa la matriz de SNP obtenida con el modulo SeqBreed.
+
+m_SNP <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1.1', 'chip_1', 'Geno_1', 'mX_1.csv'), delim = ',', col_names = FALSE) %>% # Esta matriz de SNP tiene dimensión 9844 x 2091, es decir, 9843 SNP de 2091 individuos.
+  slice(-1) %>%
+  t() %>%
+  as.matrix()
+
+## 2. Se calcula la matriz de relación genómica.
+
+mG_ped1 <- Gmatrix(SNPmatrix = m_SNP, method = 'VanRaden') # Aquí se calculo la matriz de parentesco genómico a partir de lo propuesto por VanRaden (2008).
+
+Matrix_G %>%
+  as.matrix() %>%
+  saveRDS(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1.1', 'chip_1', 'Geno_1', 'mG_ped1.RDS'))
+```
+
