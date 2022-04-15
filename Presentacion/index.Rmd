@@ -515,50 +515,108 @@ class: center
 
 .panelset.sideways[
 
-.panel[.panel-name[Modelos de selección genómica] 
+.panel[.panel-name[Mejor predictor lineal insesgado genómico] 
 
+<P align="justify">En el **GBLUP**, la matriz **A** derivada del pedigrí es reemplazada por la matriz **G**:</p>
 
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center', message = FALSE, warning = FALSE}
 
-```{r, echo = FALSE, out.width = "70%", fig.align = 'center', fig.showtext = TRUE}
+image_read(here('Presentacion', 'Imagen', 'EMM_g.png'))
+```
 
-data.frame(
-  x = c(0.0:10.0), y = c(0.0:10.0)
-  ) %>%
-  ggplot(aes(x, y)) +
-  #geom_blank() +
+```{r, echo = FALSE, eval = FALSE, out.width = "70%", fig.align = 'center', fig.showtext = TRUE}
+
+set.seed(1234)
+
+ggplot() +
+  xlim(-4, 4) +
+  geom_function(fun = dnorm, colour = 'yellow', size = 1.2) +
+  #labs(title = 'rrBLUP - GBLUP') +
+  theme_bw() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 10, face = 'bold'))
+```
+
+<!--
+NOTA: esencialmente, todos los enfoques de selección genómica son de naturaleza estadística, ya que se basan en el aprendizaje de una relación matemática entre los datos genotípicos y fenotípicos que luego se utilizan para la predicción. En este sentido, los enfoques de selección genómica son parte del aprendizaje automático que tiene como objetivo desarrollar y analizar más el rendimiento de los modelos mediante el uso de un conjunto de datos de entrenamiento. Luego, los modelos se utilizan con datos no vistos para hacer predicciones.
+-->
+
+]
+
+.panel[.panel-name[Matriz de parentesco]
+
+<P align="justify">La matriz **G**, <sup>1</sup>.</p>
+
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center', fig.showtext = TRUE, warning = FALSE}
+
+Punto_1 <- data.frame(x = c(0.65, 1.75), y = c(1.75, 1.4))
+Punto_2 <- data.frame(x = c(0.25, 0.75, 1.75), y = c(1.4, 1.05, 1.05))
+Cuadro_1 <- data.frame(x = c(0.75, 1.25), y = c(1.4, 1.4))
+Cuadro_2 <- data.frame(x = c(1.35, 0.25, 1.25), y = c(1.75, 1.05, 1.05))
+Punto <- data.frame(x = 2.4, y = 1.6)
+Cuadro <- data.frame(x = 2.4, y = 1.4)
+
+ggplot() +
   
-  annotate(geom = 'rect', xmin = 3.3, xmax = 6.7, ymin = 8.0, ymax = 9.0, colour = 'black', fill = 'black', alpha = 0.2) +
-  annotate(geom = 'text', x = 5.0, y = 8.7, label = 'Modelos de', size = 7.4, colour = 'black') +
-  annotate(geom = 'text', x = 5.0, y = 8.3, label = 'regresión', size = 7.4, colour = 'black') +
-  annotate(geom = 'segment', x = 5.0, xend = 5.0, y = 8.0, yend = 7.5, colour = 'black') +
-  annotate(geom = 'segment', x = 5.0, xend = 2.5, y = 7.5, yend = 7.5, colour = 'black') +
-  annotate(geom = 'segment', x = 5.0, xend = 7.5, y = 7.5, yend = 7.5, colour = 'black') +
-  annotate(geom = 'segment', x = 2.5, xend = 2.5, y = 7.5, yend = 7.0, colour = 'black') +
-  annotate(geom = 'rect', xmin = 0.15, xmax = 4.85, ymin = 6.0, ymax = 7.0, colour = 'black', fill = 'black', alpha = 0.2) +
-  annotate(geom = 'text', x = 2.5, y = 6.7, label = 'Modelos lineales', size = 7.4, colour = 'black') +
-  annotate(geom = 'text', x = 2.5, y = 6.3, label = 'mixtos', size = 7.4, colour = 'black') +
-  annotate(geom = 'segment', x = 7.5, xend = 7.5, y = 7.5, yend = 7.0, colour = 'black') +
-  annotate(geom = 'rect', xmin = 5.15, xmax = 9.85, ymin = 6.4, ymax = 7.0, colour = 'black', fill = 'black', alpha = 0.2) +
-  annotate(geom = 'text', x = 7.5, y = 6.7, label = 'Bayesianos', size = 7.4, colour = 'black') +
+  geom_point(aes(x = x, y = y), data = Punto, size = 10.6, shape = 21, color = 'black', fill = 'black', alpha = 0.2) +
+  geom_point(aes(x = x, y = y), data = Cuadro, size = 10.6, shape = 22, color = 'black', fill = 'black', alpha = 0.2) +
+  annotate(geom = 'text', x = 3.0, y = 1.5, label = 'Genotipados', size = 6.4, colour = 'black') +
   
-  annotate(geom = 'segment', x = 1.25, xend = 1.25, y = 6.0, yend = 4.7, colour = 'black') +
-  geom_curve(x = 1.25, xend = 1.75, y = 5.3, yend = 5.3, arrow = arrow(length = unit(0.1, 'inch')), size = 0.2, color = 'black', curvature = 0.0, linetype = 'solid') +
-  annotate(geom = 'text', x = 2.8, y = 5.3, label = 'rrBLUP', size = 7.4, colour = 'black') +
-  geom_curve(x = 1.25, xend = 1.75, y = 4.7, yend = 4.7, arrow = arrow(length = unit(0.1, 'inch')), size = 0.2, color = 'black', curvature = 0.0, linetype = 'solid') +
-  annotate(geom = 'text', x = 2.8, y = 4.7, label = 'GBLUP', size = 7.4, colour = 'black') +
+  geom_point(aes(x = x, y = y), data = Punto_1, size = 17.6, shape = 21, color = 'black', fill = 'black', alpha = 0.2) +
+  geom_point(aes(x = x, y = y), data = Punto_2, size = 17.6, shape = 21, color = 'black', fill = 'white', alpha = 0.5) +
+  geom_point(aes(x = x, y = y), data = Cuadro_1, size = 17.6, shape = 22, color = 'black', fill = 'black', alpha = 0.2) +
+  geom_point(aes(x = x, y = y), data = Cuadro_2, size = 17.6, shape = 22, color = 'black', fill = 'white', alpha = 0.5) +
   
-  annotate(geom = 'segment', x = 6.25, xend = 6.25, y = 6.4, yend = 3.9, colour = 'black') +
-  geom_curve(x = 6.25, xend = 6.75, y = 5.7, yend = 5.7, arrow = arrow(length = unit(0.1, 'inch')), size = 0.2, color = 'black', curvature = 0.0, linetype = 'solid') +
-  annotate(geom = 'text', x = 7.8, y = 5.7, label = 'BayesA', size = 7.4, colour = 'black') +
-  geom_curve(x = 6.25, xend = 6.75, y = 5.1, yend = 5.1, arrow = arrow(length = unit(0.1, 'inch')), size = 0.2, color = 'black', curvature = 0.0, linetype = 'solid') +
-  annotate(geom = 'text', x = 7.8, y = 5.1, label = 'BayesB', size = 7.4, colour = 'black') +
-  geom_curve(x = 6.25, xend = 6.75, y = 4.5, yend = 4.5, arrow = arrow(length = unit(0.1, 'inch')), size = 0.2, color = 'black', curvature = 0.0, linetype = 'solid') +
-  annotate(geom = 'text', x = 7.8, y = 4.5, label = 'BayesC', size = 7.4, colour = 'black') +
-  geom_curve(x = 6.25, xend = 6.75, y = 3.9, yend = 3.9, arrow = arrow(length = unit(0.1, 'inch')), size = 0.2, color = 'black', curvature = 0.0, linetype = 'solid') +
-  annotate(geom = 'text', x = 7.8, y = 3.9, label = 'LASSO', size = 7.4, colour = 'black') +
+  annotate(geom = 'segment', x = 0.85, xend = 1.15, y = 1.75, yend = 1.75, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 1.0, xend = 1.0, y = 1.75, yend = 1.6, colour = 'black', size = 0.8, linetype = 'solid') +
   
-  scale_x_continuous(limits = c(0.0, 10.0)) +
-  scale_y_continuous(limits = c(3.65, 9.15)) +
+  annotate(geom = 'segment', x = 0.25, xend = 1.75, y = 1.6, yend = 1.6, colour = 'black', size = 0.8, linetype = 'solid') +
+  
+  annotate(geom = 'segment', x = 0.25, xend = 0.25, y = 1.6, yend = 1.5, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 0.75, xend = 0.75, y = 1.6, yend = 1.5, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 1.25, xend = 1.25, y = 1.6, yend = 1.5, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 1.75, xend = 1.75, y = 1.6, yend = 1.5, colour = 'black', size = 0.8, linetype = 'solid') +
+  
+  annotate(geom = 'segment', x = 1.75, xend = 1.75, y = 1.3, yend = 1.15, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 1.25, xend = 1.25, y = 1.3, yend = 1.15, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 0.75, xend = 0.75, y = 1.3, yend = 1.15, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 0.25, xend = 0.25, y = 1.3, yend = 1.15, colour = 'black', size = 0.8, linetype = 'solid') +
+  
+  annotate(geom = 'text', x = 0.65, y = 1.75, label = '1', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.35, y = 1.75, label = '2', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 0.25, y = 1.4, label = '3', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 0.75, y = 1.4, label = '4', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.25, y = 1.4, label = '5', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.75, y = 1.4, label = '6', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 0.25, y = 1.05, label = '7', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 0.75, y = 1.05, label = '8', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.25, y = 1.05, label = '9', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.75, y = 1.05, label = '10', family = 'gochi', size = 7.2, colour = 'black') +
+  
+  annotate(geom = 'text', x = 1.2, y = 0.8, label = '0.13', size = 7.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.8, y = 0.8, label = '-0.40', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 2.4, y = 0.8, label = '-0.40', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 3.0, y = 0.8, label = '-0.67', size = 7.8, colour = 'black') +
+  
+  annotate(geom = 'text', x = 1.2, y = 0.6, label = '-0.40', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.8, y = 0.6, label = '1.20', size = 7.8, colour = 'black') +
+  annotate(geom = 'text', x = 2.4, y = 0.6, label = '1.20', size = 7.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.0, y = 0.6, label = '2.00', size = 7.8, colour = 'black') +
+  
+  annotate(geom = 'text', x = 1.2, y = 0.4, label = '-0.40', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.8, y = 0.4, label = '1.20', size = 7.8, colour = 'black') +
+  annotate(geom = 'text', x = 2.4, y = 0.4, label = '1.20', size = 7.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.0, y = 0.4, label = '2.00', size = 7.8, colour = 'black') +
+  
+  annotate(geom = 'text', x = 1.2, y = 0.2, label = '-0.67', size = 7.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.8, y = 0.2, label = '2.00', size = 7.8, colour = 'black') +
+  annotate(geom = 'text', x = 2.4, y = 0.2, label = '2.00', size = 7.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.0, y = 0.2, label = '3.33', size = 7.8, colour = 'black') +
+  
+  scale_x_continuous(limits = c(0.0, 3.55)) +
+  scale_y_continuous(limits = c(0.1, 1.9)) +
   
   theme_bw() +
   theme(axis.text = element_blank(),
@@ -566,11 +624,74 @@ data.frame(
         axis.title = element_blank())
 ```
 
-<P align="center"><FONT SIZE=2>Figura adaptada de `r Citet(mi_Bib, "cite:31")`.</FONT></p>
+<!--NOTA: a continuación se muestra parte de como se hizo el calculo de la matriz G, con base en el libro del profesor Agustin, considerando los individuos 1, 4, 5 y 6 como individuos genotipados, considerando que cada uno de ellos portan los siguientes alelos: ind_1 = Aa, ind_4 = AA, ind_5 = AA y ind_6 = aa. En este video (https://plant-breeding-genomics.extension.org/genomic-relationships-and-gblup/) también explican como hacer los calculos.-->
 
-<!--
-NOTA: esencialmente, todos los enfoques de selección genómica son de naturaleza estadística, ya que se basan en el aprendizaje de una relación matemática entre los datos genotípicos y fenotípicos que luego se utilizan para la predicción. En este sentido, los enfoques de selección genómica son parte del aprendizaje automático que tiene como objetivo desarrollar y analizar más el rendimiento de los modelos mediante el uso de un conjunto de datos de entrenamiento. Luego, los modelos se utilizan con datos no vistos para hacer predicciones.
--->
+```{r, echo = FALSE, Eeval = FALSE}
+
+W <- tribble(
+  ~'',
+  -0.25,
+  0.75,
+  0.75,
+  1.25
+  ) %>%
+  as.matrix()
+
+Wt <- t(W)
+
+W_Wt <- W %*% Wt
+
+G <- W_Wt * 2.13
+```
+
+]
+
+.panel[.panel-name[Múltiples pasos]
+
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center', fig.showtext = TRUE}
+
+data.frame(
+  x = c(6.225, 6.225), y = c(6.7, 0.5)
+  ) %>%
+  ggplot(aes(x0 = x, y0 = y, r = 0.8)) +
+  #geom_blank() +
+  
+  annotate(geom = 'rect', xmin = 0.5, xmax = 4.25, ymin = 6.0, ymax = 9.5, colour = 'yellow', fill = 'yellow', alpha = 0.2) +
+  annotate(geom = 'text', x = 2.375, y = 7.75, label = 'A', size = 8.4, colour = 'black') +
+  annotate(geom = 'text', x = 0.0, y = 7.75, label = 'Matriz A', size = 7.6, angle = 90, colour = 'black') +
+  
+  geom_curve(x = 4.55, xend = 5.85, y = 7.75, yend = 7.75, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0) +
+  annotate(geom = 'rect', xmin = 6.05, xmax = 8.65, ymin = 7.25, ymax = 8.25, colour = 'black', fill = 'white', alpha = 0.2, linetype = 'dashed') +
+  annotate(geom = 'text', x = 7.35, y = 7.75, label = 'BLUP', size = 7.8, colour = 'black') +
+  
+  geom_curve(x = 8.85, xend = 10.325, y = 7.75, yend = 7.75, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'dashed') +
+  annotate(geom = 'text', x = 11.35, y = 7.75, label = 'EBV', size = 7.8, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 0.75, xmax = 3.25, ymin = 0.5, ymax = 2.5, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 2.0, y = 1.5, label = 'G', size = 8.4, colour = 'black') +
+  annotate(geom = 'text', x = 0.25, y = 1.5, label = 'Matriz G', size = 7.6, angle = 90, colour = 'black') +
+  
+  geom_curve(x = 3.45, xend = 5.35, y = 1.5, yend = 1.5, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0) +
+  annotate(geom = 'rect', xmin = 5.55, xmax = 8.15, ymin = 1.0, ymax = 2.0, colour = 'black', fill = 'white', alpha = 0.2, linetype = 'dashed') +
+  annotate(geom = 'text', x = 6.85, y = 1.5, label = 'GBLUP', size = 7.8, colour = 'black') +
+  
+  geom_curve(x = 8.35, xend = 10.125, y = 1.5, yend = 1.5, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'dashed') +
+  annotate(geom = 'text', x = 11.45, y = 1.5, label = 'GEBV', size = 7.8, colour = 'black') +
+  
+  geom_curve(x = 11.15, xend = 6.85, y = 7.25, yend = 2.5, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0) +
+  annotate(geom = 'text', x = 11.45, y = 5.75, label = 'Pseudo', size = 7.8, colour = 'black') +
+  annotate(geom = 'text', x = 11.45, y = 4.95, label = 'observaciones', size = 7.8, colour = 'black') +
+  
+  scale_x_continuous(limits = c(-0.5, 14.0)) +
+  scale_y_continuous(limits = c(-0.5, 10.5)) +
+  
+  theme_bw() +
+  #labs(title = 'GBLUP') +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 11, face = 'bold'))
+```
 
 ]
 

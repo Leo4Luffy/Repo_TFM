@@ -173,11 +173,35 @@ class: center
 
 .panelset.sideways[
 
-.panel[.panel-name[Modelos de selección genómica] 
+.panel[.panel-name[Mejor predictor lineal insesgado genómico] 
+
+&lt;P align="justify"&gt;En el **GBLUP**, la matriz **A** derivada del pedigrí es reemplazada por la matriz **G**:&lt;/p&gt;
 
 &lt;img src="index_files/figure-html/unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
-&lt;P align="center"&gt;&lt;FONT SIZE=2&gt;Figura adaptada de &lt;a name=cite-cite31&gt;&lt;/a&gt;[de los Campos, Hickey, Pong-Wong, Daetwyler, and Calus (2013)](https://doi.org/10.1534/genetics.112.143313).&lt;/FONT&gt;&lt;/p&gt;
+
+
+&lt;!--
+NOTA: esencialmente, todos los enfoques de selección genómica son de naturaleza estadística, ya que se basan en el aprendizaje de una relación matemática entre los datos genotípicos y fenotípicos que luego se utilizan para la predicción. En este sentido, los enfoques de selección genómica son parte del aprendizaje automático que tiene como objetivo desarrollar y analizar más el rendimiento de los modelos mediante el uso de un conjunto de datos de entrenamiento. Luego, los modelos se utilizan con datos no vistos para hacer predicciones.
+--&gt;
+
+]
+
+.panel[.panel-name[Matriz de parentesco]
+
+&lt;P align="justify"&gt;La matriz **G**, &lt;sup&gt;1&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;img src="index_files/figure-html/unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+&lt;!--NOTA: a continuación se muestra parte de como se hizo el calculo de la matriz G, con base en el libro del profesor Agustin, considerando los individuos 1, 4, 5 y 6 como individuos genotipados, considerando que cada uno de ellos portan los siguientes alelos: ind_1 = Aa, ind_4 = AA, ind_5 = AA y ind_6 = aa. En este video (https://plant-breeding-genomics.extension.org/genomic-relationships-and-gblup/) también explican como hacer los calculos.--&gt;
+
+
+
+]
+
+.panel[.panel-name[Múltiples pasos]
+
+&lt;img src="index_files/figure-html/unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -199,12 +223,6 @@ breeding, principles_. 2nd edition. Vol. 2. Elsevier Ltd, p. 236.
 &lt;a name=bib-cite21&gt;&lt;/a&gt;[Blasco, A.](#cite-cite21) (2021). _Mejora
 genética animal_. 1st edition. EDITORIAL SÍNTESIS, S. A, p. 206. ISBN:
 978-84-1357-116-4.
-
-&lt;a name=bib-cite31&gt;&lt;/a&gt;[de los Campos, G., J. H. Hickey, R. Pong-Wong,
-et al.](#cite-cite31) (2013). "Whole-genome regression and prediction
-methods applied to plant and animal breeding". In: _Genetics_ 193, pp.
-327-345. DOI:
-[10.1534/genetics.112.143313](https://doi.org/10.1534%2Fgenetics.112.143313).
 
 &lt;a name=bib-citejpgg&gt;&lt;/a&gt;[Gutiérrez, J.](#cite-citejpgg) (2010).
 _Iniciación a la valoración genética animal_. 1st edition. EDITORIAL
