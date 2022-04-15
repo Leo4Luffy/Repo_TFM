@@ -80,9 +80,9 @@ class: center
 ---
 class: center
 
-### Revisión de literatura
+### Introducción
 
-&lt;P align="justify"&gt;El (**B**)est (**L**)inear (**U**)nbiased (**P**)rediction, es un método utilizado para predecir el valor genético de los individuos en una población&lt;sup&gt;1&lt;/sup&gt;.&lt;/p&gt;
+&lt;P align="justify"&gt;El (**B**)est (**L**)inear (**U**)nbiased (**P**)rediction, es un método utilizado para predecir los valores genéticos de los individuos en una población&lt;sup&gt;1&lt;/sup&gt;.&lt;/p&gt;
 
 &lt;img src="index_files/figure-html/unnamed-chunk-1-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
@@ -105,7 +105,7 @@ NOTA: El BLUP - Modelo Animal, esta basado en el concepto de modelo infinitesima
 ---
 class: center
 
-### Revisión de literatura
+### Introducción
 
 .panelset.sideways[
 
@@ -125,7 +125,7 @@ NOTA: X y Z son las matrices de incidencia o matrices diseño de los efectos fij
 
 ]
 
-.panel[.panel-name[Matriz de parentesco (A)] 
+.panel[.panel-name[Matriz de parentesco - I] 
 
 &lt;P align="justify"&gt;La matriz **A**, contiene la aportación de los parentescos entre individuos a las evaluaciones genéticas, y los elementos fuera de la diagonal indican la relación entre individuos&lt;sup&gt;1&lt;/sup&gt;.&lt;/p&gt;
 
@@ -133,7 +133,7 @@ NOTA: X y Z son las matrices de incidencia o matrices diseño de los efectos fij
 
 ]
 
-.panel[.panel-name[Parentesco esperado] 
+.panel[.panel-name[Matriz de parentesco - II] 
 
 &lt;P align="justify"&gt;El parentesco que proviene al usar la matriz **A** es un parentesco esperado, lo cual no refleja el porcentaje real de genes idénticos entre individuos emparentados&lt;sup&gt;2&lt;/sup&gt;.&lt;/p&gt;
 
@@ -152,16 +152,42 @@ NOTA: X y Z son las matrices de incidencia o matrices diseño de los efectos fij
 ---
 class: center
 
-### Revisión de literatura
+### Introducción
 
+&lt;P align="justify"&gt;La **selección genómica** son una serie de métodos que usan numerosos marcadores de ADN, para predecir los valores genéticos.&lt;/p&gt;
 
+&lt;img src="index_files/figure-html/unnamed-chunk-6-1.png" width="52%" style="display: block; margin: auto;" /&gt;
+
+&lt;P align="center"&gt;&lt;FONT SIZE=2&gt;Figura adaptada de &lt;a name=cite-cite7&gt;&lt;/a&gt;[Tong and Nikoloski (2021)](https://doi.org/10.1016/j.jplph.2020.153354).&lt;/FONT&gt;&lt;/p&gt;
+
+&lt;!--
+NOTA: en la selección genómica, la arquitectura genética del carácter en sí se trata como una caja negra, sin conocimiento de la cantidad de genes que afectan el carácter, y mucho menos de los efectos de cada gen o su ubicación en el genoma
+
+NOTA: el uso de decenas de miles de marcadores de ADN es una de las características fundamentales de la selección genómica, ya que al contar con tal cantidad, la probabilidad de que algunos de estos marcadores estén en desequilibrio de ligamiento con el QTL tiende a aumentar, con lo cual, aún cuando dichos marcadores no tienen efecto directo sobre el carácter, sí que se captura una asociación entre el carácter y los marcadores.
+--&gt;
 
 ---
 class: center
 
-### Revisión de literatura
+### Introducción
+
+.panelset.sideways[
+
+.panel[.panel-name[Modelos de selección genómica] 
+
+&lt;img src="index_files/figure-html/unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+&lt;P align="center"&gt;&lt;FONT SIZE=2&gt;Figura adaptada de &lt;a name=cite-cite31&gt;&lt;/a&gt;[de los Campos, Hickey, Pong-Wong, Daetwyler, and Calus (2013)](https://doi.org/10.1534/genetics.112.143313).&lt;/FONT&gt;&lt;/p&gt;
+
+]
+
+]
 
 
+
+&lt;!--
+En teoría, el uso de marcadores puede proporcionar la relación genética realizada teniendo en cuenta el muestreo mendeliano, a diferencia de la relación genética esperada a partir de una matriz de relación derivada del pedigrí.
+--&gt;
 
 ---
 
@@ -174,9 +200,21 @@ breeding, principles_. 2nd edition. Vol. 2. Elsevier Ltd, p. 236.
 genética animal_. 1st edition. EDITORIAL SÍNTESIS, S. A, p. 206. ISBN:
 978-84-1357-116-4.
 
+&lt;a name=bib-cite31&gt;&lt;/a&gt;[de los Campos, G., J. H. Hickey, R. Pong-Wong,
+et al.](#cite-cite31) (2013). "Whole-genome regression and prediction
+methods applied to plant and animal breeding". In: _Genetics_ 193, pp.
+327-345. DOI:
+[10.1534/genetics.112.143313](https://doi.org/10.1534%2Fgenetics.112.143313).
+
 &lt;a name=bib-citejpgg&gt;&lt;/a&gt;[Gutiérrez, J.](#cite-citejpgg) (2010).
 _Iniciación a la valoración genética animal_. 1st edition. EDITORIAL
 COMPLUTENSE, p. 221. ISBN: 978-84-9938-021-6.
+
+&lt;a name=bib-cite7&gt;&lt;/a&gt;[Tong, H. and Z. Nikoloski](#cite-cite7) (2021).
+"Machine learning approaches for crop improvement: leveraging
+phenotypic and genotypic big data". In: _Journal of Plant Physiology_
+257, p. 153354. DOI:
+[10.1016/j.jplph.2020.153354](https://doi.org/10.1016%2Fj.jplph.2020.153354).
 
 ---
 
