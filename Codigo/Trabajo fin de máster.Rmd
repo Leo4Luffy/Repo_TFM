@@ -45420,7 +45420,7 @@ $ echo $?
 
 ```{r Carga del paquete reticulate para usar Python en R y de otros paquetes de interés}
 
-pacman::p_load(reticulate, qqman, here, readr, tibble, tidyverse, ggrepel, patchwork, genio, BEDMatrix, ggtext, gt, AGHmatrix, pedigreemm)
+pacman::p_load(reticulate, qqman, here, readr, tibble, tidyverse, ggrepel, patchwork, genio, BEDMatrix, ggtext, gt, AGHmatrix, pedigreemm, reshape2)
 
 use_condaenv(conda = '/home/leo/anaconda3/bin/python') # Se uso el entorno conda (indicando la ruta donde reside la carpeta de Python), como la versión de Python que se quiere usar.
 
@@ -75871,7 +75871,7 @@ mA_ped1_map_a <- ggplot(data = mA_ped1_map, aes(x = Var1, y = Var2, fill = value
     axis.text = element_text(size = 10, face = 'bold'),
     axis.title = element_text(size = 10, face = 'bold'),
     plot.title = element_text(size = 10, face = 'bold'),
-    legend.title = element_text(size = 10, face = 'bold')
+    legend.title = element_text(size = 9, face = 'bold')
     )
 
 mA_ped1_map_b <-ggplot(data = mA_ped1_map, aes(x = value, after_stat(density))) +
@@ -75886,6 +75886,374 @@ mA_ped1_map_b <-ggplot(data = mA_ped1_map, aes(x = value, after_stat(density))) 
     axis.ticks.y = element_blank(),
     )
 
-(mA_ped1_map_b | mA_ped1_map_a)
-```
+### Para la matriz H:
 
+mH_ped1 <- readRDS(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_1.1', 'chip_1', 'Geno_1', 'mH_1.RDS'))
+
+mH_ped1_map <- melt(mH_ped1) # Usando la función melt() del paquete "reshape2" se convertie la matriz H al formato largo.
+
+mH_ped1_map_a <- ggplot(data = mH_ped1_map, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(high = 'red', low = 'yellow') +
+  labs(x = 'Individuos', y = 'Individuos', fill = 'Relación') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    legend.title = element_text(size = 9, face = 'bold')
+    )
+
+mH_ped1_map_b <-ggplot(data = mH_ped1_map, aes(x = value, after_stat(density))) +
+  geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  labs(title = 'Pedigrí 3 - matriz H', x = 'relación', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    plot.title = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    )
+
+mA_ped1_map_b | mA_ped1_map_a | mH_ped1_map_b | mH_ped1_map_a
+
+###########
+# Pedigrí 2
+###########
+
+###################
+# Densidad de 1.000
+###################
+
+# Con todos los individuos genotipados (F0-F1-F2-F3):
+
+## 1. Se importa la matriz de SNP obtenida con el modulo SeqBreed.
+
+m_SNP <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.1', 'chip_1', 'Geno_1', 'mX_1.csv'), delim = ',', col_names = FALSE) %>% # Esta matriz de SNP tiene dimensión 961 x 2071, es decir, 961 SNP de 2071 individuos.
+  slice(-1) %>%
+  t() %>%
+  as.matrix()
+
+## 2. Se calcula la matriz de relación genómica.
+
+mG_ped2 <- Gmatrix(SNPmatrix = m_SNP, method = 'VanRaden') # Aquí se calculo la matriz de parentesco genómico a partir de lo propuesto por VanRaden (2008).
+
+mG_ped2 %>%
+  as.matrix() %>%
+  saveRDS(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.1', 'chip_1', 'Geno_1', 'mG_1.RDS')) # Se importa la matriz G.
+
+## 3. Se calcula la matriz de relación basada en pedigríes.
+
+ped_2 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.1', 'Pedigri_2.txt'), delim = ' ', col_names = FALSE) %>% # Se importa el pedigrí creado son el software molcoanc.
+  na_if(0) # Para usar la función para calcular la matriz A y su inversa, todos los padres y madres faltantes (en este caso 0), deben estar como NA.
+
+ped_2_edit <- editPed( # Esta función ordena el pedigrí.
+  sire = ped_2$X2,
+  dam = ped_2$X3,
+  label = ped_2$X1
+  )
+
+pedi <- pedigree( # Aquí se usa la salida anterior (ya ordenado) y se crea un objeto de clase pedigree.
+  sire = ped_2_edit$sire,
+  dam = ped_2_edit$dam,
+  label = ped_2_edit$label
+  )
+
+mA_ped2 <- getA(ped = pedi) %>% # Esto dara la matriz de relaciones aditivas A.
+  as.matrix() %>%
+  saveRDS(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.1', 'chip_1', 'Geno_1', 'mA_1.RDS'))
+
+## 4. Se calcula la matriz de relación combinada.
+
+fn.mH <- function(ped, mG) { # Esta función recibe como argumentos los datos con estructura (X1 | X2 | X3 | Gen (TRUE/FALSE)) y la matriz de relaciones genómicas.
+  
+  # 1. Se calcula la matriz de relaciones aditivas con base en el pedigrí (A)
+  
+  ped_edit <- editPed( # Esta función ordena el pedigrí.
+    sire = ped$X2,
+    dam = ped$X3,
+    label = ped$X1
+    )
+  pedi <- pedigree( # Aquí se usa la salida anterior (ya ordenado) y se crea un objeto de clase pedigree.
+    sire = ped_edit$sire,
+    dam = ped_edit$dam,
+    label = ped_edit$label
+  )
+  Matrix_A <- getA(ped = pedi) # Esto dara la matriz de relaciones aditivas A.
+ 
+  # 2. De lo anterior (Matriz_A) se extraen las partes correspondientes a individuos no genotipados (1) y genotipados (2)
+  
+  # Individuos no genotipados:
+  A_11 <- Matrix_A[ped$Genotiped != 1, ped$Genotiped != 1]
+  # Individuos genotipados:
+  A_22 <- Matrix_A[ped$Genotiped == 1, ped$Genotiped == 1]
+  # Individuos no genotipados (en filas) y genotipados (en columnas):
+  A_12 <- Matrix_A[ped$Genotiped != 1, ped$Genotiped == 1]
+  # Transpuesta de la anterior (individuos no genotipados en columnas y genotipados en filas):
+  A_21 <- t(A_12)
+  
+  # 3. Se coloca el nombre de las filas y y de las columnas de la matriz G según los individuos genotipados
+  
+  rownames(mG) <- ped$X1[ped$Genotiped == 1]
+  colnames(mG) <- ped$X1[ped$Genotiped == 1]
+  
+  # 4. Teniendo todos los componentes de la matriz H, se procede a su construcción y a calcular su inversa
+  
+  H_11 <- A_11 - 
+    (A_12 %*% solve(A_22) %*% A_21) + 
+    (A_12 %*% solve(A_22) %*% mG %*% solve(A_22) %*% A_21)
+  H_12 <- A_12 %*% solve(A_22) %*% mG
+  H_21 <- t(H_12)
+  H_22 <- mG
+  
+  H_11_H_12 <- cbind(H_11, H_12)
+  H_21_H_22 <- cbind(H_21, H_22)
+  mH <- rbind(H_11_H_12, H_21_H_22)
+  
+  mH <- mH[order(as.numeric(rownames(mH))), order(as.numeric(colnames(mH)))]
+  mH <- Matrix(mH)
+  
+  # 5. Finalmente se indica retornar la matriz H
+  
+  return(mH)
+}
+
+ped_2 <- ped_2 %>%
+  mutate(Genotiped = TRUE) # Se especifica aquí que todos los individuos estan genotipados.
+
+mH_ped2 <- fn.mH(ped = ped_2, mG = mG_ped2) %>%
+  as.matrix() %>%
+  saveRDS(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_2.1', 'chip_1', 'Geno_1', 'mH_1.RDS'))
+
+mH_ped2[1:10, 1:10]
+mH_ped2[490:500, 490:500]
+mH_ped2[501:511, 501:511]
+diag(mH_ped2)
+
+###########
+# Pedigrí 3
+###########
+
+###################
+# Densidad de 1.000
+###################
+
+# Con todos los individuos genotipados (F0-F1-F2-F3):
+
+## 1. Se importa la matriz de SNP obtenida con el modulo SeqBreed.
+
+m_SNP <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.1', 'chip_1', 'Geno_1', 'mX_1.csv'), delim = ',', col_names = FALSE) %>% # Esta matriz de SNP tiene dimensión 961 x 2061, es decir, 961 SNP de 2061 individuos.
+  slice(-1) %>%
+  t() %>%
+  as.matrix()
+
+## 2. Se calcula la matriz de relación genómica.
+
+mG_ped3 <- Gmatrix(SNPmatrix = m_SNP, method = 'VanRaden') # Aquí se calculo la matriz de parentesco genómico a partir de lo propuesto por VanRaden (2008).
+
+mG_ped3 %>%
+  as.matrix() %>%
+  saveRDS(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.1', 'chip_1', 'Geno_1', 'mG_1.RDS')) # Se importa la matriz G.
+
+## 3. Se calcula la matriz de relación basada en pedigríes.
+
+ped_3 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.1', 'Pedigri_3.txt'), delim = ' ', col_names = FALSE) %>% # Se importa el pedigrí creado son el software molcoanc.
+  na_if(0) # Para usar la función para calcular la matriz A y su inversa, todos los padres y madres faltantes (en este caso 0), deben estar como NA.
+
+ped_3_edit <- editPed( # Esta función ordena el pedigrí.
+  sire = ped_3$X2,
+  dam = ped_3$X3,
+  label = ped_3$X1
+  )
+
+pedi <- pedigree( # Aquí se usa la salida anterior (ya ordenado) y se crea un objeto de clase pedigree.
+  sire = ped_3_edit$sire,
+  dam = ped_3_edit$dam,
+  label = ped_3_edit$label
+  )
+
+mA_ped3 <- getA(ped = pedi) %>% # Esto dara la matriz de relaciones aditivas A.
+  as.matrix() %>%
+  saveRDS(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.1', 'chip_1', 'Geno_1', 'mA_1.RDS'))
+
+## 4. Se calcula la matriz de relación combinada.
+
+fn.mH <- function(ped, mG) { # Esta función recibe como argumentos los datos con estructura (X1 | X2 | X3 | Gen (TRUE/FALSE)) y la matriz de relaciones genómicas.
+  
+  # 1. Se calcula la matriz de relaciones aditivas con base en el pedigrí (A)
+  
+  ped_edit <- editPed( # Esta función ordena el pedigrí.
+    sire = ped$X2,
+    dam = ped$X3,
+    label = ped$X1
+    )
+  pedi <- pedigree( # Aquí se usa la salida anterior (ya ordenado) y se crea un objeto de clase pedigree.
+    sire = ped_edit$sire,
+    dam = ped_edit$dam,
+    label = ped_edit$label
+  )
+  Matrix_A <- getA(ped = pedi) # Esto dara la matriz de relaciones aditivas A.
+ 
+  # 2. De lo anterior (Matriz_A) se extraen las partes correspondientes a individuos no genotipados (1) y genotipados (2)
+  
+  # Individuos no genotipados:
+  A_11 <- Matrix_A[ped$Genotiped != 1, ped$Genotiped != 1]
+  # Individuos genotipados:
+  A_22 <- Matrix_A[ped$Genotiped == 1, ped$Genotiped == 1]
+  # Individuos no genotipados (en filas) y genotipados (en columnas):
+  A_12 <- Matrix_A[ped$Genotiped != 1, ped$Genotiped == 1]
+  # Transpuesta de la anterior (individuos no genotipados en columnas y genotipados en filas):
+  A_21 <- t(A_12)
+  
+  # 3. Se coloca el nombre de las filas y y de las columnas de la matriz G según los individuos genotipados
+  
+  rownames(mG) <- ped$X1[ped$Genotiped == 1]
+  colnames(mG) <- ped$X1[ped$Genotiped == 1]
+  
+  # 4. Teniendo todos los componentes de la matriz H, se procede a su construcción y a calcular su inversa
+  
+  H_11 <- A_11 - 
+    (A_12 %*% solve(A_22) %*% A_21) + 
+    (A_12 %*% solve(A_22) %*% mG %*% solve(A_22) %*% A_21)
+  H_12 <- A_12 %*% solve(A_22) %*% mG
+  H_21 <- t(H_12)
+  H_22 <- mG
+  
+  H_11_H_12 <- cbind(H_11, H_12)
+  H_21_H_22 <- cbind(H_21, H_22)
+  mH <- rbind(H_11_H_12, H_21_H_22)
+  
+  mH <- mH[order(as.numeric(rownames(mH))), order(as.numeric(colnames(mH)))]
+  mH <- Matrix(mH)
+  
+  # 5. Finalmente se indica retornar la matriz H
+  
+  return(mH)
+}
+
+ped_3 <- ped_3 %>%
+  mutate(Genotiped = TRUE) # Se especifica aquí que todos los individuos estan genotipados.
+
+mH_ped3 <- fn.mH(ped = ped_3, mG = mG_ped3) %>%
+  as.matrix() %>%
+  saveRDS(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_3.1', 'chip_1', 'Geno_1', 'mH_1.RDS'))
+
+mH_ped3[1:10, 1:10]
+mH_ped3[490:500, 490:500]
+mH_ped3[501:511, 501:511]
+diag(mH_ped3)
+
+###########
+# Pedigrí 4
+###########
+
+###################
+# Densidad de 1.000
+###################
+
+# Con todos los individuos genotipados (F0-F1-F2-F3):
+
+## 1. Se importa la matriz de SNP obtenida con el modulo SeqBreed.
+
+m_SNP <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.1', 'chip_1', 'Geno_1', 'mX_1.csv'), delim = ',', col_names = FALSE) %>% # Esta matriz de SNP tiene dimensión 961 x 2131, es decir, 961 SNP de 2131 individuos.
+  slice(-1) %>%
+  t() %>%
+  as.matrix()
+
+## 2. Se calcula la matriz de relación genómica.
+
+mG_ped4 <- Gmatrix(SNPmatrix = m_SNP, method = 'VanRaden') # Aquí se calculo la matriz de parentesco genómico a partir de lo propuesto por VanRaden (2008).
+
+mG_ped4 %>%
+  as.matrix() %>%
+  saveRDS(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.1', 'chip_1', 'Geno_1', 'mG_1.RDS')) # Se importa la matriz G.
+
+## 3. Se calcula la matriz de relación basada en pedigríes.
+
+ped_4 <- read_delim(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.1', 'Pedigri_4.txt'), delim = ' ', col_names = FALSE) %>% # Se importa el pedigrí creado son el software molcoanc.
+  na_if(0) # Para usar la función para calcular la matriz A y su inversa, todos los padres y madres faltantes (en este caso 0), deben estar como NA.
+
+ped_4_edit <- editPed( # Esta función ordena el pedigrí.
+  sire = ped_4$X2,
+  dam = ped_4$X3,
+  label = ped_4$X1
+  )
+
+pedi <- pedigree( # Aquí se usa la salida anterior (ya ordenado) y se crea un objeto de clase pedigree.
+  sire = ped_4_edit$sire,
+  dam = ped_4_edit$dam,
+  label = ped_4_edit$label
+  )
+
+mA_ped4 <- getA(ped = pedi) %>% # Esto dara la matriz de relaciones aditivas A.
+  as.matrix() %>%
+  saveRDS(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.1', 'chip_1', 'Geno_1', 'mA_1.RDS'))
+
+## 4. Se calcula la matriz de relación combinada.
+
+fn.mH <- function(ped, mG) { # Esta función recibe como argumentos los datos con estructura (X1 | X2 | X3 | Gen (TRUE/FALSE)) y la matriz de relaciones genómicas.
+  
+  # 1. Se calcula la matriz de relaciones aditivas con base en el pedigrí (A)
+  
+  ped_edit <- editPed( # Esta función ordena el pedigrí.
+    sire = ped$X2,
+    dam = ped$X3,
+    label = ped$X1
+    )
+  pedi <- pedigree( # Aquí se usa la salida anterior (ya ordenado) y se crea un objeto de clase pedigree.
+    sire = ped_edit$sire,
+    dam = ped_edit$dam,
+    label = ped_edit$label
+  )
+  Matrix_A <- getA(ped = pedi) # Esto dara la matriz de relaciones aditivas A.
+ 
+  # 2. De lo anterior (Matriz_A) se extraen las partes correspondientes a individuos no genotipados (1) y genotipados (2)
+  
+  # Individuos no genotipados:
+  A_11 <- Matrix_A[ped$Genotiped != 1, ped$Genotiped != 1]
+  # Individuos genotipados:
+  A_22 <- Matrix_A[ped$Genotiped == 1, ped$Genotiped == 1]
+  # Individuos no genotipados (en filas) y genotipados (en columnas):
+  A_12 <- Matrix_A[ped$Genotiped != 1, ped$Genotiped == 1]
+  # Transpuesta de la anterior (individuos no genotipados en columnas y genotipados en filas):
+  A_21 <- t(A_12)
+  
+  # 3. Se coloca el nombre de las filas y y de las columnas de la matriz G según los individuos genotipados
+  
+  rownames(mG) <- ped$X1[ped$Genotiped == 1]
+  colnames(mG) <- ped$X1[ped$Genotiped == 1]
+  
+  # 4. Teniendo todos los componentes de la matriz H, se procede a su construcción y a calcular su inversa
+  
+  H_11 <- A_11 - 
+    (A_12 %*% solve(A_22) %*% A_21) + 
+    (A_12 %*% solve(A_22) %*% mG %*% solve(A_22) %*% A_21)
+  H_12 <- A_12 %*% solve(A_22) %*% mG
+  H_21 <- t(H_12)
+  H_22 <- mG
+  
+  H_11_H_12 <- cbind(H_11, H_12)
+  H_21_H_22 <- cbind(H_21, H_22)
+  mH <- rbind(H_11_H_12, H_21_H_22)
+  
+  mH <- mH[order(as.numeric(rownames(mH))), order(as.numeric(colnames(mH)))]
+  mH <- Matrix(mH)
+  
+  # 5. Finalmente se indica retornar la matriz H
+  
+  return(mH)
+}
+
+ped_4 <- ped_4 %>%
+  mutate(Genotiped = TRUE) # Se especifica aquí que todos los individuos estan genotipados.
+
+mH_ped4 <- fn.mH(ped = ped_4, mG = mG_ped4) mH_ped4%>%
+  as.matrix() %>%
+  saveRDS(here('Datos', 'Datos_IND', 'SeqBreed', 'Pedigri_4.1', 'chip_1', 'Geno_1', 'mH_1.RDS'))
+
+mH_ped4[1:10, 1:10]
+mH_ped4[490:500, 490:500]
+mH_ped4[501:511, 501:511]
+diag(mH_ped4)
+```
