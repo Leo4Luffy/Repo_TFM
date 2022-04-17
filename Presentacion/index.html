@@ -147,6 +147,7 @@ NOTA: X y Z son las matrices de incidencia o matrices diseño de los efectos fij
 
 &lt;P align="justify"&gt;&lt;FONT SIZE=2&gt;[1] &lt;a name=cite-citejpgg&gt;&lt;/a&gt;[Gutiérrez (2010)](#bib-citejpgg).&lt;/FONT&gt;&lt;/p&gt;
 &lt;P align="justify"&gt;&lt;FONT SIZE=2&gt;[2] [Blasco (2021)](#bib-cite21).&lt;/FONT&gt;&lt;/p&gt;
+
 ]
 
 ---
@@ -183,13 +184,15 @@ class: center
 
 &lt;!--
 NOTA: esencialmente, todos los enfoques de selección genómica son de naturaleza estadística, ya que se basan en el aprendizaje de una relación matemática entre los datos genotípicos y fenotípicos que luego se utilizan para la predicción. En este sentido, los enfoques de selección genómica son parte del aprendizaje automático que tiene como objetivo desarrollar y analizar más el rendimiento de los modelos mediante el uso de un conjunto de datos de entrenamiento. Luego, los modelos se utilizan con datos no vistos para hacer predicciones.
+
+NOTA: el uso de marcadores puede proporcionar la relación genética realizada teniendo en cuenta el muestreo mendeliano, a diferencia de la relación genética esperada a partir de una matriz de relación derivada del pedigrí.
 --&gt;
 
 ]
 
-.panel[.panel-name[Matriz de parentesco]
+.panel[.panel-name[Desventaja del GBLUP - I]
 
-&lt;P align="justify"&gt;La matriz **G**, &lt;sup&gt;1&lt;/sup&gt;.&lt;/p&gt;
+&lt;P align="justify"&gt;Para implementar la selección genómica mediante **GBLUP**, es necesario disponer de información genotípica de todos los individuos, situación que puede ser desventajosa&lt;sup&gt;1&lt;/sup&gt;.&lt;/p&gt;
 
 &lt;img src="index_files/figure-html/unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
@@ -199,19 +202,69 @@ NOTA: esencialmente, todos los enfoques de selección genómica son de naturalez
 
 ]
 
-.panel[.panel-name[Múltiples pasos]
+.panel[.panel-name[Desventaja del GBLUP - II]
 
-&lt;img src="index_files/figure-html/unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;P align="justify"&gt;El **GBLUP** es un método de varios pasos, con una evaluación genética con BLUP, seguidos de la extracción de pseudofenotipos, un análisis genómico y la creación de un índice que combina esta información&lt;sup&gt;2&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;img src="index_files/figure-html/unnamed-chunk-11-1.png" width="68%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.panel[.panel-name[Desventaja del GBLUP - III]
+
+.pull-left[
+
+.content-box-red[
+.small[
+&lt;P align="justify"&gt;Pueden existir individuos con fenotipos y pseudofenotipos.&lt;/p&gt;
+]
+]
+
+&lt;br&gt;
+
+.content-box-yellow[
+.small[
+&lt;P align="justify"&gt;Las precisiones de los pseudofenotipos son difíciles de obtener.&lt;/p&gt;
+]
+]
+
+]
+
+.pull-right[
+
+.content-box-yellow[
+.small[
+&lt;P align="justify"&gt;La creación de pseudofenotipos puede ser ineficaz si los individuos tienen poca descendencia.&lt;/p&gt;
+]
+]
+
+&lt;br&gt;
+
+.content-box-red[
+.small[
+&lt;P align="justify"&gt;Es difícil de generalizarse a caracteres múltiples y maternos.&lt;/p&gt;
+]
+]
+
+]
 
 ]
 
 ]
 
+.footnote[
 
+&lt;P align="justify"&gt;&lt;FONT SIZE=2&gt;[1] &lt;a name=cite-cite17&gt;&lt;/a&gt;[Legarra, Aguilar, and Misztal (2009)](https://doi.org/10.3168/jds.2009-2061).&lt;/FONT&gt;&lt;/p&gt;
+&lt;P align="justify"&gt;&lt;FONT SIZE=2&gt;[2] &lt;a name=cite-cite39&gt;&lt;/a&gt;[VanRaden (2007)](#bib-cite39).&lt;/FONT&gt;&lt;/p&gt;
 
-&lt;!--
-En teoría, el uso de marcadores puede proporcionar la relación genética realizada teniendo en cuenta el muestreo mendeliano, a diferencia de la relación genética esperada a partir de una matriz de relación derivada del pedigrí.
---&gt;
+]
+
+---
+class: center
+
+### Introducción
+
+&lt;img src="index_files/figure-html/unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -228,11 +281,21 @@ genética animal_. 1st edition. EDITORIAL SÍNTESIS, S. A, p. 206. ISBN:
 _Iniciación a la valoración genética animal_. 1st edition. EDITORIAL
 COMPLUTENSE, p. 221. ISBN: 978-84-9938-021-6.
 
+&lt;a name=bib-cite17&gt;&lt;/a&gt;[Legarra, A., I. Aguilar, and I.
+Misztal](#cite-cite17) (2009). "A relationship matrix including full
+pedigree and genomic information". In: _Journal of Dairy Science_ 92,
+p. 4656–4663. DOI:
+[10.3168/jds.2009-2061](https://doi.org/10.3168%2Fjds.2009-2061).
+
 &lt;a name=bib-cite7&gt;&lt;/a&gt;[Tong, H. and Z. Nikoloski](#cite-cite7) (2021).
 "Machine learning approaches for crop improvement: leveraging
 phenotypic and genotypic big data". In: _Journal of Plant Physiology_
 257, p. 153354. DOI:
 [10.1016/j.jplph.2020.153354](https://doi.org/10.1016%2Fj.jplph.2020.153354).
+
+&lt;a name=bib-cite39&gt;&lt;/a&gt;[VanRaden, P. M.](#cite-cite39) (2007).
+"Efficient methods to compute genomic predictions". In: _Journal of
+Dairy Science_ 91, p. 4414–4423.
 
 ---
 
