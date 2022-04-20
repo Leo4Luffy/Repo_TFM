@@ -18,7 +18,7 @@ class: center
 
 # Paquetes usados ----
 
-pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, readr, ggplot2, dplyr, latex2exp, showtext, ggforce, magick) # Aquí (https://pkg.garrickadenbuie.com/xaringanExtra/#/) y aquí (https://github.com/gadenbuie/xaringanExtra) explican las muchas opciones de usar el paquete xaringanExtra.
+pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, tidyverse, latex2exp, showtext, ggforce, magick, pedigreemm) # Aquí (https://pkg.garrickadenbuie.com/xaringanExtra/#/) y aquí (https://github.com/gadenbuie/xaringanExtra) explican las muchas opciones de usar el paquete xaringanExtra.
 font_add_google('Gochi Hand', 'gochi')
 showtext_auto()
 
@@ -807,6 +807,88 @@ data.frame(
 
 .panel[.panel-name[GBLUP de un solo paso - II]
 
+```{r Calculó de la matriz H, echo = FALSE, eval = FALSE}
+
+# 1. Se crea el pedigrí ----
+
+id <- seq(from = 1, to = 6, by = 1)
+sire <- c(0, 0, 1, 1, 1, 1)
+dam <- c(0, 0, 2, 2, 2, 2)
+
+Pedigri <- tibble(id, sire, dam) %>%
+  na_if(0) %>%
+  mutate(
+    Genotiped = case_when(
+      Animal %in% c(1, 4:6) ~ TRUE,
+      TRUE ~ FALSE
+    )
+  )
+
+# 2. Se construye la matriz de relaciones genómicas (G) ----
+
+Matriz_G <- Matrix(matrix(c(0.13, -0.40, -0.40, -0.67,
+                            -0.40, 1.20, 1.20, 2.0,
+                            -0.40, 1.20, 1.20, 2.0,
+                            -0.67, 2.0, 2.0, 3.33),
+                          nrow = 4))
+
+# 3. Se coloca la función que calcula la matriz H ----
+
+fn.mH <- function(ped, mG) { # Esta función recibe como argumentos los datos con estructura (id | sire | dam | Gen (TRUE/FALSE)) y la matriz de relaciones genómicas.
+  
+  # 1. Se calcula la matriz de relaciones aditivas con base en el pedigrí (A)
+  
+  ped_edit <- pedigreemm::editPed( # Esta función ordena el pedigrí. Luego la salida se usa posteriormente para crear un objeto "ped".
+    sire = ped$sire,
+    dam = ped$dam,
+    label = ped$id
+    )
+  pedi <- pedigreemm::pedigree(
+    sire = ped_edit$sire,
+    dam = ped_edit$dam,
+    label = ped_edit$label
+  )
+  Matrix_A <- pedigreemm::getA(ped = pedi) # El argumento debe ser un objeto de clase pedigree (el anteriormente creado). Esto dara la matriz de relaciones aditivas A.
+ 
+  # 2. De lo anterior (Matriz_A) se extraen las partes correspondientes a individuos no genotipados (1) y genotipados (2)
+  
+  # Individuos no genotipados:
+  A_11 <- Matrix_A[ped$Genotiped != 1, ped$Genotiped != 1] # Recordar que el R identifica a TRUE como 1 (de valor logico a número) y a FALSE como 0 (en este caso distinto de 1).
+  # Individuos genotipados:
+  A_22 <- Matrix_A[ped$Genotiped == 1, ped$Genotiped == 1]
+  # Individuos no genotipados (en filas) y genotipados (en columnas):
+  A_12 <- Matrix_A[ped$Genotiped != 1, ped$Genotiped == 1]
+  # Transpuesta de la anterior (individuos no genotipados en columnas y genotipados en filas):
+  A_21 <- t(A_12)
+  
+  # 3. Se coloca el nombre de las filas y y de las columnas de la matriz G según los individuos genotipados
+  
+  rownames(mG) <- ped$id[ped$Genotiped == 1]
+  colnames(mG) <- ped$id[ped$Genotiped == 1]
+  
+  # 4. Teniendo todos los componentes de la matriz H, se procede a su construcción
+  
+  H_11 <- A_11 - (A_12 %*% solve(A_22) %*% A_21) + (A_12 %*% solve(A_22) %*% mG %*% solve(A_22) %*% A_21)
+  H_12 <- A_12 %*% solve(A_22) %*% mG
+  H_21 <- t(H_12)
+  H_22 <- mG
+  
+  H_11_H_12 <- cbind(H_11, H_12)
+  H_21_H_22 <- cbind(H_21, H_22)
+  mH <- rbind(H_11_H_12, H_21_H_22)
+  
+  mH <- mH[order(as.numeric(rownames(mH))), order(as.numeric(colnames(mH)))]
+  
+  # 5. Finalmente se indica retornar la matriz H
+  
+  return(mH)
+  }
+
+# 4. Se usa la función para calcular la matriz H ----
+
+fn.mH(ped = Pedigri, mG = Matriz_G)
+```
+
 ```{r, echo = FALSE, out.width = "70%", fig.align = 'center', fig.showtext = TRUE, warning = FALSE}
 
 Punto_1 <- data.frame(x = c(0.65, 1.75), y = c(1.75, 1.4))
@@ -855,47 +937,47 @@ ggplot() +
   annotate(geom = 'text', x = 1.25, y = 1.05, label = '9', family = 'gochi', size = 7.2, colour = 'black') +
   annotate(geom = 'text', x = 1.75, y = 1.05, label = '10', family = 'gochi', size = 7.2, colour = 'black') +
   
-  annotate(geom = 'text', x = 1.2, y = 0.8, label = '1.00', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 1.8, y = 0.8, label = '0.00', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 2.4, y = 0.8, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 3.0, y = 0.8, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 3.6, y = 0.8, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 4.2, y = 0.8, label = '0.50', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.2, y = 0.8, label = '0.13', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.8, y = 0.8, label = '-0.67', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 2.4, y = 0.8, label = '-0.27', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.0, y = 0.8, label = '-0.40', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.6, y = 0.8, label = '-0.40', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 4.2, y = 0.8, label = '-0.67', size = 6.8, colour = 'black') +
   
-  annotate(geom = 'text', x = 1.2, y = 0.6, label = '0.00', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 1.8, y = 0.6, label = '1.00', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 2.4, y = 0.6, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 3.0, y = 0.6, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 3.6, y = 0.6, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 4.2, y = 0.6, label = '0.50', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.2, y = 0.6, label = '-0.67', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.8, y = 0.6, label = '3.73', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 2.4, y = 0.6, label = '1.53', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.0, y = 0.6, label = '2.00', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.6, y = 0.6, label = '2.00', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 4.2, y = 0.6, label = '3.33', size = 6.8, colour = 'black') +
   
-  annotate(geom = 'text', x = 1.2, y = 0.4, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 1.8, y = 0.4, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 2.4, y = 0.4, label = '1.00', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 3.0, y = 0.4, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 3.6, y = 0.4, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 4.2, y = 0.4, label = '0.50', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.2, y = 0.4, label = '-0.27', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.8, y = 0.4, label = '1.53', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 2.4, y = 0.4, label = '1.13', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.0, y = 0.4, label = '0.80', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.6, y = 0.4, label = '0.80', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 4.2, y = 0.4, label = '1.33', size = 6.8, colour = 'black') +
   
-  annotate(geom = 'text', x = 1.2, y = 0.2, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 1.8, y = 0.2, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 2.4, y = 0.2, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 3.0, y = 0.2, label = '1.00', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 3.6, y = 0.2, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 4.2, y = 0.2, label = '0.50', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.2, y = 0.2, label = '-0.40', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.8, y = 0.2, label = '2.00', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 2.4, y = 0.2, label = '0.80', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.0, y = 0.2, label = '1.20', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.6, y = 0.2, label = '1.20', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 4.2, y = 0.2, label = '2.00', size = 6.8, colour = 'black') +
   
-  annotate(geom = 'text', x = 1.2, y = 0.0, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 1.8, y = 0.0, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 2.4, y = 0.0, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 3.0, y = 0.0, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 3.6, y = 0.0, label = '1.00', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 4.2, y = 0.0, label = '0.50', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.2, y = 0.0, label = '-0.40', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.8, y = 0.0, label = '2.00', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 2.4, y = 0.0, label = '0.80', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.0, y = 0.0, label = '1.20', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.6, y = 0.0, label = '1.20', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 4.2, y = 0.0, label = '2.00', size = 6.8, colour = 'black') +
   
-  annotate(geom = 'text', x = 1.2, y = -0.2, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 1.8, y = -0.2, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 2.4, y = -0.2, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 3.0, y = -0.2, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 3.6, y = -0.2, label = '0.50', size = 6.8, colour = 'black') +
-  annotate(geom = 'text', x = 4.2, y = -0.2, label = '1.00', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.2, y = -0.2, label = '-0.67', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 1.8, y = -0.2, label = '3.33', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 2.4, y = -0.2, label = '1.33', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.0, y = -0.2, label = '2.00', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.6, y = -0.2, label = '2.00', size = 6.8, colour = 'black') +
+  annotate(geom = 'text', x = 4.2, y = -0.2, label = '3.33', size = 6.8, colour = 'black') +
   
   scale_x_continuous(limits = c(0.0, 4.45)) +
   scale_y_continuous(limits = c(-0.3, 1.9)) +
