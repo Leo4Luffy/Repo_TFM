@@ -771,11 +771,11 @@ data.frame(
   #geom_blank() +
   
   annotate(geom = 'rect', xmin = 1.5, xmax = 4.25, ymin = 7.5, ymax = 9.5, colour = 'yellow', fill = 'yellow', alpha = 0.2) +
-  annotate(geom = 'text', x = 2.875, y = 8.5, label = 'A', size = 7.4, colour = 'black') +
+  annotate(geom = 'text', x = 2.875, y = 8.5, label = 'A', size = 8.4, colour = 'black') +
   annotate(geom = 'text', x = 1.1, y = 8.5, label = 'Matriz A', size = 7.6, angle = 90, colour = 'black') +
   
   annotate(geom = 'rect', xmin = 7.0, xmax = 8.75, ymin = 7.75, ymax = 9.0, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
-  annotate(geom = 'text', x = 7.875, y = 8.375, label = 'G', size = 7.4, colour = 'black') +
+  annotate(geom = 'text', x = 7.875, y = 8.375, label = 'G', size = 8.4, colour = 'black') +
   annotate(geom = 'text', x = 6.6, y = 8.375, label = 'Matriz G', size = 7.6, angle = 90, colour = 'black') +
   
   annotate(geom = 'rect', xmin = 1.5, xmax = 4.25, ymin = 3.75, ymax = 5.75, colour = 'black', fill = 'white', alpha = 0.2) +
@@ -838,7 +838,14 @@ ggplot() +
   
   annotate(geom = 'rect', xmin = 1.54, xmax = 2.06, ymin = 0.7, ymax = 0.9, colour = 'yellow', fill = 'yellow', size = 0.4, linetype = 'dashed', alpha = 0.4) +
   
-  #annotate(geom = 'rect', xmin = 3.95, xmax = 4.45, ymin = -0.1, ymax = 0.1, colour = 'yellow', fill = 'yellow', size = 0.4, linetype = 'dashed', alpha = 0.4) +
+  annotate(geom = 'rect', xmin = 2.74, xmax = 3.26, ymin = 0.3, ymax = 0.5, colour = 'red', fill = 'red', size = 0.4, linetype = 'dashed', alpha = 0.4) +
+  annotate(geom = 'rect', xmin = 3.34, xmax = 3.86, ymin = 0.3, ymax = 0.5, colour = 'red', fill = 'red', size = 0.4, linetype = 'dashed', alpha = 0.4) +
+  annotate(geom = 'rect', xmin = 3.94, xmax = 4.46, ymin = 0.3, ymax = 0.5, colour = 'red', fill = 'red', size = 0.4, linetype = 'dashed', alpha = 0.4) +
+  
+  annotate(geom = 'rect', xmin = 3.34, xmax = 3.86, ymin = 0.1, ymax = 0.3, colour = 'red', fill = 'red', size = 0.4, linetype = 'dashed', alpha = 0.4) +
+  annotate(geom = 'rect', xmin = 3.94, xmax = 4.46, ymin = 0.1, ymax = 0.3, colour = 'red', fill = 'red', size = 0.4, linetype = 'dashed', alpha = 0.4) +
+  
+  annotate(geom = 'rect', xmin = 3.94, xmax = 4.46, ymin = -0.1, ymax = 0.1, colour = 'red', fill = 'red', size = 0.4, linetype = 'dashed', alpha = 0.4) +
   
   geom_point(aes(x = x, y = y), data = Puntos, size = 17.6, shape = 21, color = 'black', fill = 'white', alpha = 0.5) +
   geom_point(aes(x = x, y = y), data = Cuadros, size = 17.6, shape = 22, color = 'black', fill = 'white', alpha = 0.5) +
@@ -911,7 +918,7 @@ ggplot() +
   annotate(geom = 'text', x = 3.6, y = -0.2, label = '0.50', size = 6.8, colour = 'black') +
   annotate(geom = 'text', x = 4.2, y = -0.2, label = '1.00', size = 6.8, colour = 'black') +
   
-  scale_x_continuous(limits = c(0.0, 4.45)) +
+  scale_x_continuous(limits = c(0.0, 4.46)) +
   scale_y_continuous(limits = c(-0.3, 1.9)) +
   
   theme_bw() +
@@ -1045,7 +1052,14 @@ ggplot() +
   
   annotate(geom = 'rect', xmin = 1.54, xmax = 2.06, ymin = 0.7, ymax = 0.9, colour = 'yellow', fill = 'yellow', size = 0.4, linetype = 'dashed', alpha = 0.4) +
   
-  #annotate(geom = 'rect', xmin = 3.95, xmax = 4.45, ymin = -0.1, ymax = 0.1, colour = 'yellow', fill = 'yellow', size = 0.4, linetype = 'dashed', alpha = 0.4) +
+  annotate(geom = 'rect', xmin = 2.74, xmax = 3.26, ymin = 0.3, ymax = 0.5, colour = 'red', fill = 'red', size = 0.4, linetype = 'dashed', alpha = 0.4) +
+  annotate(geom = 'rect', xmin = 3.34, xmax = 3.86, ymin = 0.3, ymax = 0.5, colour = 'red', fill = 'red', size = 0.4, linetype = 'dashed', alpha = 0.4) +
+  annotate(geom = 'rect', xmin = 3.94, xmax = 4.46, ymin = 0.3, ymax = 0.5, colour = 'red', fill = 'red', size = 0.4, linetype = 'dashed', alpha = 0.4) +
+  
+  annotate(geom = 'rect', xmin = 3.34, xmax = 3.86, ymin = 0.1, ymax = 0.3, colour = 'red', fill = 'red', size = 0.4, linetype = 'dashed', alpha = 0.4) +
+  annotate(geom = 'rect', xmin = 3.94, xmax = 4.46, ymin = 0.1, ymax = 0.3, colour = 'red', fill = 'red', size = 0.4, linetype = 'dashed', alpha = 0.4) +
+  
+  annotate(geom = 'rect', xmin = 3.94, xmax = 4.46, ymin = -0.1, ymax = 0.1, colour = 'red', fill = 'red', size = 0.4, linetype = 'dashed', alpha = 0.4) +
   
   geom_point(aes(x = x, y = y), data = Punto, size = 10.6, shape = 21, color = 'black', fill = 'black', alpha = 0.2) +
   geom_point(aes(x = x, y = y), data = Cuadro, size = 10.6, shape = 22, color = 'black', fill = 'black', alpha = 0.2) +
@@ -1124,7 +1138,7 @@ ggplot() +
   annotate(geom = 'text', x = 3.6, y = -0.2, label = '2.00', size = 6.8, colour = 'black') +
   annotate(geom = 'text', x = 4.2, y = -0.2, label = '3.33', size = 6.8, colour = 'black') +
   
-  scale_x_continuous(limits = c(0.0, 4.45)) +
+  scale_x_continuous(limits = c(0.0, 4.46)) +
   scale_y_continuous(limits = c(-0.3, 1.9)) +
   
   theme_bw() +
@@ -1184,6 +1198,10 @@ class: center
 class: center
 
 ### Materiales y métodos
+
+<P align="justify"><b>Recurso vegetal y datos fenotípicos</b></p>
+
+
 
 ---
 
