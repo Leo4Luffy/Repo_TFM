@@ -78,12 +78,12 @@ xaringanExtra::use_share_again()
 <br>
 
 <P align="justify"> **Estudiante:** Jorge Leonardo López Martínez <p>
-<P align="justify">[`r fa(name = "github", fill = "black")` Leo4Luffy](https://github.com/Leo4Luffy)<p>
+<!--<P align="justify">[`r fa(name = "github", fill = "black")` Leo4Luffy](https://github.com/Leo4Luffy)<p>-->
 
 <br>
 
 <P align="justify">**Director:** prof. dr. Miguel Pérez-Enciso<p>
-<P align="justify">[`r fa(name = "github", fill = "black")` miguelperezenciso](https://github.com/miguelperezenciso)<p>
+<!--<P align="justify">[`r fa(name = "github", fill = "black")` miguelperezenciso](https://github.com/miguelperezenciso)<p>-->
 
 
 <br>
@@ -805,7 +805,7 @@ data.frame(
 
 ]
 
-.panel[.panel-name[Matriz de parentesco combinado - I]
+.panel[.panel-name[Matriz de parentesco - I]
 
 <P align="justify">La estructura de la matriz **H** es:</p>
 
@@ -823,7 +823,7 @@ image_read(here('Presentacion', 'Imagen', 'EMM_h.png'))
 
 ]
 
-.panel[.panel-name[Matriz de parentesco combinado - II]
+.panel[.panel-name[Matriz de parentesco - II]
 
 .pull-left[
 
@@ -933,7 +933,7 @@ mA <- tribble(
 mA <- melt(mA)
 
 ggplot(data = mA, aes(x = value, after_stat(density))) +
-  geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2, bins = 8) +
   labs(x = 'relación', y = ' ') +
   theme_bw() +
   theme(
@@ -1146,7 +1146,7 @@ mH <- tribble(
 mH <- melt(mH)
 
 ggplot(data = mH, aes(x = value, after_stat(density))) +
-  geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2, bins = 8) +
   labs(x = 'relación', y = ' ') +
   theme_bw() +
   theme(
@@ -1168,6 +1168,22 @@ ggplot(data = mH, aes(x = value, after_stat(density))) +
 <P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:14")`.</FONT></p>
 
 ]
+
+<!--
+NOTA: aquí (https://onunicornsandgenes.blog/2019/05/28/what-single-step-does-with-relationship/) plantean un bonito ejemplo de comparación entre matrices de relaciones con los métodos BLUP, GBLUP y ssGBLUP, usando una población simulada con el paquete de R AlphaSimR, y el paquete AGHmatrix para el calulo de las matrices de relación. 
+-->
+
+---
+class: center
+
+### Objetivo
+
+<P align="justify">Evaluar el interés de la selección genómica en un solo paso en plantas. Para ello, se evaluó el efecto de la cantidad de individuos genotipados y del número de marcadores en un diseño que combina datos reales de arroz y simulaciones de dos tipos, hacia atrás (ancestros) y hacia delante (descendientes).</p>
+
+---
+class: center
+
+### Materiales y métodos
 
 ---
 
