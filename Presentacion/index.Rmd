@@ -18,7 +18,7 @@ class: center
 
 # Paquetes usados ----
 
-pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, tidyverse, latex2exp, showtext, ggforce, magick, pedigreemm, reshape2) # Aquí (https://pkg.garrickadenbuie.com/xaringanExtra/#/) y aquí (https://github.com/gadenbuie/xaringanExtra) explican las muchas opciones de usar el paquete xaringanExtra.
+pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, tidyverse, latex2exp, showtext, ggforce, magick, pedigreemm, reshape2, gt) # Aquí (https://pkg.garrickadenbuie.com/xaringanExtra/#/) y aquí (https://github.com/gadenbuie/xaringanExtra) explican las muchas opciones de usar el paquete xaringanExtra.
 font_add_google('Gochi Hand', 'gochi')
 showtext_auto()
 
@@ -928,12 +928,12 @@ ggplot() +
 
 mA <- tribble(
   ~'1', ~'2', ~'3', ~'4', ~'5', ~'6',
-  1.0, 0.0, 0.5, 0.5, 0.5, 0.5,
-  0.0, 1.0, 0.5, 0.5, 0.5, 0.5,
-  0.5, 0.5, 1.0, 0.5, 0.5, 0.5,
-  0.5, 0.5, 0.5, 1.0, 0.5, 0.5,
-  0.5, 0.5, 0.5, 0.5, 1.0, 0.5,
-  0.5, 0.5, 0.5, 0.5, 0.5, 1.0
+  NA, 0.0, 0.5, 0.5, 0.5, 0.5,
+  0.0, NA, 0.5, 0.5, 0.5, 0.5,
+  0.5, 0.5, NA, 0.5, 0.5, 0.5,
+  0.5, 0.5, 0.5, NA, 0.5, 0.5,
+  0.5, 0.5, 0.5, 0.5, NA, 0.5,
+  0.5, 0.5, 0.5, 0.5, 0.5, NA
   ) %>%
   as.matrix()
 
@@ -1148,12 +1148,12 @@ ggplot() +
 
 mH <- tribble(
   ~'1', ~'2', ~'3', ~'4', ~'5', ~'6',
-  0.13, -0.67, -0.27, -0.40, -0.40, -0.67,
-  -0.67, 3.73, 1.53, 2.00, 2.00, 3.33,
-  -0.27, 1.53, 1.13, 0.80, 0.80, 1.33,
-  -0.40, 2.00, 0.80, 1.20, 1.20, 2.00,
-  -0.40, 2.00, 0.80, 1.20, 1.20, 2.00,
-  -0.67, 3.33, 1.33, 2.00, 2.00, 3.33
+  NA, -0.67, -0.27, -0.40, -0.40, -0.67,
+  -0.67, NA, 1.53, 2.00, 2.00, 3.33,
+  -0.27, 1.53, NA, 0.80, 0.80, 1.33,
+  -0.40, 2.00, 0.80, NA, 1.20, 2.00,
+  -0.40, 2.00, 0.80, 1.20, NA, 2.00,
+  -0.67, 3.33, 1.33, 2.00, 2.00, NA
   ) %>%
   as.matrix()
 
@@ -1201,15 +1201,119 @@ class: center
 
 <P align="justify"><b>Recurso vegetal y datos fenotípicos</b></p>
 
+.pull-left[
 
+<P align="justify">Se usaron los conjuntos de datos del [Rice SNP-Seek Database](http://iric.irri.org/), editados en estudio previo<sup>1</sup>. Adicionalmente, se consieró un MAF inferior a 0.5.</p>
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE}
+
+tribble(
+  ~'Arroz (Oryza sativa L.)',
+  'Ploidia  →  2n = 24',
+  'No. SNP  →  100.231'
+  ) %>%
+  gt()
+```
+
+<br>
+
+<P align="justify">Se eligió la variedad indica y el carácter tiempo de floración.</p>
+
+]
+
+.pull-right[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message=FALSE, warning=FALSE}
+
+# 1. Se importan los archivos de datos.
+
+m_dist <- read_table(here('Presentacion', 'Imagen', 'PCA_IND.mdist'), col_names = FALSE) %>%
+  select(-X739)
+
+ind <- tibble(id = read_table(here('Presentacion', 'Imagen', 'PCA_IND.mdist.id'), col_names = FALSE)[, 2]) # Se extrajo el nombre de los individuos.
+
+esp <- read_delim(here('Presentacion', 'Imagen', 'all.phenotypes.csv'), delim = ',') %>%
+  select(SNPsubsp) # Se extrajo el nombre de las especies (ADM, ARO, AUS, IND y JAP).
+
+# 2. Se calculan los componentes principales en función del escalado multidimensional.
+
+mds_poblacion <- cmdscale(d = m_dist, eig = TRUE, k = 5)
+
+# 3. Se extraen los vectores propios.
+
+vec_propios <- cbind(esp, ind, mds_poblacion$points)
+
+# 4. Se calcula la proporción de la variación explicada por cada valor propio (por los dos primeros componentes principales).
+
+porc_propio <- round(((mds_poblacion$eig) / sum(mds_poblacion$eig)) * 100, digits = 2)
+
+porc_propio_2 <- porc_propio %>%
+  as_tibble() %>%
+  slice(1:12) %>%
+  rowid_to_column(var = 'componente') %>%
+  mutate(componente = as.factor(componente))
+
+# 5. Se visualizan los resultados mediante componentes principales.
+
+graf_bar <- ggplot(data = porc_propio_2, aes(x = componente, y = value)) +
+  geom_bar(stat = 'identity', color = 'gray34', fill = 'gray34', alpha = 0.4) +
+  labs(
+   x = 'Componente principal',
+   y = 'Variación acumulada (%)'
+   ) +
+  theme(
+    axis.text.x = element_text(face = 'bold', size = 7),
+    axis.text.y = element_text(face = 'bold', size = 7, angle = 90),
+    axis.title = element_text(face = 'bold', size = 8)
+    )
+
+ggplot(data = vec_propios, mapping = aes(x = `1`, y = `2`, color = SNPsubsp, fill = SNPsubsp)) +
+  geom_point(alpha = 0.2, size = 4.4) +
+  stat_ellipse(aes(color = SNPsubsp), type = 't') +
+  geom_hline(yintercept = 0, linetype = 'dotted') +
+  geom_vline(xintercept = 0, linetype = 'dotted') +
+  scale_color_manual(values = c('yellow', 'black', 'red', 'cyan', 'green')) +
+  scale_fill_manual(values = c('yellow', 'black', 'red', 'cyan', 'green')) +
+  labs(
+   x = paste0('Primer componente (',porc_propio[1],' %)'),
+   y = paste0('Segundo componente (',porc_propio[2], '%)'),
+   col = 'Variedades de arroz', fill = 'Variedades de arroz'
+   ) +
+  theme_bw() +
+  theme(
+    legend.background = element_rect(color = 'gray34', fill = 'white', size = 0.4, linetype = 'dashed'),
+    legend.position = c(0.18, 0.24),
+    legend.text = element_text(size = 11),
+    legend.title = element_text(face = 'bold', size = 11),
+    axis.text = element_text(face = 'bold', size = 11),
+    axis.title = element_text(face = 'bold', size = 11)
+    )
+```
+
+]
+
+.footnote[
+
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:26")`.</FONT></p>
+
+]
 
 ---
 
 ### Bibliografía
 
-```{r refs, echo=FALSE, results="asis"}
+```{r refs 1, echo=FALSE, results="asis"}
 
-PrintBibliography(mi_Bib)
+PrintBibliography(bib = mi_Bib, start = 1, end = 7)
+```
+
+---
+
+### Bibliografía
+
+```{r refs 2, echo=FALSE, results="asis"}
+
+PrintBibliography(bib = mi_Bib, start = 8)
 ```
 
 ---
