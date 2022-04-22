@@ -1355,6 +1355,83 @@ class: center
 
 ### Materiales y métodos
 
+<P align="justify"><b>Precisión de la predición mediante simulación ancestral</b></p>
+
+.pull-left[
+
+<P align="justify">Se utilizó la metodología del software Molcoanc<sup>1</sup> con el fin de construir tres pedigríes.</p>
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE}
+
+tribble(
+  ~'Pedigrí', ~'Núm. individuos',
+  'Pedigrí 1', 751,
+  'Pedigrí 2', 1661,
+  'Pedigrí 3', 2451
+  ) %>%
+  gt()
+```
+
+<P align="justify">Este proceso se replicó diez veces para cada pedigrí.</p>
+
+]
+
+.pull-right[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.showtext = TRUE, warning = FALSE, message = FALSE}
+
+Puntos <- data.frame(x = c(1.0, 1.5, 0.75, 1.25, 1.75, 0.5, 1.0, 1.5, 2.0, 0.25, 0.75, 1.25, 1.75, 2.25), y = c(c(2.8, 2.8, 1.5, 1.5, 1.5, 0.2, 0.2, 0.2, 0.2, -1.1, -1.1, -1.1, -1.1, -1.1)))
+
+data.frame(
+  x = 1.0, y = 1.0
+  ) %>%
+  ggplot() +
+  
+  annotate(geom = 'rect', xmin = -0.4, xmax = 2.5, ymin = -1.7, ymax = 3.4, colour = 'black', fill = 'white', size = 0.4, linetype = 'dashed') +
+  geom_point(aes(x = x, y = y), data = Puntos, size = 5.6, shape = 21, color = 'black', fill = 'black', alpha = 0.8) +
+  geom_curve(x = 0.05, xend = 0.05, y = -1.1, yend = 2.8, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0) +
+  annotate(geom = 'text', x = -0.3, y = 0.85, label = 'Creación de antepasados de indivi-', size = 5.2, colour = 'black', angle = 90) +
+  annotate(geom = 'text', x = -0.1, y = 0.85, label = 'duos genotipados mediante simulación', size = 5.2, colour = 'black', angle = 90) +
+  
+  annotate(geom = 'segment', x = 1.0, xend = 0.75, y = 2.8, yend = 1.5, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 1.5, xend = 0.75, y = 2.8, yend = 1.5, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 1.0, xend = 1.25, y = 2.8, yend = 1.5, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 1.5, xend = 1.25, y = 2.8, yend = 1.5, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 1.5, xend = 1.75, y = 2.8, yend = 1.5, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 0.75, xend = 0.5, y = 1.5, yend = 0.2, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 1.25, xend = 1.0, y = 1.5, yend = 0.2, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 1.25, xend = 2.0, y = 1.5, yend = 0.2, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 1.75, xend = 2.0, y = 1.5, yend = 0.2, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 1.75, xend = 1.5, y = 1.5, yend = 0.2, colour = 'black', size = 0.8) +
+  
+  annotate(geom = 'segment', x = 0.25, xend = 0.5, y = -1.1, yend = 0.2, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 0.75, xend = 1.0, y = -1.1, yend = 0.2, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 1.25, xend = 1.0, y = -1.1, yend = 0.2, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 1.75, xend = 2.0, y = -1.1, yend = 0.2, colour = 'black', size = 0.8) +
+  annotate(geom = 'segment', x = 2.25, xend = 2.0, y = -1.1, yend = 0.2, colour = 'black', size = 0.8) +
+  
+  geom_curve(x = 2.6, xend = 3.0, y = 2.8, yend = 2.8, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'dashed') +
+  
+  annotate(geom = 'rect', xmin = 3.1, xmax = 4.1, ymin = 3.0, ymax = 1.8, colour = 'yellow', fill = 'yellow', alpha = 0.2) +
+  annotate(geom = 'text', x = 3.6, y = 2.4, label = 'A', size = 9.4, colour = 'black') +
+  
+  scale_x_continuous(limits = c(-0.4, 4.2)) +
+  scale_y_continuous(limits = c(-1.8, 3.4)) +
+  
+  theme_bw() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank())
+```
+
+]
+
+.footnote[
+
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:24")`.</FONT></p>
+
+]
+
 ---
 
 ### Bibliografía
@@ -1370,7 +1447,7 @@ PrintBibliography(bib = mi_Bib, start = 1, end = 6)
 
 ```{r refs 2, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 7, end = 8)
+PrintBibliography(bib = mi_Bib, start = 7, end = 9)
 ```
 
 ---
