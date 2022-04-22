@@ -82,7 +82,7 @@ xaringanExtra::use_share_again()
 
 <br>
 
-<P align="justify">**Director:** prof. dr. Miguel Pérez-Enciso<p>
+<P align="justify">**Director:** Miguel Pérez-Enciso<p>
 <!--<P align="justify">[`r fa(name = "github", fill = "black")` miguelperezenciso](https://github.com/miguelperezenciso)<p>-->
 
 
@@ -1203,13 +1203,13 @@ class: center
 
 .pull-left[
 
-<P align="justify">Se usaron los conjuntos de datos del [Rice SNP-Seek Database](http://iric.irri.org/), editados en estudio previo<sup>1</sup>. Adicionalmente, se consieró un MAF inferior a 0.5.</p>
+<P align="justify">Se usaron los conjuntos de datos del [Rice SNP-Seek Database](http://iric.irri.org/), editados en un estudio previo<sup>1</sup>. Adicionalmente, se consieró un MAF inferior a 0.5.</p>
 
 ```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE}
 
 tribble(
   ~'Arroz (Oryza sativa L.)',
-  'Ploidia  →  2n = 24',
+  'Ploidía  →  2n = 24',
   'No. SNP  →  100.231'
   ) %>%
   gt()
@@ -1299,12 +1299,69 @@ ggplot(data = vec_propios, mapping = aes(x = `1`, y = `2`, color = SNPsubsp, fil
 ]
 
 ---
+class: center
+
+### Materiales y métodos
+
+<P align="justify"><b>Predicción basada en información de pedigrí e información genómica</b></p>
+
+.pull-left[
+
+<P align="justify">El modelo general fue:</p>
+
+\begin{equation}
+y = \mu + Zg + e
+\end{equation}
+
+<br>
+
+<P align="justify">Los supuestos del modelo son:</p>
+
++ <P align="justify">BLUP $\rightarrow$ $g$ ~ $N(0, A \sigma^{2}_{g})$</p>
+
++ <P align="justify">ssGBLUP $\rightarrow$ $g$ ~ $N(0, H \sigma^{2}_{g})$</p>
+
+]
+
+.pull-right[
+
+<P align="justify">La matriz **H** fue construida como:</p>
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE, warning = FALSE}
+
+image_read(here('Presentacion', 'Imagen', 'Matriz_H.png'))
+```
+
+<P align="justify">La matriz **G** se obtuvo a partir del método de `r Citet(mi_Bib, "cite:39")`:</p>
+
+\begin{equation}
+G =\frac{XX'}{2 \sum_{j=1}^{nSNP} p_{j} (1 - p_{j})}
+\end{equation}
+
+]
+
+--
+
+<br>
+
+<P align="justify">La heredabilidad en sentido estricto se estimó mediante el método BLUP como:</p>
+
+\begin{equation}
+h^{2} = \frac{\sigma^{2}_{g}}{\sigma^{2}_{g} + \sigma^{2}_{e}},
+\end{equation}
+
+---
+class: center
+
+### Materiales y métodos
+
+---
 
 ### Bibliografía
 
 ```{r refs 1, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 1, end = 7)
+PrintBibliography(bib = mi_Bib, start = 1, end = 6)
 ```
 
 ---
@@ -1313,7 +1370,7 @@ PrintBibliography(bib = mi_Bib, start = 1, end = 7)
 
 ```{r refs 2, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 8)
+PrintBibliography(bib = mi_Bib, start = 7, end = 8)
 ```
 
 ---
