@@ -18,7 +18,7 @@ class: center
 
 # Paquetes usados ----
 
-pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, tidyverse, latex2exp, showtext, ggforce, magick, pedigreemm, reshape2, gt) # Aquí (https://pkg.garrickadenbuie.com/xaringanExtra/#/) y aquí (https://github.com/gadenbuie/xaringanExtra) explican las muchas opciones de usar el paquete xaringanExtra.
+pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, tidyverse, latex2exp, showtext, ggforce, magick, pedigreemm, reshape2, gt, ggforce) # Aquí (https://pkg.garrickadenbuie.com/xaringanExtra/#/) y aquí (https://github.com/gadenbuie/xaringanExtra) explican las muchas opciones de usar el paquete xaringanExtra.
 font_add_google('Gochi Hand', 'gochi')
 showtext_auto()
 
@@ -1570,7 +1570,7 @@ data.frame(
 
 <br>
 
-<P align="justify">Se uso el coeficiente de correlación entre los valores fenotípicos observados y predichos como medida de predictibilidad.</p>
+<P align="justify">Se uso el coeficiente de correlación entre los valores fenotípicos observados y predichos como medida de predictibilidad (48 individuos mejorados).</p>
 
 ]
 
@@ -1580,6 +1580,201 @@ data.frame(
 
 <P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:50")`.</FONT></p>
 <P align="justify"><FONT SIZE=2>[2] `r Citet(mi_Bib, "cite:51")`.</FONT></p>
+
+]
+
+---
+class: center
+
+### Resultados (parciales)
+
+<P align="justify"><b>Fenotipo y heredabilidad</b></p>
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', warning = FALSE, message=FALSE}
+
+tribble(
+  ~'Parámetro', ~'Pedigrí 1', ~'Pedigrí 2', ~'Pedigrí 3', ~'Pedigrí_a', ~'Pedigrí_b', ~'Pedigrí_c',
+  'Varianza aditiva', 0.43, 0.50, 0.56, 0.47, 0.50, 0.56,
+  'Varianza ambiental', 0.16, 0.14, 0.11, 0.12, 0.13, 0.11,
+  'Heredabilidad', 0.72, 0.78, 0.84, 0.80, 0.79, 0.84
+  ) %>%
+  gt() %>%
+  tab_style(
+    style = list(
+      cell_fill(color = '#ffff4d'),
+      cell_text(weight = 'bold')
+      ),
+    locations = cells_body(
+      columns = 'Pedigrí 1',
+      rows = 3
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = '#ffff4d'),
+      cell_text(weight = 'bold')
+      ),
+    locations = cells_body(
+      columns = 'Pedigrí 3',
+      rows = 3
+    )
+  ) %>%
+  cols_label(
+    Pedigrí_a = 'Pedigrí 1',
+    Pedigrí_b = 'Pedigrí 2',
+    Pedigrí_c = 'Pedigrí 3'
+  ) %>%
+  tab_spanner(
+    label = 'Bayesiano',
+    columns = c(2, 3, 4)
+    ) %>%
+  tab_spanner(
+    label = 'REML',
+    columns = c(5, 6, 7)
+    )
+```
+
+---
+class: center
+
+### Resultados (parciales)
+
+<P align="justify"><b>Precisión de la predición mediante simulación ancestral</b></p>
+
+```{r, echo = FALSE, out.width = "62%", fig.align = 'center', message = FALSE}
+
+Cor_ped_1_est <- read_delim(here('Presentacion', 'Imagen', 'Ped1_Bay_Pen.txt'), delim = '\t') %>%
+  mutate(
+    Enfoque = recode(
+      .x = Enfoque,
+      'Penalizado' = 'REML'
+      )
+    ) %>%
+  mutate(
+    Densidad = case_when(
+      Densidad == 0 ~ '0',
+      Densidad == 1 ~ '1.000',
+      Densidad == 10 ~ '10.000',
+      Densidad == 100 ~ '100.000'
+      ),
+    Genotipados = as.factor(Genotipados),
+    Pedigrí = 'Pedigrí 1'
+    )
+
+Cor_ped_2_est <- read_delim(here('Presentacion', 'Imagen', 'Ped2_Bay_Pen.txt'), delim = '\t') %>%
+  mutate(
+    Enfoque = recode(
+      .x = Enfoque,
+      'Penalizado' = 'REML'
+      )
+    ) %>%
+  mutate(
+    Densidad = case_when(
+      Densidad == 0 ~ '0',
+      Densidad == 1 ~ '1.000',
+      Densidad == 10 ~ '10.000',
+      Densidad == 100 ~ '100.000'
+      ),
+    Genotipados = as.factor(Genotipados),
+    Pedigrí = 'Pedigrí 2'
+    )
+
+Cor_ped_3_est <- read_delim(here('Presentacion', 'Imagen', 'Ped3_Bay_Pen.txt'), delim = '\t') %>%
+  mutate(
+    Enfoque = recode(
+      .x = Enfoque,
+      'Penalizado' = 'REML'
+      )
+    ) %>%
+  mutate(
+    Densidad = case_when(
+      Densidad == 0 ~ '0',
+      Densidad == 1 ~ '1.000',
+      Densidad == 10 ~ '10.000',
+      Densidad == 100 ~ '100.000'
+      ),
+    Genotipados = as.factor(Genotipados),
+    Pedigrí = 'Pedigrí 3'
+    )
+
+bind_rows(Cor_ped_1_est, Cor_ped_2_est, Cor_ped_3_est) %>%
+  ggplot(data = .,aes(x = Densidad, y = Correlación, fill = Genotipados, colour = Genotipados)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6, alpha = 0.4) +
+  geom_errorbar(aes(ymin = Correlación - des, ymax = Correlación + des), width = 0.2, position = position_dodge(width = 0.7)) +
+  scale_y_continuous(limits = c(0.0, 1.0)) +
+  facet_grid(vars(Pedigrí), vars(Enfoque)) +
+  labs(y = 'Precisión de la predicción', x = 'Densidad del marcador') +
+  scale_colour_manual(values = c('black', 'yellow', 'cyan', 'red')) +
+  scale_fill_manual(values = c('black', 'yellow', 'cyan', 'red')) +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 11, face = 'bold'),
+    legend.title = element_text(size = 11, face = 'bold'),
+    legend.text = element_text(size = 11),
+    legend.position = 'top',
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 10, colour = 'black', face = 'bold')
+    )
+```
+
+---
+
+class: center
+
+### Resultados (parciales)
+
+<P align="justify"><b>Precisión de la predición mediante simulación ancestral</b></p>
+
+.pull-left[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE}
+
+Cor_ped_1_est <- read_delim(here('Presentacion', 'Imagen', 'Ped1_Bay_Pen.txt'), delim = '\t') %>%
+  mutate(
+    Enfoque = recode(
+      .x = Enfoque,
+      'Penalizado' = 'REML'
+      )
+    ) %>%
+  mutate(
+    Densidad = case_when(
+      Densidad == 0 ~ '0',
+      Densidad == 1 ~ '1.000',
+      Densidad == 10 ~ '10.000',
+      Densidad == 100 ~ '100.000'
+      ),
+    Genotipados = as.factor(Genotipados),
+    Pedigrí = 'Pedigrí 1'
+    )
+
+Cor_ped_1_est %>%
+  filter(Enfoque == 'Bayesiano') %>%
+  ggplot(data = .,aes(x = Densidad, y = Correlación, fill = Genotipados, colour = Genotipados)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6, alpha = 0.4) +
+  geom_errorbar(aes(ymin = Correlación - des, ymax = Correlación + des), width = 0.2, position = position_dodge(width = 0.7)) +
+  scale_y_continuous(limits = c(0.0, 1.0)) +
+  labs(title = 'Pedigrí 1 - Enfoque Bayesiano', y = 'Precisión de la predicción', x = 'Densidad del marcador') +
+  scale_colour_manual(values = c('black', 'yellow', 'cyan', 'red')) +
+  scale_fill_manual(values = c('black', 'yellow', 'cyan', 'red')) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 20, face = 'bold'),
+    axis.text = element_text(size = 20),
+    axis.title = element_text(size = 20, face = 'bold'),
+    legend.title = element_text(size = 20, face = 'bold'),
+    legend.text = element_text(size = 20),
+    legend.position = 'bottom',
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 20, colour = 'black', face = 'bold')
+    )
+```
+
+]
+
+.pull-right[
+
+
 
 ]
 
