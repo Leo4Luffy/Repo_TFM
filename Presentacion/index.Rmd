@@ -1347,7 +1347,7 @@ G =\frac{XX'}{2 \sum_{j=1}^{nSNP} p_{j} (1 - p_{j})}
 <P align="justify">La heredabilidad en sentido estricto se estimó mediante el método BLUP como:</p>
 
 \begin{equation}
-h^{2} = \frac{\sigma^{2}_{g}}{\sigma^{2}_{g} + \sigma^{2}_{e}},
+h^{2} = \frac{\sigma^{2}_{g}}{\sigma^{2}_{g} + \sigma^{2}_{e}}
 \end{equation}
 
 ---
@@ -1364,10 +1364,10 @@ class: center
 ```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE}
 
 tribble(
-  ~'Pedigrí', ~'Núm. individuos',
-  'Pedigrí 1', 751,
-  'Pedigrí 2', 1661,
-  'Pedigrí 3', 2451
+  ~'Pedigrí', ~'Núm. de individuos',
+  'Pedigrí 1', '300 + 451 = 751',
+  'Pedigrí 2', '1210 + 451 = 1661',
+  'Pedigrí 3', '2000 + 451 = 2451'
   ) %>%
   gt()
 ```
@@ -1413,7 +1413,7 @@ data.frame(
   geom_curve(x = 2.6, xend = 3.0, y = 2.8, yend = 2.8, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'dashed') +
   
   annotate(geom = 'rect', xmin = 3.1, xmax = 4.1, ymin = 3.0, ymax = 1.8, colour = 'yellow', fill = 'yellow', alpha = 0.2) +
-  annotate(geom = 'text', x = 3.6, y = 2.4, label = 'A', size = 9.4, colour = 'black') +
+  annotate(geom = 'text', x = 3.6, y = 2.4, label = 'A', size = 10.4, colour = 'black') +
   
   scale_x_continuous(limits = c(-0.4, 4.2)) +
   scale_y_continuous(limits = c(-1.8, 3.4)) +
@@ -1433,6 +1433,157 @@ data.frame(
 ]
 
 ---
+class: center
+
+### Materiales y métodos
+
+<P align="justify"><b>Precisión de la predición mediante simulación ancestral</b></p>
+
+.pull-left[
+
+<P align="justify">Se usaron diferentes subconjuntos de datos con la siguientes características:</p>
+
+<P align="justify">a) Distinta cantidad de individuos genotipados.</p>
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE}
+
+tribble(
+  ~'148', ~'298 ', ~'451'
+  ) %>%
+  gt()
+```
+
+<P align="justify">b) Diferentes densidades de marcador.</p>
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE}
+
+tribble(
+  ~'1.000', ~'10.000 ', ~'100.000'
+  ) %>%
+  gt()
+```
+
+]
+
+.pull-right[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.showtext = TRUE, warning = FALSE, message = FALSE}
+
+data.frame(
+  x = 1.0, y = 1.0
+  ) %>%
+  ggplot() +
+  
+  annotate(geom = 'text', x = 0.5, y = 3.5, label = 'Ind. genotipados', size = 6.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.5, y = 3.5, label = '148', size = 6.2, colour = 'black') +
+  annotate(geom = 'text', x = 2.5, y = 3.5, label = '298', size = 6.2, colour = 'black') +
+  annotate(geom = 'text', x = 3.5, y = 3.5, label = '298', size = 6.2, colour = 'black') +
+  
+  annotate(geom = 'text', x = 0.5, y = 2.0, label = 'Densidad de SNP', size = 6.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.5, y = 2.0, label = '1.000', size = 6.2, colour = 'black') +
+  annotate(geom = 'text', x = 2.5, y = 2.0, label = '10.000', size = 6.2, colour = 'black') +
+  annotate(geom = 'text', x = 3.5, y = 2.0, label = '100.000', size = 6.2, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 1.1, xmax = 1.9, ymin = 1.0, ymax = 0.4, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 1.5, y = 0.7, label = 'G', size = 9.4, colour = 'black') +
+  annotate(geom = 'rect', xmin = 2.1, xmax = 2.9, ymin = 1.0, ymax = 0.4, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 2.5, y = 0.7, label = 'G', size = 9.4, colour = 'black') +
+  annotate(geom = 'rect', xmin = 3.1, xmax = 3.9, ymin = 1.0, ymax = 0.4, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 3.5, y = 0.7, label = 'G', size = 9.4, colour = 'black') +
+  
+  geom_curve(x = 1.5, xend = 1.5, y = 3.3, yend = 2.2, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0) +
+  geom_curve(x = 1.5, xend = 2.5, y = 3.3, yend = 2.2, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0) +
+  geom_curve(x = 1.5, xend = 3.5, y = 3.3, yend = 2.2, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0) +
+  
+  geom_curve(x = 1.5, xend = 1.5, y = 1.8, yend = 1.2, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0) +
+  geom_curve(x = 2.5, xend = 2.5, y = 1.8, yend = 1.2, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0) +
+  geom_curve(x = 3.5, xend = 3.5, y = 1.8, yend = 1.2, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0) +
+  
+  scale_x_continuous(limits = c(0.0, 3.9)) +
+  scale_y_continuous(limits = c(0.4, 3.6)) +
+  
+  theme_bw() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank())
+```
+
+]
+
+---
+class: center
+
+### Materiales y métodos
+
+<P align="justify"><b>Precisión de la predición mediante simulación ancestral</b></p>
+
+.pull-left[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.showtext = TRUE}
+
+data.frame(
+  x = 4.5, y = 0.5
+  ) %>%
+  ggplot(aes(x0 = x, y0 = y, r = 0.8)) +
+  #geom_blank() +
+  
+  annotate(geom = 'rect', xmin = 1.5, xmax = 4.25, ymin = 7.5, ymax = 9.5, colour = 'yellow', fill = 'yellow', alpha = 0.2) +
+  annotate(geom = 'text', x = 2.875, y = 8.5, label = 'A', size = 8.4, colour = 'black') +
+  annotate(geom = 'text', x = 1.1, y = 8.5, label = 'Matriz A', size = 7.6, angle = 90, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 7.0, xmax = 8.75, ymin = 7.75, ymax = 9.0, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 7.875, y = 8.375, label = 'G', size = 8.4, colour = 'black') +
+  annotate(geom = 'text', x = 6.6, y = 8.375, label = 'Matriz G', size = 7.6, angle = 90, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 1.5, xmax = 4.25, ymin = 3.75, ymax = 5.75, colour = 'black', fill = 'white', alpha = 0.2) +
+  annotate(geom = 'rect', xmin = 2.3, xmax = 4.05, ymin = 3.95, ymax = 5.05, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 1.1, y = 4.75, label = 'Matriz H', size = 7.6, angle = 90, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 4.1, xmax = 6.3, ymin = 1.4, ymax = 2.2, colour = 'black', fill = 'white', alpha = 0.2, linetype = 'dashed') +
+  annotate(geom = 'text', x = 5.2, y = 1.8, label = 'ssGBLUP', size = 7.6, colour = 'black') +
+  
+  geom_curve(x = 6.4, xend = 7.5, y = 1.8, yend = 1.8, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'dashed') +
+  annotate(geom = 'text', x = 8.4, y = 1.8, label = 'GEBV', size = 7.6, colour = 'black') +
+  
+  geom_curve(x = 2.875, xend = 2.875, y = 7.3, yend = 6.05, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'solid') +
+  geom_curve(x = 7.875, xend = 4.55, y = 7.45, yend = 4.75, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'solid') +
+  geom_curve(x = 2.875, xend = 3.95, y = 3.45, yend = 2.1, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'solid') +
+  
+  scale_x_continuous(limits = c(0.45, 9.4)) +
+  scale_y_continuous(limits = c(1.0, 9.9)) +
+  
+  theme_bw() +
+  #labs(title = 'ssGBLUP') +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 11, face = 'bold'))
+```
+
+]
+
+--
+
+.pull-right[
+
+<P align="justify">Se usaron los paquetes `BGLR`<sup>1</sup> y `lme4GS`<sup>2</sup> del `R` para estimar los componentes de varianza y los valores fenotípicos predichos, permitiendo así la predicción mediante procedimientos Bayesianos y REML.</p>
+
+<br>
+
+<P align="justify">Se uso el coeficiente de correlación entre los valores fenotípicos observados y predichos como medida de predictibilidad.</p>
+
+]
+
+<br>
+
+.footnote[
+
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:50")`.</FONT></p>
+<P align="justify"><FONT SIZE=2>[2] `r Citet(mi_Bib, "cite:51")`.</FONT></p>
+
+]
+
+---
 
 ### Bibliografía
 
@@ -1447,7 +1598,7 @@ PrintBibliography(bib = mi_Bib, start = 1, end = 6)
 
 ```{r refs 2, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 7, end = 9)
+PrintBibliography(bib = mi_Bib, start = 7, end = 11)
 ```
 
 ---
