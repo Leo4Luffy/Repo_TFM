@@ -96,10 +96,23 @@ class: center
 
 ### Índice general
 
-- <P align="justify">Hola.</p>
+- <P align="justify">Introducción.</p>
 
 <br>
-- <P align="justify">Hola.</p>
+
+- <P align="justify">Objetivo.</p>
+
+<br>
+
+- <P align="justify">Materiales y métodos (parciales).</p>
+
+<br>
+
+- <P align="justify">Resultados (parciales).</p>
+
+<br>
+
+- <P align="justify">Bibiografía.</p>
 
 ---
 class: center
@@ -1197,7 +1210,7 @@ class: center
 ---
 class: center
 
-### Materiales y métodos
+### Materiales y métodos (parciales)
 
 <P align="justify"><b>Recurso vegetal y datos fenotípicos</b></p>
 
@@ -1301,7 +1314,7 @@ ggplot(data = vec_propios, mapping = aes(x = `1`, y = `2`, color = SNPsubsp, fil
 ---
 class: center
 
-### Materiales y métodos
+### Materiales y métodos (parciales)
 
 <P align="justify"><b>Predicción basada en información de pedigrí e información genómica</b></p>
 
@@ -1353,7 +1366,7 @@ h^{2} = \frac{\sigma^{2}_{g}}{\sigma^{2}_{g} + \sigma^{2}_{e}}
 ---
 class: center
 
-### Materiales y métodos
+### Materiales y métodos (parciales)
 
 <P align="justify"><b>Precisión de la predición mediante simulación ancestral</b></p>
 
@@ -1435,7 +1448,7 @@ data.frame(
 ---
 class: center
 
-### Materiales y métodos
+### Materiales y métodos (parciales)
 
 <P align="justify"><b>Precisión de la predición mediante simulación ancestral</b></p>
 
@@ -1513,7 +1526,7 @@ data.frame(
 ---
 class: center
 
-### Materiales y métodos
+### Materiales y métodos (parciales)
 
 <P align="justify"><b>Precisión de la predición mediante simulación ancestral</b></p>
 
@@ -1617,6 +1630,26 @@ tribble(
       ),
     locations = cells_body(
       columns = 'Pedigrí 3',
+      rows = 3
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = '#91ffff'),
+      cell_text(weight = 'bold')
+      ),
+    locations = cells_body(
+      columns = 'Pedigrí_b',
+      rows = 3
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = '#91ffff'),
+      cell_text(weight = 'bold')
+      ),
+    locations = cells_body(
+      columns = 'Pedigrí_c',
       rows = 3
     )
   ) %>%
