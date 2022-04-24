@@ -18,7 +18,7 @@ class: center
 
 # Paquetes usados ----
 
-pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, tidyverse, latex2exp, showtext, ggforce, magick, pedigreemm, reshape2, gt, ggforce) # Aquí (https://pkg.garrickadenbuie.com/xaringanExtra/#/) y aquí (https://github.com/gadenbuie/xaringanExtra) explican las muchas opciones de usar el paquete xaringanExtra.
+pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, tidyverse, latex2exp, showtext, ggforce, magick, pedigreemm, reshape2, gt) # Aquí (https://pkg.garrickadenbuie.com/xaringanExtra/#/) y aquí (https://github.com/gadenbuie/xaringanExtra) explican las muchas opciones de usar el paquete xaringanExtra.
 font_add_google('Gochi Hand', 'gochi')
 showtext_auto()
 
@@ -1535,19 +1535,20 @@ data.frame(
   annotate(geom = 'text', x = 7.875, y = 8.375, label = 'G', size = 8.4, colour = 'black') +
   annotate(geom = 'text', x = 6.6, y = 8.375, label = 'Matriz G', size = 7.6, angle = 90, colour = 'black') +
   
-  annotate(geom = 'rect', xmin = 1.5, xmax = 4.25, ymin = 3.75, ymax = 5.75, colour = 'black', fill = 'white', alpha = 0.2) +
-  annotate(geom = 'rect', xmin = 2.3, xmax = 4.05, ymin = 3.95, ymax = 5.05, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
-  annotate(geom = 'text', x = 1.1, y = 4.75, label = 'Matriz H', size = 7.6, angle = 90, colour = 'black') +
+  annotate(geom = 'rect', xmin = 6.0, xmax = 8.75, ymin = 3.75, ymax = 5.75, colour = 'black', fill = 'white', alpha = 0.2) +
+  annotate(geom = 'rect', xmin = 6.8, xmax = 8.55, ymin = 3.95, ymax = 5.05, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 5.6, y = 4.75, label = 'Matriz H', size = 7.6, angle = 90, colour = 'black') +
   
-  annotate(geom = 'rect', xmin = 4.1, xmax = 6.3, ymin = 1.4, ymax = 2.2, colour = 'black', fill = 'white', alpha = 0.2, linetype = 'dashed') +
-  annotate(geom = 'text', x = 5.2, y = 1.8, label = 'ssGBLUP', size = 7.6, colour = 'black') +
+  annotate(geom = 'rect', xmin = 6.275, xmax = 8.475, ymin = 1.4, ymax = 2.2, colour = 'black', fill = 'white', alpha = 0.2, linetype = 'dashed') +
+  annotate(geom = 'text', x = 7.375, y = 1.8, label = 'ssGBLUP', size = 7.6, colour = 'black') +
+  geom_curve(x = 7.375, xend = 7.375, y = 3.45, yend = 2.5, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'dashed') +
   
-  geom_curve(x = 6.4, xend = 7.5, y = 1.8, yend = 1.8, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'dashed') +
-  annotate(geom = 'text', x = 8.4, y = 1.8, label = 'GEBV', size = 7.6, colour = 'black') +
+  annotate(geom = 'rect', xmin = 1.55, xmax = 3.75, ymin = 1.4, ymax = 2.2, colour = 'black', fill = 'white', alpha = 0.2, linetype = 'dashed') +
+  annotate(geom = 'text', x = 2.65, y = 1.8, label = 'BLUP', size = 7.6, colour = 'black') +
   
-  geom_curve(x = 2.875, xend = 2.875, y = 7.3, yend = 6.05, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'solid') +
-  geom_curve(x = 7.875, xend = 4.55, y = 7.45, yend = 4.75, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'solid') +
-  geom_curve(x = 2.875, xend = 3.95, y = 3.45, yend = 2.1, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'solid') +
+  geom_curve(x = 3.0, xend = 5.2, y = 7.3, yend = 4.9, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'solid') +
+  geom_curve(x = 7.875, xend = 7.875, y = 7.45, yend = 6.05, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'solid') +
+  geom_curve(x = 2.65, xend = 2.65, y = 7.3, yend = 2.5, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'dashed') +
   
   scale_x_continuous(limits = c(0.45, 9.4)) +
   scale_y_continuous(limits = c(1.0, 9.9)) +
