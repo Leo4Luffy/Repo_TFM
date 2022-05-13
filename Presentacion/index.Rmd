@@ -642,7 +642,7 @@ ggplot() +
 
 <!--NOTA: a continuación se muestra parte de como se hizo el calculo de la matriz G, con base en el libro del profesor Agustin, considerando los individuos 1, 4, 5 y 6 como individuos genotipados, considerando que cada uno de ellos portan los siguientes alelos: ind_1 = Aa, ind_4 = AA, ind_5 = AA y ind_6 = aa. En este video (https://plant-breeding-genomics.extension.org/genomic-relationships-and-gblup/) también explican como hacer los calculos.-->
 
-```{r, echo = FALSE, Eeval = FALSE}
+```{r, echo = FALSE, eval = FALSE}
 
 W <- tribble(
   ~'',
@@ -659,6 +659,8 @@ W_Wt <- W %*% Wt
 
 G <- W_Wt * 2.13
 ```
+
+<!--NOTA: otra forma de calcular la matriz G es por medio de una función presentada en el articulo "Genomic Best Linear Unbiased Prediction (gBLUP) for the Estimation of Genomic Breeding Values" de Samuel A. Clark and Julius van der Werf, en la página 328. Este articulo lo tengo en la carpeta "Articulos".-->
 
 ]
 
