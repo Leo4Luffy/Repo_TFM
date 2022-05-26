@@ -16,7 +16,7 @@ class: center
 
 ```{r Paquetes usados, general y bibliografia, load_refs, eval = TRUE, echo = FALSE, include = FALSE, cache = FALSE}
 
-# Paquetes usados ----
+# Paquetes usados (prueba) ----
 
 pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, tidyverse, latex2exp, showtext, ggforce, magick, pedigreemm, reshape2, gt) # Aquí (https://pkg.garrickadenbuie.com/xaringanExtra/#/) y aquí (https://github.com/gadenbuie/xaringanExtra) explican las muchas opciones de usar el paquete xaringanExtra.
 font_add_google('Gochi Hand', 'gochi')
