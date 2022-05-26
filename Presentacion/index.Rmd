@@ -1816,6 +1816,12 @@ Cor_ped_1_est %>%
 
 ---
 
+class: center
+
+### Resultados (parciales)
+
+---
+
 ### Bibliografía
 
 ```{r refs 1, echo=FALSE, results="asis"}
