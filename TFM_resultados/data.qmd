@@ -1,0 +1,275 @@
+---
+bibliography: references.bib
+execute: 
+  warning: false
+  message: false
+---
+
+## Los datos {.unnumbered}
+
+En este tutorial usaré los conjuntos de datos del [Rice SNP-Seek Database](http://iric.irri.org/), el cual contiene información sobre genotipados de SNP y fenotipos de distintas variedades de arroz (*Oryza sativa L.*).
+
+### Descripción de los datos
+
+Al realizar un análisis de componentes principales sobre los datos de genotipado de SNP, se observaron diferentes grupos varietales de arroz (@fig-PCA). La variedad indica fue la variedad seleccionada para llevar a cabo el estudio ya que fue el grupo varietal con mayor número de individuos genotipados (451 individuos de un total de 738).
+
+```{r}
+#| label: paquetes
+#| eval: true
+#| echo: false
+
+pacman::p_load(here, tidyverse, patchwork)
+```
+
+```{r}
+#| label: fig-PCA
+#| eval: true
+#| echo: false
+#| out-width: '74%'
+#| fig-align: 'center'
+#| fig-cap: 'Análisis de componentes principales en datos de arroz. Los puntos y las circuferencias de color representan los distintos grupos varietales disponibles: tipo intermedio o mezclado (ADM), aromático (ARO), aus (AUS), indica (IND) y japónica (JAP).'
+
+# 1. Se importan los archivos de datos.
+
+m_dist <- read_table(here('datos', 'PCA_IND.mdist'), col_names = FALSE) %>%
+  select(-X739)
+
+ind <- tibble(id = read_table(here('datos', 'PCA_IND.mdist.id'), col_names = FALSE)[, 2]) # Se extrajo el nombre de los individuos.
+
+esp <- read_delim(here('datos', 'all.phenotypes.csv'), delim = ',') %>%
+  select(SNPsubsp) # Se extrajo el nombre de las especies (ADM, ARO, AUS, IND y JAP).
+
+# 2. Se calculan los componentes principales en función del escalado multidimensional.
+
+mds_poblacion <- cmdscale(d = m_dist, eig = TRUE, k = 5)
+
+# 3. Se extraen los vectores propios.
+
+vec_propios <- cbind(esp, ind, mds_poblacion$points)
+
+# 4. Se calcula la proporción de la variación explicada por cada valor propio (por los dos primeros componentes principales).
+
+porc_propio <- round(((mds_poblacion$eig) / sum(mds_poblacion$eig)) * 100, digits = 2)
+
+porc_propio_2 <- porc_propio %>%
+  as_tibble() %>%
+  slice(1:12) %>%
+  rowid_to_column(var = 'componente') %>%
+  mutate(componente = as.factor(componente))
+
+# 5. Se visualizan los resultados mediante componentes principales.
+
+ggplot(data = vec_propios, mapping = aes(x = `1`, y = `2`, color = SNPsubsp, fill = SNPsubsp)) +
+  geom_point(alpha = 0.2, size = 4.4) +
+  stat_ellipse(aes(color = SNPsubsp), type = 't') +
+  geom_hline(yintercept = 0, linetype = 'dotted') +
+  geom_vline(xintercept = 0, linetype = 'dotted') +
+  scale_color_manual(values = c('yellow', 'black', 'red', 'cyan', 'green')) +
+  scale_fill_manual(values = c('yellow', 'black', 'red', 'cyan', 'green')) +
+  labs(
+   x = paste0('Primer componente (',porc_propio[1],' %)'),
+   y = paste0('Segundo componente (',porc_propio[2], '%)'),
+   col = 'Variedades de arroz', fill = 'Variedades de arroz'
+   ) +
+  theme_bw() +
+  theme(
+    legend.background = element_rect(color = 'gray34', fill = 'white', size = 0.4, linetype = 'dashed'),
+    legend.position = c(0.18, 0.24),
+    legend.text = element_text(size = 11),
+    legend.title = element_text(face = 'bold', size = 11),
+    axis.text = element_text(face = 'bold', size = 11),
+    axis.title = element_text(face = 'bold', size = 12)
+    ) #-> Graf_PCA
+```
+
+De entre los datos de fenotipos disponibles (@fig-feno), se eligió el carácter tiempo de floración, ya que se observó que en este carácter la predicción genómica podría funcionar mejor. Estos datos fenotípicos se centraron (restando la media general) y estandarizaron (dividiendo por la desviación estándar).
+
+```{r}
+#| label: fig-feno
+#| eval: true
+#| echo: false
+#| out-width: '74%'
+#| fig-align: 'center'
+#| fig-cap: 'Distribución de cada uno de los caracteres del conjunto de datos fenotípicos de arroz.'
+
+Fenotipos <- read_delim(here('datos', 'all.phenotypes.csv'), delim = ',')
+
+# Trillabilidad de la panícula (término descriptivo para la facilidad con la que se extrae el grano de la panícula durante la trilla) ----
+
+Rasgo_1 <- Fenotipos %>%
+  mutate(panicle.threshability = as.factor(panicle.threshability)) %>%
+  na.omit() %>%
+  ggplot(data =., aes(x = panicle.threshability)) +
+  geom_bar(color = 'yellow', fill = 'yellow', alpha = 0.2) +
+  labs(x = 'Trillabilidad de\n la panícula', y = 'Número de observaciones') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 8, face = 'bold'),
+    axis.title.y = element_text(size = 10, face = 'bold')
+    )
+
+# Tiempo de floración ----
+
+Rasgo_2 <- Fenotipos %>%
+  na.omit() %>%
+  ggplot(data = ., aes(x = Time.to.flowering..from.sowing)) +
+  geom_density(color = 'black', fill = 'black', alpha = 0.2) +
+  labs(x = 'Tiempo de\n floración', y = 'Densidad') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 6, face = 'bold'),
+    axis.text.y = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 8, face = 'bold'),
+    axis.title.y = element_text(size = 10, face = 'bold')
+    )
+
+Rasgo_2b <- Fenotipos %>%
+  na.omit() %>%
+  ggplot(aes(x = ' ', y = Time.to.flowering..from.sowing)) + 
+  geom_boxplot(color = 'cyan', fill = 'cyan', alpha = 0.2) +
+  coord_flip() +
+  labs(x = ' ', y = 'Tiempo de floración') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    axis.title.y = element_text(size = 10, face = 'bold'),
+    axis.ticks.y = element_blank()
+    )
+
+# Daño de la sal ----
+
+Rasgo_3 <- Fenotipos %>%
+  mutate(Salt.injury.at.EC12 = as.factor(Salt.injury.at.EC12)) %>%
+  na.omit() %>%
+  ggplot(data =., aes(x = Salt.injury.at.EC12)) +
+  geom_bar(color = 'green', fill = 'green', alpha = 0.2) +
+  labs(x = 'Daño de la sal', y = 'Número de observaciones') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 8, face = 'bold'),
+    axis.title.y = element_text(size = 10, face = 'bold')
+    )
+
+# Longitud de la hoja ----
+
+Rasgo_4 <- Fenotipos %>%
+  mutate(leaf.length = as.factor(leaf.length)) %>%
+  na.omit() %>%
+  ggplot(data =., aes(x = leaf.length)) +
+  geom_bar(color = 'red', fill = 'red', alpha = 0.2) +
+  labs(x = 'Longitud de\n la hoja', y = 'Número de observaciones') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 8, face = 'bold'),
+    axis.title.y = element_text(size = 10, face = 'bold')
+    )
+
+# Fuerza del culmo ----
+
+Rasgo_5 <- Fenotipos %>%
+  mutate(culm.strength = as.factor(culm.strength)) %>%
+  na.omit() %>%
+  ggplot(data =., aes(x = culm.strength)) +
+  geom_bar(color = 'cyan', fill = 'cyan', alpha = 0.2) +
+  labs(x = 'Fuerza del culmo', y = 'Número de observaciones') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 8, face = 'bold'),
+    axis.title.y = element_text(size = 10, face = 'bold')
+    )
+
+# Senescencia de la hoja ----
+
+Rasgo_6 <- Fenotipos %>%
+  mutate(leaf.senescence = as.factor(leaf.senescence)) %>%
+  na.omit() %>%
+  ggplot(data =., aes(x = leaf.senescence)) +
+  geom_bar(color = 'cyan', fill = 'cyan', alpha = 0.2) +
+  labs(x = 'Senescencia de\n la hoja', y = 'Número de observaciones') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 8, face = 'bold'),
+    axis.title.y = element_text(size = 10, face = 'bold')
+    )
+
+# Ángulo de la hoja bandera ----
+
+Rasgo_7 <- Fenotipos %>%
+  mutate(flag.leaf.angle = as.factor(flag.leaf.angle)) %>%
+  na.omit() %>%
+  ggplot(data =., aes(x = flag.leaf.angle)) +
+  geom_bar(color = 'red', fill = 'red', alpha = 0.2) +
+  labs(x = 'Ángulo de la\n hoja bandera', y = 'Número de observaciones') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 8, face = 'bold'),
+    axis.title.y = element_text(size = 10, face = 'bold')
+    )
+
+# Longitud del grano ----
+
+Rasgo_8 <- Fenotipos %>%
+  na.omit() %>%
+  ggplot(data =., aes(x = grain.length)) +
+  geom_density(color = 'green', fill = 'green', alpha = 0.2) +
+  labs(x = 'Longitud del\n grano', y = 'Densidad') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 6, face = 'bold'),
+    axis.text.y = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 8, face = 'bold'),
+    axis.title.y = element_text(size = 10, face = 'bold')
+    )
+
+# Ancho del grano ----
+
+Rasgo_9 <- Fenotipos %>%
+  na.omit() %>%
+  ggplot(data =., aes(x = grain.width)) +
+  geom_density(color = 'black', fill = 'black', alpha = 0.2) +
+  labs(x = 'Ancho del\n grano', y = 'Densidad') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 6, face = 'bold'),
+    axis.text.y = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 8, face = 'bold'),
+    axis.title.y = element_text(size = 10, face = 'bold')
+    )
+
+# Peso del grano ----
+
+Rasgo_10 <- Fenotipos %>%
+  na.omit() %>%
+  ggplot(data =., aes(x = Grain.weight)) +
+  geom_density(color = 'yellow', fill = 'yellow', alpha = 0.2) +
+  labs(x = 'Peso del grano', y = 'Densidad') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 6, face = 'bold'),
+    axis.text.y = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 8, face = 'bold'),
+    axis.title.y = element_text(size = 10, face = 'bold')
+    )
+
+(Rasgo_1 | Rasgo_2 | Rasgo_3 | Rasgo_4 | Rasgo_5) / (Rasgo_6 | Rasgo_7 | Rasgo_8 | Rasgo_9 | Rasgo_10) #-> Graf_feno
+```
+
+### Control de calidad
+
+Los datos fueron sometidos previamente a procedimientos de control de calidad, eliminando loci con una frecuencia del alelo menor inferior a 0.05 y con una tasa de ausencia mayor a 0.01, todo esto usando Plink [@purcell2007].
+
+Luego de dicho control de calidad, el conjunto de datos resultante consistió de 100.231 SNP. A continuación podra descargar los datos en formato variant call luego del control de calidad.
+
+::: {.callout appearance="minimal"}
+<i class="bi bi-download"></i> [Datos](datos/vcf_IND.vcf){download="vcf_IND.vcf"}
+:::
+
+## Referencia bibliográfica

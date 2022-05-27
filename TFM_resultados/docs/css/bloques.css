@@ -1,0 +1,18 @@
+/* Bloques informativos */
+
+.aclaracion {
+  padding: 1em 1em 1em 4em;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  border: 1pt solid #ffff00;
+  background: #ffffff 5px center/3em no-repeat;
+  background-image: url("aclaracion.png");
+}
+.aclaracion:before {
+  content: "Aclaración: ";
+  clear: right;
+  display: block;
+  font-weight: bold;
+  color: #80D4E6;
+}
+

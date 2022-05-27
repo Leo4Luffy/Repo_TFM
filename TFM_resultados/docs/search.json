@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Tutorial básico con SeqBreed",
+    "section": "",
+    "text": "Este es el sitio web del “Tutorial básico con SeqBreed”. Aquí encontrará algunos de los resultados obtenidos al realizar mi trabajo de grado del Máster de Mejora Genética Animal y Biotecnología de la Reproducción, específicamente, los resultados obtenidos al usar el módulo de Python SeqBreed.\nA lo largo de este tutorial usaré bloques informativos para resaltar algún aspecto importante. Abajo encontrará un ejemplo de los bloques y su significado.\n\nInformación sobre un tema de interés."
+  },
+  {
+    "objectID": "index.html#licencia",
+    "href": "index.html#licencia",
+    "title": "Tutorial básico con SeqBreed",
+    "section": "Licencia",
+    "text": "Licencia\nEsta página web es de uso gratuito y está licenciado bajo la licencia licencia Creative Commons Attribution-NonCommercial-NoDerivs 4.0. Sí tiene alguna inquietud al respecto, por favor informar al correo mperezenciso@gmail.com."
+  },
+  {
+    "objectID": "data.html",
+    "href": "data.html",
+    "title": "Los datos",
+    "section": "",
+    "text": "En este tutorial usaré los conjuntos de datos del Rice SNP-Seek Database, el cual contiene información sobre genotipados de SNP y fenotipos de distintas variedades de arroz (Oryza sativa L.)."
+  },
+  {
+    "objectID": "preface.html#hola-2",
+    "href": "preface.html#hola-2",
+    "title": "Los datos",
+    "section": "Hola 2",
+    "text": "Hola 2"
+  },
+  {
+    "objectID": "preface.html",
+    "href": "preface.html",
+    "title": "Los datos",
+    "section": "",
+    "text": "Hola 2\nsggs dhd jjd djd"
+  },
+  {
+    "objectID": "data.html#references",
+    "href": "data.html#references",
+    "title": "Los datos",
+    "section": "References",
+    "text": "References\n\n\n\n\nPurcell, Shaun, Benjamin Neale, Kathe Todd-Brown, Lori Thomas, Manuel A. R. Ferreira, David Bender, Julian Maller, et al. 2007. “PLINK: A Tool Set for Whole-Genome Association and Population-Based Linkage Analyses.” The American Journal of Human Genetics 81 (3): 559–75. https://doi.org/10.1086/519795."
+  },
+  {
+    "objectID": "data.html#referencias",
+    "href": "data.html#referencias",
+    "title": "Los datos",
+    "section": "Referencias",
+    "text": "Referencias\n\n\n\n\nPurcell, Shaun, Benjamin Neale, Kathe Todd-Brown, Lori Thomas, Manuel A. R. Ferreira, David Bender, Julian Maller, et al. 2007. “PLINK: A Tool Set for Whole-Genome Association and Population-Based Linkage Analyses.” The American Journal of Human Genetics 81 (3): 559–75. https://doi.org/10.1086/519795."
+  },
+  {
+    "objectID": "data.html#referencia-bibliográfica",
+    "href": "data.html#referencia-bibliográfica",
+    "title": "Los datos",
+    "section": "Referencia bibliográfica",
+    "text": "Referencia bibliográfica\n\n\n\n\nPurcell, Shaun, Benjamin Neale, Kathe Todd-Brown, Lori Thomas, Manuel A. R. Ferreira, David Bender, Julian Maller, et al. 2007. “PLINK: A Tool Set for Whole-Genome Association and Population-Based Linkage Analyses.” The American Journal of Human Genetics 81 (3): 559–75. https://doi.org/10.1086/519795."
+  }
+]
