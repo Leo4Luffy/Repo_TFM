@@ -18,7 +18,7 @@
     "href": "data.html",
     "title": "Los datos",
     "section": "",
-    "text": "En este tutorial usaré los conjuntos de datos del Rice SNP-Seek Database, el cual contiene información sobre genotipados de SNP y fenotipos de distintas variedades de arroz (Oryza sativa L.)."
+    "text": "En este tutorial usaré los conjuntos de datos del Rice SNP-Seek Database, el cual contiene información sobre genotipos de SNP y fenotipos de distintas variedades de arroz (Oryza sativa L.)."
   },
   {
     "objectID": "preface.html#hola-2",
@@ -54,5 +54,26 @@
     "title": "Los datos",
     "section": "Referencia bibliográfica",
     "text": "Referencia bibliográfica\n\n\n\n\nPurcell, Shaun, Benjamin Neale, Kathe Todd-Brown, Lori Thomas, Manuel A. R. Ferreira, David Bender, Julian Maller, et al. 2007. “PLINK: A Tool Set for Whole-Genome Association and Population-Based Linkage Analyses.” The American Journal of Human Genetics 81 (3): 559–75. https://doi.org/10.1086/519795."
+  },
+  {
+    "objectID": "model.html",
+    "href": "model.html",
+    "title": "Modelos de predicción",
+    "section": "",
+    "text": "Los datos del carácter tiempo de floración los analice utilizando los métodos del mejor predictor lineal insesgado (BLUP) y del mejor predictor lineal insesgado genómico de un solo paso (ssGBLUP), y las precisiones de la predicción las calculé a través del coeficiente de correlación entre los valores fenotípicos observados y predichos.\n\nBLUP\nPara llevar a cabo la predicción usando el BLUP en individuos no genotipados, se aplicó el siguiente modelo:\n\\[\n\\textbf{y} = \\mu + \\textbf{Z} \\textbf{g} + \\textbf{e},\n\\] donde \\(y\\) es el fenotipo a predecir, \\(\\mu\\) es la media de la población, \\(g\\) representa los efectos aleatorios genéticos aditivos, \\(Z\\) es la matriz de incidencia que relaciona a \\(g\\) con \\(y\\), y \\(e\\) es el vector de residuos. Se asume que \\(g\\) ~ \\(N(0, A \\sigma_{g}^{2})\\), donde \\(A\\) representa la matriz de parentesco basada en información del pedigrí, y que \\(\\sigma_{g}^{2}\\) es la varianza genética aditiva. Se asume también que \\(e\\) ~ \\(N(0, I \\sigma_{e}^{2})\\), siendo \\(I\\) la matriz identidad, y \\(\\sigma_{e}^{2}\\) la varianza residual.\nLa figura a continuación (Figure 1) representa el método BLUP.\n\n\n\n\n\nFigure 1: Esquema del método del mejor predictor lineal insesgado (BLUP).\n\n\n\n\n\n\nssGBLUP\nEl método ssGBLUP (Legarra, Aguilar, and Misztal 2009) incluye información de individuos genotipados y no genotipados mediante la combinación de la matriz de parentesco basada en información genómica (matriz G) y la matriz A. Este método utiliza el mismo modelo anterior con la excepción de que \\(g\\) ~ \\(N(0, H \\sigma_{g}^{2})\\), donde \\(H\\) es la matriz de parentesco combinada, cuya estructura se observa a continuación:\n\\[\nH =\n\\begin{bmatrix}\nA_{11} + A_{12} A_{22}^{-1} ( G - A_{22} ) A_{22}^{-1}  A_{21} & A_{12} A_{22}^{-1} G \\\\\nG A_{22}^{-1} A_{12}' & G\n\\end{bmatrix}\n,\n\\]\ndonde \\(A_{11}\\), \\(A_{12}\\), \\(A_{21}\\) y \\(A_{22}\\) son submatrices de A, siendo \\(A_{11}\\) la submatriz de los individuos sin genotipo, \\(A_{22}\\) la submatriz de los individuos con genotipo, y \\(A_{12}\\) y \\(A_{21}\\) las submatrices que contienen las relaciones genéticas aditivas esperadas entre individuos con genotipo y sin genotipo. Para el cálculo de la matriz H, se obtuvo la matriz G utilizando el método de (VanRaden 2008), \\(\\frac{XX'}{2 \\sum_{j=1}^{nSNP} p_{j} (1 - p_{j})}\\), donde \\(X\\) es una matriz de dimensión n x nSNP que contiene los genotipos, \\(p_{j}\\) es la frecuencia del j-ésimo SNP, \\(n\\) corresponde al número de individuos y nSNP representa al número de SNP.\nLa figura a continuación (Figure 2) representa el método ssGBLUP.\n\n\n\n\n\nFigure 2: Esquema del método del mejor predictor lineal insesgado de un solo paso (ssGBLUP).\n\n\n\n\n\nAl comparar los métodos BLUP y ssGBLUP, con el ssGBLUP se obtienen predicciones más precisas y una selección más eficiente de genotipos superiores, en virtud de una mejor estimación del parentesco entre individuos. Esto último debido al uso de información genómica y a la construcción a través de esta información de matrices de relación realizadas.\n\n\n\nReferencia bibliográfica\n\n\n\n\nLegarra, A., I. Aguilar, and I. Misztal. 2009. “A Relationship Matrix Including Full Pedigree and Genomic Information.” Journal of Dairy Science 92 (9): 4656–63. https://doi.org/10.3168/jds.2009-2061.\n\n\nVanRaden, P. M. 2008. “Efficient Methods to Compute Genomic Predictions.” Journal of Dairy Science 91 (11): 4414–23. https://doi.org/10.3168/jds.2007-0980."
+  },
+  {
+    "objectID": "index.html#bienvenido",
+    "href": "index.html#bienvenido",
+    "title": "Tutorial básico con SeqBreed",
+    "section": "Bienvenido",
+    "text": "Bienvenido\nEste es el sitio web del “Tutorial básico con SeqBreed”. Aquí encontrará algunos de los resultados obtenidos al realizar mi trabajo de grado del Máster de Mejora Genética Animal y Biotecnología de la Reproducción, específicamente, los resultados obtenidos al usar el módulo de Python SeqBreed.\nA lo largo de este tutorial usaré bloques informativos para resaltar algún aspecto importante. Abajo encontrará un ejemplo de los bloques y su significado.\n\nInformación sobre un tema de interés."
+  },
+  {
+    "objectID": "seqbreed.html",
+    "href": "seqbreed.html",
+    "title": "SeqBreed",
+    "section": "",
+    "text": "Figure 1: Esquema de predicción usando simulación con el paquete SeqBreed."
   }
 ]

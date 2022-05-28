@@ -1,0 +1,14 @@
+{
+  "hash": "c3424641841192cfade84e37f31f3629",
+  "result": {
+    "markdown": "---\ndescription-meta: |\n  Este es un libro con un pequeño tutorial de los resultados obtenidos al usar el módulo de Python SeqBreed.\n---\n\n\n## Bienvenido {.unnumbered}\n\n\n::: {.cell}\n\n:::\n\n\nEste es el sitio web del **\"Tutorial básico con SeqBreed\"**. Aquí encontrará algunos de los resultados obtenidos al realizar mi trabajo de grado del [Máster de Mejora Genética Animal y Biotecnología de la Reproducción](http://www.mastermejorageneticaanimal.es/), específicamente, los resultados obtenidos al usar el módulo de `Python` [`SeqBreed`](https://github.com/miguelperezenciso/SeqBreed).\n\nA lo largo de este tutorial usaré bloques informativos para resaltar algún aspecto importante. Abajo encontrará un ejemplo de los bloques y su significado.\n\n::: {.aclaracion}\nInformación sobre un tema de interés.\n:::\n\n## Licencia\n\nEsta página web es de uso gratuito y está licenciado bajo la licencia [licencia Creative Commons Attribution-NonCommercial-NoDerivs 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/). Sí tiene alguna inquietud al respecto, por favor informar al correo mperezenciso@gmail.com.\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

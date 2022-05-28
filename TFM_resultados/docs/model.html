@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tutorial básico con SeqBreed - Los datos</title>
+<title>Tutorial básico con SeqBreed - Modelos de predicción</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -43,8 +43,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
-<link href="./model.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./seqbreed.html" rel="next">
+<link href="./data.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -74,6 +74,7 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="css/bloques.css">
 </head>
@@ -84,7 +85,7 @@ div.csl-indent {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Los datos</h1>
+      <h1 class="quarto-secondary-nav-title">Modelos de predicción</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -117,12 +118,12 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data.html" class="sidebar-item-text sidebar-link active">Los datos</a>
+  <a href="./data.html" class="sidebar-item-text sidebar-link">Los datos</a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./model.html" class="sidebar-item-text sidebar-link">Modelos de predicción</a>
+  <a href="./model.html" class="sidebar-item-text sidebar-link active">Modelos de predicción</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -139,18 +140,18 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#descripción-de-los-datos" id="toc-descripción-de-los-datos" class="nav-link active" data-scroll-target="#descripción-de-los-datos">Descripción de los datos</a></li>
-  <li><a href="#control-de-calidad" id="toc-control-de-calidad" class="nav-link" data-scroll-target="#control-de-calidad">Control de calidad</a></li>
+  <li><a href="#blup" id="toc-blup" class="nav-link active" data-scroll-target="#blup">BLUP</a></li>
+  <li><a href="#ssgblup" id="toc-ssgblup" class="nav-link" data-scroll-target="#ssgblup">ssGBLUP</a></li>
   <li><a href="#referencia-bibliográfica" id="toc-referencia-bibliográfica" class="nav-link" data-scroll-target="#referencia-bibliográfica">Referencia bibliográfica</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/Leo4Luffy/Repo_TFM/edit/master/tree/main/TFM_resultados/data.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/Leo4Luffy/Repo_TFM/edit/master/tree/main/TFM_resultados/model.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Los datos</h1>
+<h1 class="title d-none d-lg-block">Modelos de predicción</h1>
 </div>
 
 
@@ -167,57 +168,62 @@ div.csl-indent {
 <div class="cell">
 
 </div>
-<p>En este tutorial usaré los conjuntos de datos del <a href="http://iric.irri.org/">Rice SNP-Seek Database</a>, el cual contiene información sobre genotipos de SNP y fenotipos de distintas variedades de arroz (<em>Oryza sativa L.</em>).</p>
-<section id="descripción-de-los-datos" class="level3">
-<h3 class="anchored" data-anchor-id="descripción-de-los-datos">Descripción de los datos</h3>
-<p>Al realizar un análisis de componentes principales sobre los datos de genotipo, se observaron diferentes grupos varietales de arroz (<a href="#fig-PCA">Figure&nbsp;<span>1</span></a>). La variedad indica fue la variedad seleccionada para llevar a cabo el estudio ya que fue el grupo varietal con mayor número de individuos genotipados (451 individuos de un total de 738).</p>
+<p>Los datos del carácter tiempo de floración los analice utilizando los métodos del mejor predictor lineal insesgado (BLUP) y del mejor predictor lineal insesgado genómico de un solo paso (ssGBLUP), y las precisiones de la predicción las calculé a través del coeficiente de correlación entre los valores fenotípicos observados y predichos.</p>
+<section id="blup" class="level3">
+<h3 class="anchored" data-anchor-id="blup">BLUP</h3>
+<p>Para llevar a cabo la predicción usando el BLUP en individuos no genotipados, se aplicó el siguiente modelo:</p>
+<p><span class="math display">\[
+\textbf{y} = \mu + \textbf{Z} \textbf{g} + \textbf{e},
+\]</span> donde <span class="math inline">\(y\)</span> es el fenotipo a predecir, <span class="math inline">\(\mu\)</span> es la media de la población, <span class="math inline">\(g\)</span> representa los efectos aleatorios genéticos aditivos, <span class="math inline">\(Z\)</span> es la matriz de incidencia que relaciona a <span class="math inline">\(g\)</span> con <span class="math inline">\(y\)</span>, y <span class="math inline">\(e\)</span> es el vector de residuos. Se asume que <span class="math inline">\(g\)</span> ~ <span class="math inline">\(N(0, A \sigma_{g}^{2})\)</span>, donde <span class="math inline">\(A\)</span> representa la matriz de parentesco basada en información del pedigrí, y que <span class="math inline">\(\sigma_{g}^{2}\)</span> es la varianza genética aditiva. Se asume también que <span class="math inline">\(e\)</span> ~ <span class="math inline">\(N(0, I \sigma_{e}^{2})\)</span>, siendo <span class="math inline">\(I\)</span> la matriz identidad, y <span class="math inline">\(\sigma_{e}^{2}\)</span> la varianza residual.</p>
+<p>La figura a continuación (<a href="#fig-BLUP">Figure&nbsp;<span>1</span></a>) representa el método BLUP.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-PCA" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-BLUP" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="data_files/figure-html/fig-PCA-1.png" class="img-fluid figure-img" style="width:74.0%"></p>
-<p></p><figcaption aria-hidden="true" class="figure-caption">Figure 1: Análisis de componentes principales en datos de arroz. Los puntos y las circuferencias de color representan los distintos grupos varietales disponibles: tipo intermedio o mezclado (ADM), aromático (ARO), aus (AUS), indica (IND) y japónica (JAP).</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>De entre los datos de fenotipos disponibles (<a href="#fig-feno">Figure&nbsp;<span>2</span></a>), se eligió el carácter tiempo de floración, ya que se observó que en este carácter la predicción genómica podría funcionar mejor. Estos datos fenotípicos se centraron (restando la media general) y estandarizaron (dividiendo por la desviación estándar).</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-feno" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="data_files/figure-html/fig-feno-1.png" class="img-fluid figure-img" style="width:74.0%"></p>
-<p></p><figcaption aria-hidden="true" class="figure-caption">Figure 2: Distribución de cada uno de los caracteres del conjunto de datos fenotípicos de arroz.</figcaption><p></p>
+<p><img src="model_files/figure-html/fig-BLUP-1.png" class="img-fluid figure-img" style="width:54.0%"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Figure 1: Esquema del método del mejor predictor lineal insesgado (BLUP).</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="control-de-calidad" class="level3">
-<h3 class="anchored" data-anchor-id="control-de-calidad">Control de calidad</h3>
-<p>Los datos fueron sometidos previamente a procedimientos de control de calidad, eliminando loci con una frecuencia del alelo menor inferior a 0.05 y con una tasa de ausencia mayor a 0.01, todo esto usando Plink <span class="citation" data-cites="purcell2007">(<a href="#ref-purcell2007" role="doc-biblioref">Purcell et al. 2007</a>)</span>.</p>
-<p>Luego de dicho control de calidad, el conjunto de datos resultante consistió de 100.231 SNP. A continuación podrá descargar los datos en formato variant call luego del control de calidad.</p>
-<div class="callout callout callout-style-simple no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-body-container">
-<p><i class="bi bi-download"></i> <a href="datos/vcf_IND.vcf" download="vcf_IND.vcf">Datos</a></p>
+<section id="ssgblup" class="level3">
+<h3 class="anchored" data-anchor-id="ssgblup">ssGBLUP</h3>
+<p>El método ssGBLUP <span class="citation" data-cites="legarra2009">(<a href="#ref-legarra2009" role="doc-biblioref">Legarra, Aguilar, and Misztal 2009</a>)</span> incluye información de individuos genotipados y no genotipados mediante la combinación de la matriz de parentesco basada en información genómica (matriz G) y la matriz A. Este método utiliza el mismo modelo anterior con la excepción de que <span class="math inline">\(g\)</span> ~ <span class="math inline">\(N(0, H \sigma_{g}^{2})\)</span>, donde <span class="math inline">\(H\)</span> es la matriz de parentesco combinada, cuya estructura se observa a continuación:</p>
+<p><span class="math display">\[
+H =
+\begin{bmatrix}
+A_{11} + A_{12} A_{22}^{-1} ( G - A_{22} ) A_{22}^{-1}  A_{21} &amp; A_{12} A_{22}^{-1} G \\
+G A_{22}^{-1} A_{12}' &amp; G
+\end{bmatrix}
+,
+\]</span></p>
+<p>donde <span class="math inline">\(A_{11}\)</span>, <span class="math inline">\(A_{12}\)</span>, <span class="math inline">\(A_{21}\)</span> y <span class="math inline">\(A_{22}\)</span> son submatrices de A, siendo <span class="math inline">\(A_{11}\)</span> la submatriz de los individuos sin genotipo, <span class="math inline">\(A_{22}\)</span> la submatriz de los individuos con genotipo, y <span class="math inline">\(A_{12}\)</span> y <span class="math inline">\(A_{21}\)</span> las submatrices que contienen las relaciones genéticas aditivas esperadas entre individuos con genotipo y sin genotipo. Para el cálculo de la matriz H, se obtuvo la matriz G utilizando el método de <span class="citation" data-cites="vanraden2008">(<a href="#ref-vanraden2008" role="doc-biblioref">VanRaden 2008</a>)</span>, <span class="math inline">\(\frac{XX'}{2 \sum_{j=1}^{nSNP} p_{j} (1 - p_{j})}\)</span>, donde <span class="math inline">\(X\)</span> es una matriz de dimensión n x nSNP que contiene los genotipos, <span class="math inline">\(p_{j}\)</span> es la frecuencia del <em>j</em>-ésimo SNP, <span class="math inline">\(n\)</span> corresponde al número de individuos y nSNP representa al número de SNP.</p>
+<p>La figura a continuación (<a href="#fig-ssGBLUP">Figure&nbsp;<span>2</span></a>) representa el método ssGBLUP.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-ssGBLUP" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="model_files/figure-html/fig-ssGBLUP-1.png" class="img-fluid figure-img" style="width:54.0%"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Figure 2: Esquema del método del mejor predictor lineal insesgado de un solo paso (ssGBLUP).</figcaption><p></p>
+</figure>
 </div>
 </div>
 </div>
 <div class="aclaracion">
-<p>Antes de realizar cualquier tipo de análisis, se debe verificar la calidad de los datos de genotipo. A esto se le conoce como <strong>control de calidad</strong>. Uno de los procedimientos de control de calidad que se llevó a cabo fue eliminar SNP de acuerdo a su tasa de ausencia, esto es, SNP que no están bien genotipados en toda la población<!-- NOTA: o SNP con bajas tasas de genotipado. Estos deben eliminarse para mejorar la calidad general de los datos. --><!-- NOTA: en el estudio se usó un umbral del 0.01. En otras palabras, se eliminó cualquier SNP con más del 1% de SNP faltantes -->. El otro procedimiento de control de calidad que se llevó a cabo fue la llamada frecuencia alélica menor, que es la proporción de ocurrencia del alelo que se presenta con menor frecuencia. Un umbral típico para ambos tipos de control de calidad oscilan entre 1 y 5%.</p>
+<p>Al comparar los métodos BLUP y ssGBLUP, con el ssGBLUP se obtienen predicciones más precisas y una selección más eficiente de genotipos superiores, en virtud de una mejor estimación del parentesco entre individuos. Esto último debido al uso de información genómica y a la construcción a través de esta información de matrices de relación realizadas.</p>
 </div>
 </section>
-<section id="referencia-bibliográfica" class="level2">
-<h2 class="anchored" data-anchor-id="referencia-bibliográfica">Referencia bibliográfica</h2>
+<section id="referencia-bibliográfica" class="level3">
+<h3 class="anchored" data-anchor-id="referencia-bibliográfica">Referencia bibliográfica</h3>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-purcell2007" class="csl-entry" role="doc-biblioentry">
-Purcell, Shaun, Benjamin Neale, Kathe Todd-Brown, Lori Thomas, Manuel A. R. Ferreira, David Bender, Julian Maller, et al. 2007. <span>“PLINK: A Tool Set for Whole-Genome Association and Population-Based Linkage Analyses.”</span> <em>The American Journal of Human Genetics</em> 81 (3): 559–75. <a href="https://doi.org/10.1086/519795">https://doi.org/10.1086/519795</a>.
+<div id="ref-legarra2009" class="csl-entry" role="doc-biblioentry">
+Legarra, A., I. Aguilar, and I. Misztal. 2009. <span>“A Relationship Matrix Including Full Pedigree and Genomic Information.”</span> <em>Journal of Dairy Science</em> 92 (9): 4656–63. <a href="https://doi.org/10.3168/jds.2009-2061">https://doi.org/10.3168/jds.2009-2061</a>.
+</div>
+<div id="ref-vanraden2008" class="csl-entry" role="doc-biblioentry">
+VanRaden, P. M. 2008. <span>“Efficient Methods to Compute Genomic Predictions.”</span> <em>Journal of Dairy Science</em> 91 (11): 4414–23. <a href="https://doi.org/10.3168/jds.2007-0980">https://doi.org/10.3168/jds.2007-0980</a>.
 </div>
 </div>
 </section>
@@ -304,13 +310,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Bienvenido</span>
+      <a href="./data.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Los datos</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./model.html" class="pagination-link">
-        <span class="nav-page-text">Modelos de predicción</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./seqbreed.html" class="pagination-link">
+        <span class="nav-page-text">SeqBreed</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

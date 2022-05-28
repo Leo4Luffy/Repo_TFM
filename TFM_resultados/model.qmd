@@ -2,6 +2,133 @@
 execute: 
   warning: false
   message: false
+bibliography: references.bib
 ---
 
 ## Modelos de predicción {.unnumbered}
+
+```{r}
+#| label: paquetes
+#| eval: true
+#| echo: false
+
+pacman::p_load(tidyverse)
+```
+
+Los datos del carácter tiempo de floración los analice utilizando los métodos del mejor predictor lineal insesgado (BLUP) y del mejor predictor lineal insesgado genómico de un solo paso (ssGBLUP), y las precisiones de la predicción las calculé a través del coeficiente de correlación entre los valores fenotípicos observados y predichos.
+
+### BLUP
+
+Para llevar a cabo la predicción usando el BLUP en individuos no genotipados, se aplicó el siguiente modelo:
+
+$$
+\textbf{y} = \mu + \textbf{Z} \textbf{g} + \textbf{e},
+$$ donde $y$ es el fenotipo a predecir, $\mu$ es la media de la población, $g$ representa los efectos aleatorios genéticos aditivos, $Z$ es la matriz de incidencia que relaciona a $g$ con $y$, y $e$ es el vector de residuos. Se asume que $g$ \~ $N(0, A \sigma_{g}^{2})$, donde $A$ representa la matriz de parentesco basada en información del pedigrí, y que $\sigma_{g}^{2}$ es la varianza genética aditiva. Se asume también que $e$ \~ $N(0, I \sigma_{e}^{2})$, siendo $I$ la matriz identidad, y $\sigma_{e}^{2}$ la varianza residual.
+
+La figura a continuación (@fig-BLUP) representa el método BLUP.
+
+```{r}
+#| label: fig-BLUP
+#| eval: true
+#| echo: false
+#| out-width: '54%'
+#| fig-align: 'center'
+#| fig-cap: 'Esquema del método del mejor predictor lineal insesgado (BLUP).'
+
+data.frame(
+  x = 4.5, y = 0.5
+  ) %>%
+  ggplot(aes(x0 = x, y0 = y, r = 0.8)) +
+  #geom_blank() +
+  
+  annotate(geom = 'rect', xmin = 1.5, xmax = 4.25, ymin = 3.75, ymax = 5.75, colour = 'yellow', fill = 'yellow', alpha = 0.2) +
+  annotate(geom = 'text', x = 2.875, y = 4.75, label = 'A', size = 8.4, colour = 'black') +
+  annotate(geom = 'text', x = 1.1, y = 4.75, label = 'Matriz A', size = 7.6, angle = 90, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 4.1, xmax = 6.3, ymin = 1.4, ymax = 2.2, colour = 'black', fill = 'white', alpha = 0.2, linetype = 'dashed') +
+  annotate(geom = 'text', x = 5.2, y = 1.8, label = 'BLUP', size = 7.6, colour = 'black') +
+  
+  geom_curve(x = 6.4, xend = 7.5, y = 1.8, yend = 1.8, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'dashed') +
+  annotate(geom = 'text', x = 8.4, y = 1.8, label = 'EBV', size = 7.6, colour = 'black') +
+  
+  geom_curve(x = 2.875, xend = 3.95, y = 3.45, yend = 2.1, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'solid') +
+  
+  scale_x_continuous(limits = c(0.45, 9.4)) +
+  scale_y_continuous(limits = c(1.0, 6.3)) +
+  
+  theme_bw() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 11, face = 'bold'))
+```
+
+### ssGBLUP
+
+El método ssGBLUP [@legarra2009] incluye información de individuos genotipados y no genotipados mediante la combinación de la matriz de parentesco basada en información genómica (matriz G) y la matriz A. Este método utiliza el mismo modelo anterior con la excepción de que $g$ \~ $N(0, H \sigma_{g}^{2})$, donde $H$ es la matriz de parentesco combinada, cuya estructura se observa a continuación:
+
+$$
+H =
+\begin{bmatrix}
+A_{11} + A_{12} A_{22}^{-1} ( G - A_{22} ) A_{22}^{-1}  A_{21} & A_{12} A_{22}^{-1} G \\ 
+G A_{22}^{-1} A_{12}' & G 
+\end{bmatrix}
+,
+$$
+
+donde $A_{11}$, $A_{12}$, $A_{21}$ y $A_{22}$ son submatrices de A, siendo $A_{11}$ la submatriz de los individuos sin genotipo, $A_{22}$ la submatriz de los individuos con genotipo, y $A_{12}$ y $A_{21}$ las submatrices que contienen las relaciones genéticas aditivas esperadas entre individuos con genotipo y sin genotipo. Para el cálculo de la matriz H, se obtuvo la matriz G utilizando el método de [@vanraden2008], $\frac{XX'}{2 \sum_{j=1}^{nSNP} p_{j} (1 - p_{j})}$, donde $X$ es una matriz de dimensión n x nSNP que contiene los genotipos, $p_{j}$ es la frecuencia del *j*-ésimo SNP, $n$ corresponde al número de individuos y nSNP representa al número de SNP.
+
+La figura a continuación (@fig-ssGBLUP) representa el método ssGBLUP.
+
+```{r}
+#| label: fig-ssGBLUP
+#| eval: true
+#| echo: false
+#| out-width: '54%'
+#| fig-align: 'center'
+#| fig-cap: 'Esquema del método del mejor predictor lineal insesgado de un solo paso (ssGBLUP).'
+
+
+data.frame(
+  x = 4.5, y = 0.5
+  ) %>%
+  ggplot(aes(x0 = x, y0 = y, r = 0.8)) +
+  #geom_blank() +
+  
+  annotate(geom = 'rect', xmin = 2.5, xmax = 4.25, ymin = 7.5, ymax = 9.5, colour = 'yellow', fill = 'yellow', alpha = 0.2) +
+  annotate(geom = 'text', x = 3.375, y = 8.5, label = 'A', size = 6.4, colour = 'black') +
+  annotate(geom = 'text', x = 2.1, y = 8.5, label = 'Matriz A', size = 5.6, angle = 90, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 7.0, xmax = 7.75, ymin = 7.75, ymax = 9.0, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 7.375, y = 8.375, label = 'G', size = 6.4, colour = 'black') +
+  annotate(geom = 'text', x = 6.6, y = 8.375, label = 'Matriz G', size = 5.6, angle = 90, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 2.5, xmax = 4.25, ymin = 3.75, ymax = 5.75, colour = 'black', fill = 'white', alpha = 0.2) +
+  annotate(geom = 'rect', xmin = 3.3, xmax = 4.05, ymin = 3.95, ymax = 5.05, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 2.1, y = 4.75, label = 'Matriz H', size = 5.6, angle = 90, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 4.1, xmax = 6.3, ymin = 1.4, ymax = 2.2, colour = 'black', fill = 'white', alpha = 0.2, linetype = 'dashed') +
+  annotate(geom = 'text', x = 5.2, y = 1.8, label = 'ssGBLUP', size = 5.6, colour = 'black') +
+  
+  geom_curve(x = 6.4, xend = 7.5, y = 1.8, yend = 1.8, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'dashed') +
+  annotate(geom = 'text', x = 8.4, y = 1.8, label = 'GEBV', size = 5.6, colour = 'black') +
+  
+  geom_curve(x = 3.375, xend = 3.375, y = 7.3, yend = 6.05, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'solid') +
+  geom_curve(x = 7.375, xend = 4.55, y = 7.45, yend = 4.75, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'solid') +
+  geom_curve(x = 3.375, xend = 3.95, y = 3.45, yend = 2.1, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'solid') +
+  
+  scale_x_continuous(limits = c(1.45, 9.4)) +
+  scale_y_continuous(limits = c(0.5, 10.4)) +
+  
+  theme_bw() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 11, face = 'bold'))
+```
+
+::: aclaracion
+Al comparar los métodos BLUP y ssGBLUP, con el ssGBLUP se obtienen predicciones más precisas y una selección más eficiente de genotipos superiores, en virtud de una mejor estimación del parentesco entre individuos. Esto último debido al uso de información genómica y a la construcción a través de esta información de matrices de relación realizadas.
+:::
+
+### Referencia bibliográfica

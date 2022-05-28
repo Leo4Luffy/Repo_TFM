@@ -1,0 +1,16 @@
+{
+  "hash": "472c69a18c3c050c31a952798fc6c3c5",
+  "result": {
+    "markdown": "---\nexecute: \n  warning: false\n  message: false\n---\n\n\n## SeqBreed {.unnumbered}\n\nHola\n\n\n::: {.cell}\n\n:::\n\n::: {.cell layout-align=\"center\"}\n::: {.cell-output-display}\n![Esquema de predicción usando simulación con el paquete SeqBreed.](seqbreed_files/figure-html/fig-seqbreed-1.png){#fig-seqbreed fig-align='center' width=74%}\n:::\n:::\n",
+    "supporting": [
+      "seqbreed_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
