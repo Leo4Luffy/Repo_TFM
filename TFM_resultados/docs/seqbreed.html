@@ -247,20 +247,13 @@ div.csl-indent {
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>SNPs_pos <span class="op">=</span> <span class="st">'SNP_pos'</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Gen_Pob_base <span class="op">=</span> gg.GFounder(vcfFile <span class="op">=</span> vcf_IND, snpFile <span class="op">=</span> SNP_pos)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pickle.dump(Gen_Pob_base, <span class="bu">open</span>(<span class="st">'Gen_Pob_base'</span>, <span class="st">'wb'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Gen_Pob_base <span class="op">=</span> gg.GFounder(vcfFile <span class="op">=</span> vcf_IND, snpFile <span class="op">=</span> SNP_pos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="codigo">
 <p>.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Gen_Pob_base <span class="op">=</span> pickle.load(<span class="bu">open</span>(<span class="st">'Gen_Pob_base'</span>, <span class="st">'rb'</span>))</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Gen_caracteristicas <span class="op">=</span> gg.Genome(snpFile <span class="op">=</span> SNPs_pos, mapFile <span class="op">=</span> <span class="va">None</span>, ploidy <span class="op">=</span> Gen_Pob_base.ploidy,  XChr <span class="op">=</span> <span class="st">'X'</span>, YChr <span class="op">=</span> <span class="st">'Y'</span>, MTChr <span class="op">=</span> <span class="st">'MT'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="codigo">
-<p>.</p>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Gen_caracteristicas <span class="op">=</span> gg.Genome(snpFile <span class="op">=</span> SNPs_pos, mapFile <span class="op">=</span> <span class="va">None</span>, ploidy <span class="op">=</span> Gen_Pob_base.ploidy,  XChr <span class="op">=</span> <span class="st">'X'</span>, YChr <span class="op">=</span> <span class="st">'Y'</span>, MTChr <span class="op">=</span> <span class="st">'MT'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="aclaracion">
 <p>.</p>
@@ -297,7 +290,7 @@ div.csl-indent {
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><i class="bi bi-download"></i> <a href="datos/QTN.txt" download="QTN.txt">Datos GWAS</a></p>
+<p><i class="bi bi-download"></i> <a href="datos/QTN.txt" download="QTN.txt">Datos QTN</a></p>
 </div>
 </div>
 </div>

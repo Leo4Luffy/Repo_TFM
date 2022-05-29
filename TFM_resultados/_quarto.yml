@@ -18,6 +18,7 @@ book:
 
 format:
   html:
+    highlight-style: ayu
     theme: cosmo
     css: css/bloques.css
     cover-image: images/logo.gif

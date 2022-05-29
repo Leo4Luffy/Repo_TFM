@@ -101,8 +101,6 @@ Para simular los datos de fenotipo y de genotipo se usaron los datos con los 100
 SNPs_pos = 'SNP_pos'
 
 Gen_Pob_base = gg.GFounder(vcfFile = vcf_IND, snpFile = SNP_pos)
-
-pickle.dump(Gen_Pob_base, open('Gen_Pob_base', 'wb'))
 ```
 
 ::: codigo
@@ -113,14 +111,8 @@ pickle.dump(Gen_Pob_base, open('Gen_Pob_base', 'wb'))
 #| label: Paso-1b
 #| eval: false
 
-Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb'))
-
 Gen_caracteristicas = gg.Genome(snpFile = SNPs_pos, mapFile = None, ploidy = Gen_Pob_base.ploidy,  XChr = 'X', YChr = 'Y', MTChr = 'MT')
 ```
-
-::: codigo
-.
-:::
 
 ::: aclaracion
 .
@@ -235,7 +227,7 @@ Graf_QTN <- res_GWAS %>%
 A continuación podrá descargar los 50 QTN seleccionados.
 
 ::: {.callout appearance="minimal"}
-<i class="bi bi-download"></i> [Datos GWAS](datos/QTN.txt){download="QTN.txt"}
+<i class="bi bi-download"></i> [Datos QTN](datos/QTN.txt){download="QTN.txt"}
 :::
 
 Por último, se uso la función `gg.QTNs()` sobre estos datos generados, indicando también la heredabilidad del carácter (0.7) de acuerdo a resultados previamente reportados [@Vourlakietal].
