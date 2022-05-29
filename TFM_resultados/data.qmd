@@ -1,8 +1,8 @@
 ---
-bibliography: references.bib
 execute: 
   warning: false
   message: false
+bibliography: references.bib
 ---
 
 ## Los datos {.unnumbered}

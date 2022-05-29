@@ -17,9 +17,8 @@ book:
     - seqbreed.qmd
 
 format:
-  html: 
+  html:
     theme: cosmo
     css: css/bloques.css
     cover-image: images/logo.gif
     code-link: true
-    

@@ -4,14 +4,14 @@
     "href": "index.html",
     "title": "Tutorial básico con SeqBreed",
     "section": "",
-    "text": "Este es el sitio web del “Tutorial básico con SeqBreed”. Aquí encontrará algunos de los resultados obtenidos al realizar mi trabajo de grado del Máster de Mejora Genética Animal y Biotecnología de la Reproducción, específicamente, los resultados obtenidos al usar el módulo de Python SeqBreed.\nA lo largo de este tutorial usaré bloques informativos para resaltar algún aspecto importante. Abajo encontrará un ejemplo de los bloques y su significado.\n\nInformación sobre un tema de interés."
+    "text": "Este es el sitio web del “Tutorial básico con SeqBreed”. Aquí encontrará algunos de los resultados obtenidos al realizar mi trabajo de grado del Máster de Mejora Genética Animal y Biotecnología de la Reproducción, específicamente, los resultados obtenidos al usar el módulo de Python SeqBreed.\nA lo largo de este tutorial usaré bloques informativos para resaltar algún aspecto importante. Abajo encontrará un ejemplo de los bloques y su significado.\n\nInformación sobre un tema de interés.\n\n\nInformación sobre una función usada en la codificación."
   },
   {
     "objectID": "index.html#licencia",
     "href": "index.html#licencia",
     "title": "Tutorial básico con SeqBreed",
     "section": "Licencia",
-    "text": "Licencia\nEsta página web es de uso gratuito y está licenciado bajo la licencia licencia Creative Commons Attribution-NonCommercial-NoDerivs 4.0. Sí tiene alguna inquietud al respecto, por favor informar al correo mperezenciso@gmail.com."
+    "text": "Licencia\nEsta página web es de uso gratuito y está licenciado bajo la licencia licencia Creative Commons Attribution-NonCommercial-NoDerivs 4.0. Sí tiene alguna inquietud al respecto, por favor informar a los correos jollopezma@unal.edu.co y mperezenciso@gmail.com."
   },
   {
     "objectID": "data.html",
@@ -72,8 +72,8 @@
   {
     "objectID": "seqbreed.html",
     "href": "seqbreed.html",
-    "title": "SeqBreed",
+    "title": "Precisión de la predición mediante simulación con SeqBreed",
     "section": "",
-    "text": "Figure 1: Esquema de predicción usando simulación con el paquete SeqBreed."
+    "text": "Cada uno de los pasos llevados a cabo en dicho estudio de simulación los describiré a continuación (Figure 1).\n\n\n\n\n\n\n\n\nFigure 1: Esquema de predicción usando simulación con el paquete SeqBreed.\n\n\n\n\n\nReferencia bibliográfica\n\n\n\n\nPérez-Enciso, Miguel, Lino C. Ramírez-Ayala, and Laura M. Zingaretti. 2020. “SeqBreed: A Python Tool to Evaluate Genomic Prediction in Complex Scenarios.” Genetics Selection Evolution 52 (1). https://doi.org/10.1186/s12711-020-0530-2.\n\n\nVan-Rossum, G., and Jr. F. L Drake. 1995. Python Reference Manual. Centrum voor Wiskunde en Informatica Amsterdam."
   }
 ]

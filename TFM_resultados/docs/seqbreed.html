@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tutorial básico con SeqBreed - SeqBreed</title>
+<title>Tutorial básico con SeqBreed - Precisión de la predición mediante simulación con SeqBreed</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -15,6 +15,25 @@ span.underline{text-decoration: underline;}
 div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -64,7 +83,7 @@ ul.task-list{list-style: none;}
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">SeqBreed</h1>
+      <h1 class="quarto-secondary-nav-title">Precisión de la predición mediante simulación con SeqBreed</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -107,7 +126,7 @@ ul.task-list{list-style: none;}
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./seqbreed.html" class="sidebar-item-text sidebar-link active">SeqBreed</a>
+  <a href="./seqbreed.html" class="sidebar-item-text sidebar-link active">Precisión de la predición mediante simulación con SeqBreed</a>
   </div>
 </li>
     </ul>
@@ -115,14 +134,20 @@ ul.task-list{list-style: none;}
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#referencia-bibliográfica" id="toc-referencia-bibliográfica" class="nav-link active" data-scroll-target="#referencia-bibliográfica">Referencia bibliográfica</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/Leo4Luffy/Repo_TFM/edit/master/tree/main/TFM_resultados/seqbreed.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">SeqBreed</h1>
+<h1 class="title d-none d-lg-block">Precisión de la predición mediante simulación con SeqBreed</h1>
 </div>
 
 
@@ -136,7 +161,8 @@ ul.task-list{list-style: none;}
 
 </header>
 
-<p>Hola</p>
+<p>Hoy en día, los métodos de predicción genómica se usan ampliamente en la mejora genética de plantas y de animales. Antes de que estos métodos sean implementados en escenarios prácticos, es importante conocer su precisión al predecir el valor de cría estimado (EBV, o GEBV al realizar la predicción utilizando SNP). En este sentido, el objetivo principal de mi trabajo de grado consistió en estudiar el efecto del número de marcadores (SNP) y de individuos genotipados sobre la precisión del GEBV para el carácter tiempo de floración en el arroz. Para ello, se realizó un estudio de simulación a partir del uso del módulo <code>SeqBreed</code> <span class="citation" data-cites="pérez-enciso2020">(<a href="#ref-pérez-enciso2020" role="doc-biblioref">Pérez-Enciso, Ramírez-Ayala, and Zingaretti 2020</a>)</span> del lenguaje de programación <code>Python</code><span class="citation" data-cites="Python">(<a href="#ref-Python" role="doc-biblioref">Van-Rossum and Drake 1995</a>)</span>.</p>
+<p>Cada uno de los pasos llevados a cabo en dicho estudio de simulación los describiré a continuación (<a href="#fig-seqbreed">Figure&nbsp;<span>1</span></a>).</p>
 <div class="cell">
 
 </div>
@@ -150,8 +176,19 @@ ul.task-list{list-style: none;}
 </div>
 </div>
 </div>
+<section id="referencia-bibliográfica" class="level3">
+<h3 class="anchored" data-anchor-id="referencia-bibliográfica">Referencia bibliográfica</h3>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-pérez-enciso2020" class="csl-entry" role="doc-biblioentry">
+Pérez-Enciso, Miguel, Lino C. Ramírez-Ayala, and Laura M. Zingaretti. 2020. <span>“SeqBreed: A Python Tool to Evaluate Genomic Prediction in Complex Scenarios.”</span> <em>Genetics Selection Evolution</em> 52 (1). <a href="https://doi.org/10.1186/s12711-020-0530-2">https://doi.org/10.1186/s12711-020-0530-2</a>.
+</div>
+<div id="ref-Python" class="csl-entry" role="doc-biblioentry">
+Van-Rossum, G., and Jr. F. L Drake. 1995. <em>Python Reference Manual</em>. Centrum voor Wiskunde en Informatica Amsterdam.
+</div>
+</div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

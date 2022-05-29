@@ -13,6 +13,10 @@ A lo largo de este tutorial usaré bloques informativos para resaltar algún asp
 Información sobre un tema de interés.
 :::
 
+::: {.codigo}
+Información sobre una función usada en la codificación.
+:::
+
 ## Licencia
 
-Esta página web es de uso gratuito y está licenciado bajo la licencia [licencia Creative Commons Attribution-NonCommercial-NoDerivs 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/). Sí tiene alguna inquietud al respecto, por favor informar al correo mperezenciso@gmail.com.
+Esta página web es de uso gratuito y está licenciado bajo la licencia [licencia Creative Commons Attribution-NonCommercial-NoDerivs 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/). Sí tiene alguna inquietud al respecto, por favor informar a los correos jollopezma@unal.edu.co y mperezenciso@gmail.com.

@@ -2,11 +2,14 @@
 execute: 
   warning: false
   message: false
+bibliography: references.bib
 ---
 
-## SeqBreed {.unnumbered}
+## Precisión de la predición mediante simulación con SeqBreed {.unnumbered}
 
-Hola
+Hoy en día, los métodos de predicción genómica se usan ampliamente en la mejora genética de plantas y de animales. Antes de que estos métodos sean implementados en escenarios prácticos, es importante conocer su precisión al predecir el valor de cría estimado (EBV, o GEBV al realizar la predicción utilizando SNP). En este sentido, el objetivo principal de mi trabajo de grado consistió en estudiar el efecto del número de marcadores (SNP) y de individuos genotipados sobre la precisión del GEBV para el carácter tiempo de floración en el arroz. Para ello, se realizó un estudio de simulación a partir del uso del módulo `SeqBreed` [@pérez-enciso2020] del lenguaje de programación `Python`[@Python].
+
+Cada uno de los pasos llevados a cabo en dicho estudio de simulación los describiré a continuación (@fig-seqbreed).
 
 ```{r}
 #| label: paquetes
@@ -71,11 +74,11 @@ data.frame(
   annotate(geom = 'text', x = 9.1, y = -7.0, label = 'ssGBLUP', size = 4.6, angle = 90, colour = 'black') +
   annotate(geom = 'text', x = 8.7, y = -7.0, label = 'BLUP', size = 4.6, angle = 90, colour = 'black') +
   
-  annotate(geom = 'text', x = 8.2, y = 8.2, label = '1', family = 'gochi', size = 5.8, colour = 'black') +
-  annotate(geom = 'text', x = 11.8, y = 8.2, label = '2', family = 'gochi', size = 5.8, colour = 'black') +
-  annotate(geom = 'text', x = 13.4, y = 3.35, label = '3', family = 'gochi', size = 5.8, colour = 'black') +
-  annotate(geom = 'text', x = 14.8, y = -0.25, label = '4', family = 'gochi', size = 5.8, colour = 'black') +
-  annotate(geom = 'text', x = 11.4, y = -6.6, label = '5', family = 'gochi', size = 5.8, colour = 'black') +
+  annotate(geom = 'text', x = 8.2, y = 8.2, label = '1', family = 'gochi', size = 3.8, colour = 'black') +
+  annotate(geom = 'text', x = 11.8, y = 8.2, label = '2', family = 'gochi', size = 3.8, colour = 'black') +
+  annotate(geom = 'text', x = 13.4, y = 3.35, label = '3', family = 'gochi', size = 3.8, colour = 'black') +
+  annotate(geom = 'text', x = 14.8, y = -0.25, label = '4', family = 'gochi', size = 3.8, colour = 'black') +
+  annotate(geom = 'text', x = 11.4, y = -6.6, label = '5', family = 'gochi', size = 3.8, colour = 'black') +
   geom_point(aes(x = x, y = y), data = Puntos, size = 6, shape = 1, color = 'black') +
   
   scale_x_continuous(limits = c(2.5, 17.5)) +
@@ -86,3 +89,5 @@ data.frame(
         axis.ticks = element_blank(),
         axis.title = element_blank())
 ```
+
+### Referencia bibliográfica
