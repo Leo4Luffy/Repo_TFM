@@ -1,7 +1,7 @@
 project:
   type: book
   output-dir: docs
-  
+
 book:
   title: "Tutorial básico con SeqBreed"
   author: "Jorge Leonardo López Martínez<br>Miguel Pérez-Enciso"

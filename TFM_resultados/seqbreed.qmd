@@ -16,7 +16,7 @@ Cada uno de los pasos llevados a cabo en dicho estudio de simulación los descri
 #| eval: true
 #| echo: false
 
-pacman::p_load(here, tidyverse, ggforce)
+pacman::p_load(here, tidyverse, ggforce, reticulate, ggrepel, patchwork)
 ```
 
 ```{r}
@@ -88,6 +88,165 @@ data.frame(
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
         axis.title = element_blank())
+```
+
+### 1. Uso de genotipos de la población fundadora
+
+Para simular los datos de fenotipo y de genotipo se usaron los datos con los 100.231 SNP resultantes del control de calidad y que puede descargar en el capítulo donde se describen los datos. Luego, usando las funciones `gg.GFounder()` y `gg.Genome()`, como se puede observar en el código a continuación, se obtuvo un archivo que indicó el número de individuos genotipados o individuos de la población fundadora (451), la ploidía (2) y el número de SNP (100.231).
+
+```{python}
+#| label: Paso-1a
+#| eval: false
+
+SNPs_pos = 'SNP_pos'
+
+Gen_Pob_base = gg.GFounder(vcfFile = vcf_IND, snpFile = SNP_pos)
+
+pickle.dump(Gen_Pob_base, open('Gen_Pob_base', 'wb'))
+```
+
+::: codigo
+.
+:::
+
+```{python}
+#| label: Paso-1b
+#| eval: false
+
+Gen_Pob_base = pickle.load(open('Gen_Pob_base', 'rb'))
+
+Gen_caracteristicas = gg.Genome(snpFile = SNPs_pos, mapFile = None, ploidy = Gen_Pob_base.ploidy,  XChr = 'X', YChr = 'Y', MTChr = 'MT')
+```
+
+::: codigo
+.
+:::
+
+::: aclaracion
+.
+:::
+
+### 2. Especificación de la arquitectura genética (SNP causales (QTN) y sus efectos)
+
+Se llevo a cabo inicialmente un estudio de asociación a nivel genómico (GWAS) usando el software `GCTA`[@yang2011], para identificar las regiones genómicas asociadas con el carácter tiempo de floración. A continuación podrá descargar el archivo que resultó al hacer el GWAS, el cual el efecto de los QTN y su localización.
+
+::: {.callout appearance="minimal"}
+<i class="bi bi-download"></i> [Datos GWAS](datos/gwas.mlma){download="gwas.mlma"}
+:::
+
+Posteriomente, con base en el GWAS (@fig-GWAS), se seleccionaron 50 QTN cuyo efecto era proporcional a la varianza aditiva explicada.
+
+```{r}
+#| label: fig-GWAS
+#| eval: true
+#| echo: false
+#| out-width: '74%'
+#| fig-align: 'center'
+#| fig-cap: 'Visualización del GWAS para el carácter tiempo de floración en el arroz.'
+
+res_GWAS <- read_delim(here('datos', 'gwas.mlma')) # Se importa el archivo con los resultados del GWAS.
+
+# Se visualiza los resultados mediante ggplot2 ----
+
+# 1. se calcula la posición acumulada de los SNPs:
+
+vis_GWAS <- res_GWAS %>%
+  
+  group_by(Chr) %>%
+  summarise(Tam_cromosoma = max(bp)) %>% # se calcula el tamaño de los cromosomas.
+  
+  mutate(Total = cumsum(Tam_cromosoma) - Tam_cromosoma) %>%
+  select(-Tam_cromosoma) %>% # Se calcula la posición acumulada de cada cromosoma.
+  
+  left_join(res_GWAS, ., by = c('Chr' = 'Chr')) %>% # Se adiciona la información anterior al conjunto de datos inicial "res_GWAS".
+  
+  arrange(Chr, bp) %>%
+  mutate(bp_total = bp + Total) # Se adiciona la posición acumulada de cada SNP.
+
+# 2. Se prepara el eje x, debido a que no se quiere mostrar la posición acumulada de los SNPs o bp, sino mostrar el nombre del cromosoma:
+
+eje_x <- vis_GWAS %>%
+  group_by(Chr) %>%
+  summarise(centro = (max(bp_total) + min(bp_total)) / 2)
+
+# 3. Se hace el gráfico a continuación:
+
+Graf_Manhattan <- ggplot(data = vis_GWAS, aes(x = bp_total, y = -log10(p))) +
+  geom_point(aes(colour = as.factor(Chr)), alpha = 0.2, size = 2.4) +
+  scale_colour_manual(values = c('cyan', 'green', 'red', 'yellow', 'cyan', 'green', 'red', 'yellow', 'cyan', 'green', 'red', 'yellow')) +
+  scale_x_continuous( label = eje_x$Chr, breaks= eje_x$centro ) +
+  labs(x = 'Cromosoma', y = '-log10(p)') +
+  theme_bw() +
+  theme(
+    legend.position = 'none',
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 11, face = 'bold')
+    ) # Nota: 
+
+gg_qqplot <- function(ps, ci = 0.95) {
+  n  <- length(ps)
+  df <- data.frame(
+    observed = -log10(sort(ps)),
+    expected = -log10(ppoints(n)),
+    clower   = -log10(qbeta(p = (1 - ci) / 2, shape1 = 1:n, shape2 = n:1)),
+    cupper   = -log10(qbeta(p = (1 + ci) / 2, shape1 = 1:n, shape2 = n:1))
+  )
+  log10Pe <- expression(paste('Expected -log'[10], plain(P)))
+  log10Po <- expression(paste('Observed -log'[10], plain(P)))
+  ggplot(df) +
+    geom_ribbon(
+      mapping = aes(x = expected, ymin = clower, ymax = cupper),
+      alpha = 0.2, fill = 'yellow'
+    ) +
+    geom_abline(intercept = 0, slope = 1, alpha = 1.0, size = 1.0) +
+    geom_point(aes(expected, observed), colour = 'yellow', alpha = 0.5, size = 2.6) +
+    xlab(log10Pe) +
+    ylab(log10Po)
+  }
+
+Graf_qq <- gg_qqplot(res_GWAS$p) +
+  labs(x = '-log10(P) esperado', y = '-log10(P) observado') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 11, face = 'bold')
+    )
+
+Graf_QTN <- res_GWAS %>%
+  mutate(Chr = as.factor(Chr)) %>%
+  ggplot(data = ., aes(x = Chr, y = bp, label = SNP)) +
+  geom_point(colour = 'cyan', fill = 'cyan', alpha = 0.4, size = 1.4) +
+  #geom_point(data = QTNs, aes(x = Chr, y = bp), colour = 'black', fill = 'white', alpha = 0.6, size = 3.0) +
+  labs(x = 'Cromosomas', y = 'Posición (pb)') +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 14, face = 'bold'),
+    axis.title = element_text(size = 15, face = 'bold')
+    ) +
+  geom_label_repel(
+    size = 5.4,
+    colour = 'black',
+    box.padding = 0.7
+    )
+
+(Graf_Manhattan / Graf_qq) #-> GWAS
+```
+
+A continuación podrá descargar los 50 QTN seleccionados.
+
+::: {.callout appearance="minimal"}
+<i class="bi bi-download"></i> [Datos GWAS](datos/QTN.txt){download="QTN.txt"}
+:::
+
+Por último, se uso la función `gg.QTNs()` sobre estos datos generados, indicando también la heredabilidad del carácter (0.7) de acuerdo a resultados previamente reportados [@Vourlakietal].
+
+```{python}
+#| label: Paso-2
+#| eval: false
+
+QTN = 'QTN.txt'
+
+QTN = gg.QTNs(h2 = [0.7], genome = Gen_caracteristicas, qtnFile = QTN)
 ```
 
 ### Referencia bibliográfica
