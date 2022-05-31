@@ -136,6 +136,7 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="css/bloques.css">
 </head>
@@ -253,13 +254,13 @@ div.csl-indent {
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Gen_Pob_base <span class="op">=</span> gg.GFounder(vcfFile <span class="op">=</span> vcf_IND, snpFile <span class="op">=</span> SNP_pos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="codigo">
-<p>.</p>
+<p>Con el argumento <code>vcfFile</code> de la función <code>gg.GFounder()</code>, se carga los genotipos de la llamada población fundadora en formato variant call. Con esta función se obtiene la posición de cada uno de los SNP, y esta a su vez se almacena en el objeto SNP_pos previamente definido.</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Gen_caracteristicas <span class="op">=</span> gg.Genome(snpFile <span class="op">=</span> SNPs_pos, mapFile <span class="op">=</span> <span class="va">None</span>, ploidy <span class="op">=</span> Gen_Pob_base.ploidy,  XChr <span class="op">=</span> <span class="st">'X'</span>, YChr <span class="op">=</span> <span class="st">'Y'</span>, MTChr <span class="op">=</span> <span class="st">'MT'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="codigo">
-<p>.</p>
+<p>Con la función <code>gg.Genome()</code> se genera un objeto de clase <code>Genome</code> con algunas de las características del genoma de la población fundadora, como son el nombre y el número de cromosomas. Con el argumento <code>snpFile</code> se especifica el objeto SNP_pos generado en el paso anterior, además de que si se dispone del nombre de los cromosomas sexuales y mitocondrial, estos se especifican en los argumentos <code>XChr</code>, <code>YChr</code> y <code>MT</code>. Aquí, no se dispuso de un archivo con información acerca de recombinación genética y mapeo de genes, por lo cual en el argumento <code>mapFile</code> se colocó “None”.</p>
 </div>
 </section>
 <section id="especificación-de-la-arquitectura-genética-snp-causales-qtn-y-sus-efectos" class="level3">
@@ -304,7 +305,7 @@ div.csl-indent {
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>QTNs <span class="op">=</span> gg.QTNs(h2 <span class="op">=</span> [<span class="fl">0.7</span>], genome <span class="op">=</span> Gen_caracteristicas, qtnFile <span class="op">=</span> QTN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="codigo">
-<p>.</p>
+<p>Con la función <code>gg.QTNs()</code> se determina la arquitectura genética para el carácter simulado. Para ello, se especifica un valor deseado de heredabilidad con el argumento <code>h2</code>, se carga el archivo QTN.txt que indica el efecto y la localización de cada uno de los QTN seleccionados anteriormente con el argumento <code>qtnFile</code>, y con el argumento <code>genome</code> se accede a las características del genoma previamente almacenado.</p>
 </div>
 </section>
 <section id="generación-de-pedigríes" class="level3">
@@ -313,12 +314,12 @@ div.csl-indent {
 <div class="cell">
 <div class="cell-output-display">
 
-<div id="cxcwwvvzpl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="xhlvcdssux" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#cxcwwvvzpl .gt_table {
+#xhlvcdssux .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -343,7 +344,7 @@ div.csl-indent {
   border-left-color: #D3D3D3;
 }
 
-#cxcwwvvzpl .gt_heading {
+#xhlvcdssux .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -355,7 +356,7 @@ div.csl-indent {
   border-right-color: #D3D3D3;
 }
 
-#cxcwwvvzpl .gt_title {
+#xhlvcdssux .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -367,7 +368,7 @@ div.csl-indent {
   border-bottom-width: 0;
 }
 
-#cxcwwvvzpl .gt_subtitle {
+#xhlvcdssux .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -379,13 +380,13 @@ div.csl-indent {
   border-top-width: 0;
 }
 
-#cxcwwvvzpl .gt_bottom_border {
+#xhlvcdssux .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cxcwwvvzpl .gt_col_headings {
+#xhlvcdssux .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -400,7 +401,7 @@ div.csl-indent {
   border-right-color: #D3D3D3;
 }
 
-#cxcwwvvzpl .gt_col_heading {
+#xhlvcdssux .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -420,7 +421,7 @@ div.csl-indent {
   overflow-x: hidden;
 }
 
-#cxcwwvvzpl .gt_column_spanner_outer {
+#xhlvcdssux .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -432,15 +433,15 @@ div.csl-indent {
   padding-right: 4px;
 }
 
-#cxcwwvvzpl .gt_column_spanner_outer:first-child {
+#xhlvcdssux .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cxcwwvvzpl .gt_column_spanner_outer:last-child {
+#xhlvcdssux .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cxcwwvvzpl .gt_column_spanner {
+#xhlvcdssux .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -452,7 +453,7 @@ div.csl-indent {
   width: 100%;
 }
 
-#cxcwwvvzpl .gt_group_heading {
+#xhlvcdssux .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -477,7 +478,7 @@ div.csl-indent {
   vertical-align: middle;
 }
 
-#cxcwwvvzpl .gt_empty_group_heading {
+#xhlvcdssux .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -492,15 +493,15 @@ div.csl-indent {
   vertical-align: middle;
 }
 
-#cxcwwvvzpl .gt_from_md > :first-child {
+#xhlvcdssux .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cxcwwvvzpl .gt_from_md > :last-child {
+#xhlvcdssux .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cxcwwvvzpl .gt_row {
+#xhlvcdssux .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -519,7 +520,7 @@ div.csl-indent {
   overflow-x: hidden;
 }
 
-#cxcwwvvzpl .gt_stub {
+#xhlvcdssux .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -532,7 +533,7 @@ div.csl-indent {
   padding-right: 5px;
 }
 
-#cxcwwvvzpl .gt_stub_row_group {
+#xhlvcdssux .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -546,11 +547,11 @@ div.csl-indent {
   vertical-align: top;
 }
 
-#cxcwwvvzpl .gt_row_group_first td {
+#xhlvcdssux .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cxcwwvvzpl .gt_summary_row {
+#xhlvcdssux .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -560,16 +561,16 @@ div.csl-indent {
   padding-right: 5px;
 }
 
-#cxcwwvvzpl .gt_first_summary_row {
+#xhlvcdssux .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cxcwwvvzpl .gt_first_summary_row.thick {
+#xhlvcdssux .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cxcwwvvzpl .gt_last_summary_row {
+#xhlvcdssux .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -579,7 +580,7 @@ div.csl-indent {
   border-bottom-color: #D3D3D3;
 }
 
-#cxcwwvvzpl .gt_grand_summary_row {
+#xhlvcdssux .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -589,7 +590,7 @@ div.csl-indent {
   padding-right: 5px;
 }
 
-#cxcwwvvzpl .gt_first_grand_summary_row {
+#xhlvcdssux .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -599,11 +600,11 @@ div.csl-indent {
   border-top-color: #D3D3D3;
 }
 
-#cxcwwvvzpl .gt_striped {
+#xhlvcdssux .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#cxcwwvvzpl .gt_table_body {
+#xhlvcdssux .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -612,7 +613,7 @@ div.csl-indent {
   border-bottom-color: #D3D3D3;
 }
 
-#cxcwwvvzpl .gt_footnotes {
+#xhlvcdssux .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -626,7 +627,7 @@ div.csl-indent {
   border-right-color: #D3D3D3;
 }
 
-#cxcwwvvzpl .gt_footnote {
+#xhlvcdssux .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -635,7 +636,7 @@ div.csl-indent {
   padding-right: 5px;
 }
 
-#cxcwwvvzpl .gt_sourcenotes {
+#xhlvcdssux .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -649,7 +650,7 @@ div.csl-indent {
   border-right-color: #D3D3D3;
 }
 
-#cxcwwvvzpl .gt_sourcenote {
+#xhlvcdssux .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -657,36 +658,36 @@ div.csl-indent {
   padding-right: 5px;
 }
 
-#cxcwwvvzpl .gt_left {
+#xhlvcdssux .gt_left {
   text-align: left;
 }
 
-#cxcwwvvzpl .gt_center {
+#xhlvcdssux .gt_center {
   text-align: center;
 }
 
-#cxcwwvvzpl .gt_right {
+#xhlvcdssux .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cxcwwvvzpl .gt_font_normal {
+#xhlvcdssux .gt_font_normal {
   font-weight: normal;
 }
 
-#cxcwwvvzpl .gt_font_bold {
+#xhlvcdssux .gt_font_bold {
   font-weight: bold;
 }
 
-#cxcwwvvzpl .gt_font_italic {
+#xhlvcdssux .gt_font_italic {
   font-style: italic;
 }
 
-#cxcwwvvzpl .gt_super {
+#xhlvcdssux .gt_super {
   font-size: 65%;
 }
 
-#cxcwwvvzpl .gt_two_val_uncert {
+#xhlvcdssux .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -695,31 +696,31 @@ div.csl-indent {
   margin-left: 0.1em;
 }
 
-#cxcwwvvzpl .gt_footnote_marks {
+#xhlvcdssux .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#cxcwwvvzpl .gt_asterisk {
+#xhlvcdssux .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cxcwwvvzpl .gt_slash_mark {
+#xhlvcdssux .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#cxcwwvvzpl .gt_fraction_numerator {
+#xhlvcdssux .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#cxcwwvvzpl .gt_fraction_denominator {
+#xhlvcdssux .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -797,10 +798,10 @@ div.csl-indent {
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Pob_1 <span class="op">=</span> gg.Population(Gen_caracteristicas, pedFile <span class="op">=</span> Pedigri_1, generation <span class="op">=</span> <span class="va">None</span>, qtns <span class="op">=</span> QTNs, gfounders <span class="op">=</span> Gen_Pob_base)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="codigo">
-<p>.</p>
+<p>Para simular los fenotipos y genotipos a partir de la función <code>gg.Population()</code>, se especifica en el argumento <code>pedFile</code> el pedigrí con los individuos a los cuales dicha información se simulará. Como puede observar, algunos de los objetos generados en pasos anteriores (las características del genoma y los genotipos de la población fundadora), se especifican también aquí.</p>
 </div>
 <div class="aclaracion">
-<p>.</p>
+<p>El módulo de <code>Python</code> <code>SeqBreed</code> simula los fenotipos (<span class="math inline">\(y_{i}\)</span>) de cada uno de los individuos del pedigrí proporcionado con base en la expresión <span class="math inline">\(y_{i} = \mu + g_{i} + e_{i}\)</span>, donde <span class="math inline">\(\mu\)</span> es la media, <span class="math inline">\(g_{i}\)</span> es el genotipo del individuo, y <span class="math inline">\(e_{i}\)</span> es el error.</p>
 </div>
 </section>
 <section id="uso-de-subconjuntos-de-datos-con-diferentes-densidades-de-snp" class="level3">
@@ -825,14 +826,14 @@ div.csl-indent {
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    chips.append(chip)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="codigo">
-<p>.</p>
+<p>Para generar el objeto chip, ya que este variara en los análisis que se presentaran a continuación de acuerdo a distintas densidades aproximadas de marcadores (1.000, 10.000 y 100.000), inicialmente se crea una lista con los distintos subconjuntos de datos de SNP que puede descargar en la instrucción anterior a este código. Luego, se genera el objeto chip a través de un bucle <code>for</code>.</p>
 </div>
 </section>
 <section id="implementación-de-los-métodos-blup-y-ssgblup" class="level3">
 <h3 class="anchored" data-anchor-id="implementación-de-los-métodos-blup-y-ssgblup">5. Implementación de los métodos BLUP y ssGBLUP</h3>
 <p>Se usó la función <code>sel.doEbv()</code> para llevar a cabo la predicción, usando los modelos BLUP y ssGBLUP descritos anteriormente en el capítulo sobre Modelos de predicción. A continuación podrá observar todo el código que se utilizó.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ind_gen_1 <span class="op">=</span> np.arange(<span class="dv">2091</span>, dtype <span class="op">=</span> np.<span class="bu">int</span>)</span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ind_gen_1 <span class="op">=</span> np.arange(<span class="dv">2061</span>, dtype <span class="op">=</span> np.<span class="bu">int</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ind_fen <span class="op">=</span> np.arange(<span class="dv">461</span>, dtype <span class="op">=</span> np.<span class="bu">int</span>)</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
