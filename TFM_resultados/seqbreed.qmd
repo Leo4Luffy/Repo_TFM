@@ -7,7 +7,7 @@ bibliography: references.bib
 
 ## Precisión de la predición mediante simulación con SeqBreed {.unnumbered}
 
-Hoy en día, los métodos de predicción genómica se usan ampliamente en la mejora genética de plantas y de animales. Antes de que estos métodos sean implementados en escenarios prácticos, es importante conocer su precisión al predecir el valor de cría estimado (EBV, o GEBV al realizar la predicción utilizando SNP). En este sentido, el objetivo principal de mi trabajo de grado consistió en estudiar el efecto del número de marcadores (SNP) y de individuos genotipados sobre la precisión del GEBV para el carácter tiempo de floración en el arroz. Para ello, se realizó un estudio de simulación a partir del uso del módulo `SeqBreed` [@pérez-enciso2020] del lenguaje de programación `Python`[@Python].
+Hoy en día, los métodos de predicción genómica se usan ampliamente en la mejora genética de plantas y de animales. Antes de que estos métodos sean implementados en escenarios prácticos, es importante conocer su precisión al predecir el valor de cría estimado (EBV, o GEBV al realizar la predicción utilizando SNP). En este sentido, uno de los objetivos de mi trabajo de grado consistió en estudiar el efecto del número de marcadores (SNP) sobre la precisión del GEBV para el carácter tiempo de floración en el arroz. Para ello, se realizó un estudio de simulación a partir del uso del módulo `SeqBreed` [@pérez-enciso2020] del lenguaje de programación `Python`[@Python].
 
 Cada uno de los pasos llevados a cabo en dicho estudio de simulación los describiré a continuación (@fig-seqbreed).
 
@@ -299,7 +299,7 @@ Para simular los fenotipos y genotipos a partir de la función `gg.Population()`
 :::
 
 ::: aclaracion
-El módulo de `Python` `SeqBreed` simula los fenotipos ($y_{i}$) de cada uno de los individuos del pedigrí proporcionado con base en la expresión $y_{i} = \mu + g_{i} + e_{i}$, donde $\mu$ es la media, $g_{i}$ es el genotipo del individuo, y $e_{i}$ es el error.
+El módulo de `Python` `SeqBreed`, simula los fenotipos ($y_{i}$) de cada uno de los individuos del pedigrí proporcionado con base en la expresión $y_{i} = \mu + g_{i} + e_{i}$, donde $\mu$ es la media, $g_{i}$ es el genotipo del individuo, y $e_{i}$ es el error.
 :::
 
 ### 4. Uso de subconjuntos de datos con diferentes densidades de SNP
