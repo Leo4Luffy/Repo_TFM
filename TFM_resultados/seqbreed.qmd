@@ -334,7 +334,7 @@ Se usó la función `sel.doEbv()` para llevar a cabo la predicción, usando los 
 #| label: Paso-4b
 #| eval: false
 
-ind_gen_1 = np.arange(2061, dtype = np.int)
+ind_gen = np.arange(2061, dtype = np.int)
 
 ind_fen = np.arange(461, dtype = np.int)
 
@@ -342,7 +342,7 @@ itrait = 0
 ```
 
 ::: codigo
-.
+Se crean los objetos ind_gen e ind_fen, en los cuales se indica que individuos están genotipados (del individuo 1 al 2061 en el pedigrí 1) y fenotipados (los primeros 461 individuos, que corresponden a los individuos de las generaciones $F_{0}$ y $F_{1}$, ya que los individuos de las generaciones $F_{2}$ y $F_{3}$ corresponde a la muestra de validación).
 :::
 
 #### 5.1. Método BLUP
@@ -367,7 +367,7 @@ A continuación podrá descargar los fenotipos observados y predichos usando el 
 :::
 
 ::: codigo
-.
+Con la función `sel.doEbv()` se obtiene el EVB (o fenotipo predicho) de acuerdo al método de predicción que se quiera implementar (aquí el BLUP), el cual se especifica en el argumento `criterion`. Luego, se crean dos objetos (ebv_aBLUP e y_aBLUP) donde se almacenan los EBV y los fenotipos observados (y).
 :::
 
 #### 5.2. Método ssGBLUP con densidad de SNP aproximada de 1.000
@@ -376,9 +376,9 @@ A continuación podrá descargar los fenotipos observados y predichos usando el 
 #| label: Paso-4d
 #| eval: false
 
-mX_1 = gg.do_X([Pob_1.inds[i] for i in ind_gen_1], Gen_caracteristicas, Gen_Pob_base, chips[0], minMaf = 0.05)
+mX_1 = gg.do_X([Pob_1.inds[i] for i in ind_gen], Gen_caracteristicas, Gen_Pob_base, chips[0], minMaf = 0.05)
 
-sel.doEbv(Pob_1, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+sel.doEbv(Pob_1, criterion = 'sstep', X = mX_1, yIds = ind_fen, mkrIds = ind_gen, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
 
 ebv_ssGBLUP = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_ssGBLUP = pd.DataFrame(ebv_ssGBLUP_3)
@@ -394,7 +394,7 @@ A continuación podrá descargar los fenotipos observados y predichos usando el 
 :::
 
 ::: codigo
-.
+Como el método de predicción implementado es el ssGBLUP, inicialmente se recuperan los genotipos simulados usando la función `gg.do_X()`. Como en este caso la densidad del marcador estudiada es de 1.000, dentro de esta función se especifica esto por medio de la instrucción `chips[0]`. Luego, en el argumento `criterion` se especifica que el método de predicción a implementar corresponde al ssGBLUP. De igual forma, dentro de esta función se especifica también otros de los objetos anteriormente generados, como por ejemplo los genotipos (mX_1), los individuos fenotipados (ind_fen) y los individuos genotipados (ind_gen).
 :::
 
 #### 5.3. Método ssGBLUP con densidad de SNP aproximada de 10.000
@@ -405,7 +405,7 @@ A continuación podrá descargar los fenotipos observados y predichos usando el 
 
 mX_2 = gg.do_X([Pob_1.inds[i] for i in ind_gen_1], Gen_caracteristicas, Gen_Pob_base, chips[1], minMaf = 0.05)
 
-sel.doEbv(Pob_1, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+sel.doEbv(Pob_1, criterion = 'sstep', X = mX_2, yIds = ind_fen, mkrIds = ind_gen, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
 
 ebv_ssGBLUP = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_ssGBLUP = pd.DataFrame(ebv_ssGBLUP_3)
@@ -428,7 +428,7 @@ A continuación podrá descargar los fenotipos observados y predichos usando el 
 
 mX_3 = gg.do_X([Pob_1.inds[i] for i in ind_gen_1], Gen_caracteristicas, Gen_Pob_base, chips[2], minMaf = 0.05)
 
-sel.doEbv(Pob_1, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen_1, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
+sel.doEbv(Pob_1, criterion = 'sstep', X = mX_3, yIds = ind_fen, mkrIds = ind_gen, h2 = 0.7, nh = Gen_caracteristicas.ploidy)
 
 ebv_ssGBLUP = np.array(list(Pob_1.inds[i].ebv for i in range(Pob_1.n)))
 ebv_ssGBLUP = pd.DataFrame(ebv_ssGBLUP_3)
@@ -446,12 +446,13 @@ A continuación podrá descargar los fenotipos observados y predichos usando el 
 Por último, se usó la correlación entre los valores fenotípicos observados y predichos como medida de predictibilidad, resultados que podrá observar a continuación.
 
 ```{r}
-#| label: Paso-4g
+#| label: fig-pred
 #| eval: true
 #| echo: false
 #| fig-align: center
 #| message: false
 #| out-width: '74%'
+#| fig-cap: 'Precisión de la predicción de acuerdo a los métodos BLUP y ssGBLUP (con diferentes densidad de marcadores).'
 
 #############################################################
 # Individuos de la generación F2 como conjuntos de validación
@@ -640,7 +641,7 @@ Cor_F2_F3 + plot_layout(guides = 'collect')
 ```
 
 ::: aclaracion
-.
+En los métodos de predicción, se suelen emplear dos tipos de conjuntos de muestra. La primera muestra se denomina muestra de referencia o de entrenamiento, mientras que la segunda es la muestra de validación o de individuos cuyo fenotipo se va a predecir. Aquí, se utilizaron dos muestras de prueba, los individuos de la generación $F_{2}$ y los individuos de la generación $F_{3}$, resultados que se presentan en la figura anterior (@fig-pred).
 :::
 
 ### Referencia bibliográfica
