@@ -92,21 +92,10 @@ xaringanExtra::use_share_again()
 
 <!--<P align="justify">`r workshop_day`<p>-->
 
-.pull-left[
+```{r, echo = FALSE, out.width = "80%", fig.align = 'center', message = FALSE, warning = FALSE}
 
-```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE, warning = FALSE}
-
-image_read(here('Presentacion', 'Imagen', 'Patrocinadores.png'))
+image_read(here('Presentacion', 'Imagen', 'Portada.png'))
 ```
-
-]
-
-.pull-right[
-
-[`r fa(name = "github", fill = "black")` Leo4Luffy](https://github.com/Leo4Luffy)
-`r fa(name = "envelope", fill = "black")` jollopezma@unal.edu.co
-
-]
 
 ---
 class: center
@@ -365,7 +354,7 @@ class: center
 
 .panel[.panel-name[Mejor predictor lineal insesgado genómico] 
 
-<P align="justify">La matriz **G** del GBLUP define la covarianza entre individuos en función de la similitud observada a nivel genómico, por lo que se pueden realizar predicciones más precisas del valor genético<sup>1,2</sup>.</p>
+<P align="justify">La matriz **G** del GBLUP define la covarianza entre individuos en función de la similitud observada a nivel genómico, permitiendo con esto predicciones más precisas del valor genético<sup>1,2</sup>.</p>
 
 ```{r, echo = FALSE, out.width = "70%", fig.align = 'center', fig.showtext = TRUE, warning = FALSE}
 
@@ -531,6 +520,71 @@ data.frame(
 
 ???
 
+### Proceso de selección genómica
+
+La **selección genómica** son una serie de métodos que usan numerosos marcadores de ADN, para predecir los valores genéticos:
+
+```{r, echo = FALSE, out.width = "52%", fig.align = 'center', fig.showtext = TRUE}
+
+data.frame(
+  x = c(0.0:10.0), y = c(0.0:10.0)
+  ) %>%
+  ggplot(aes(x, y)) +
+  #geom_blank() +
+  
+  annotate(geom = 'rect', xmin = 3.0, xmax = 7.0, ymin = 7.0, ymax = 9.0, colour = 'yellow', fill = 'yellow', alpha = 0.2) +
+  annotate(geom = 'text', x = 5.0, y = 8.355, label = 'Modelo de sele-', size = 7.0, colour = 'black') +
+  annotate(geom = 'text', x = 5.0, y = 7.625, label = 'cción genómica', size = 7.0, colour = 'black') +
+  geom_curve(x = 5.0, xend = 5.0, y = 6.8, yend = 6.0, arrow = arrow(length = unit(0.1, 'inch')), size = 0.8, color = 'black', curvature = 0.0, linetype = 'twodash') +
+  annotate(geom = 'text', x = 2.1, y = 8.5, label = 'Fenotipo', size = 6.4, colour = 'black') +
+  geom_curve(x = 1.2, xend = 2.8, y = 8.2, yend = 8.2, arrow = arrow(length = unit(0.1, 'inch')), size = 0.8, color = 'black', curvature = 0.0, linetype = 'solid') +
+  annotate(geom = 'text', x = 2.1, y = 7.77, label = 'Genotipo', size = 6.4, colour = 'black') +
+  geom_curve(x = 1.2, xend = 2.8, y = 7.47, yend = 7.47, arrow = arrow(length = unit(0.1, 'inch')), size = 0.8, color = 'black', curvature = 0.0, linetype = 'solid') +
+  
+  annotate(geom = 'rect', xmin = 3.0, xmax = 7.0, ymin = 4.8, ymax = 5.8, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 5.0, y = 5.3, label = 'Predicción', size = 7.0, colour = 'black') +
+  geom_curve(x = 5.0, xend = 5.0, y = 4.6, yend = 3.8, arrow = arrow(length = unit(0.1, 'inch')), size = 0.8, color = 'black', curvature = 0.0, linetype = 'twodash') +
+  annotate(geom = 'text', x = 2.1, y = 5.445, label = 'Genotipo', size = 6.4, colour = 'black') +
+  geom_curve(x = 1.2, xend = 2.8, y = 5.145, yend = 5.145, arrow = arrow(length = unit(0.1, 'inch')), size = 0.8, color = 'black', curvature = 0.0, linetype = 'solid') +
+  
+  annotate(geom = 'rect', xmin = 5.5, xmax = 8.5, ymin = 2.6, ymax = 3.6, colour = 'green', fill = 'green', alpha = 0.2) +
+  annotate(geom = 'text', x = 7.0, y = 3.1, label = 'Selección', size = 7.0, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 4.0, xmax = 5.0, ymin = 2.0, ymax = 2.75, colour = 'black', fill = 'black', alpha = 0.2) +
+  annotate(geom = 'text', x = 4.5, y = 2.25, label = 'GEV', family = 'gochi', size = 4.8, colour = 'black') +
+  annotate(geom = 'text', x = 4.5, y = 3.35, label = 'Planta /', size = 5.4, colour = 'black') +
+  annotate(geom = 'text', x = 4.5, y = 3.05, label = 'animal C', size = 5.4, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 2.75, xmax = 3.75, ymin = 2.0, ymax = 3.25, colour = 'black', fill = 'black', alpha = 0.2) +
+  annotate(geom = 'text', x = 3.25, y = 2.25, label = 'GEV', family = 'gochi', size = 4.8, colour = 'black') +
+  annotate(geom = 'text', x = 3.25, y = 3.85, label = 'Planta /', size = 5.4, colour = 'black') +
+  annotate(geom = 'text', x = 3.25, y = 3.55, label = 'animal B', size = 5.4, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 1.5, xmax = 2.5, ymin = 2.0, ymax = 2.5, colour = 'black', fill = 'black', alpha = 0.2) +
+  annotate(geom = 'text', x = 2.0, y = 2.25, label = 'GEV', family = 'gochi', size = 4.8, colour = 'black') +
+  annotate(geom = 'text', x = 2.0, y = 3.1, label = 'Planta /', size = 5.4, colour = 'black') +
+  annotate(geom = 'text', x = 2.0, y = 2.8, label = 'animal A', size = 5.4, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 7.9, xmax = 8.5, ymin = 6.45, ymax = 9.55, colour = 'black', fill = 'white', linetype = 'twodash') +
+  annotate(geom = 'text', x = 8.2, y = 8.0, label = 'Entrenamiento', angle = 90, size = 6.4, colour = 'black') +
+  geom_curve(x = 7.7, xend = 7.3, y = 8.0, yend = 8.0, arrow = arrow(length = unit(0.1, 'inch')), size = 0.8, color = 'black', curvature = 0.0, linetype = 'solid') +
+  
+  annotate(geom = 'rect', xmin = 7.9, xmax = 8.5, ymin = 4.5, ymax = 6.1, colour = 'black', fill = 'white', linetype = 'twodash') +
+  annotate(geom = 'text', x = 8.2, y = 5.3, label = 'Prueba', angle = 90, size = 6.4, colour = 'black') +
+  geom_curve(x = 7.7, xend = 7.3, y = 5.3, yend = 5.3, arrow = arrow(length = unit(0.1, 'inch')), size = 0.8, color = 'black', curvature = 0.0, linetype = 'solid') +
+  
+  scale_x_continuous(limits = c(0.0, 10.0)) +
+  scale_y_continuous(limits = c(2.0, 9.55)) +
+  
+  theme_bw() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 14, face = 'bold'))
+```
+
+### El problema con los pseudofenotipos
+
 <P align="justify">Se considera que este proceso (de múltiples pasos) es poco eficiente, relativamente complicado y con algunos inconvenientes:</p>
 
 .pull-left[
@@ -559,14 +613,6 @@ data.frame(
 
 ]
 
-<br>
-
-.content-box-red[
-
-<P align="justify">Es difícil generalizarse a caracteres múltiples y maternos.</p>
-
-]
-
 ]
 
 ---
@@ -578,7 +624,7 @@ class: center
 
 .panel[.panel-name[GBLUP de un solo paso] 
 
-<P align="justify">En el **ssGBLUP**, los fenotipos de los individuos genotipados y no genotipados se analizan conjuntamente para predecir los valores genéticos, a partir de la matriz **H**<sup>1</sup>.</p>
+<P align="justify">En el ssGBLUP, los fenotipos de los individuos genotipados y no genotipados se analizan conjuntamente para predecir los valores genéticos, a partir de la matriz **H**<sup>1</sup>.</p>
 
 ```{r, echo = FALSE, out.width = "70%", fig.align = 'center', fig.showtext = TRUE}
 
@@ -623,7 +669,28 @@ data.frame(
 
 ]
 
-.panel[.panel-name[Matriz de parentesco]
+.panel[.panel-name[Matriz H e inversa de H]
+
+<P align="justify">La estructura de la matriz **H** es:</p>
+
+```{r, echo = FALSE, out.width = "90%", fig.align = 'center', message = FALSE, warning = FALSE}
+
+image_read(here('Presentacion', 'Imagen', 'Matriz_H.png'))
+```
+
+<P align="justify">Y las ecuaciones del modelo mixto para una evaluación genética de un solo paso son:</p>
+
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center', message = FALSE, warning = FALSE}
+
+image_read(here('Presentacion', 'Imagen', 'EMM_h.png'))
+```
+
+<P align="justify">La inversa de **H** es más simple que la estructura de **H**:</p>
+
+```{r, echo = FALSE, out.width = "56%", fig.align = 'center', message = FALSE, warning = FALSE}
+
+image_read(here('Presentacion', 'Imagen', 'Matriz_Hinv.png'))
+```
 
 ]
 
@@ -981,6 +1048,12 @@ ggplot(data = mH, aes(x = value, after_stat(density))) +
 
 ]
 
+.footnote[
+
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:14")`.</FONT></p>
+
+]
+
 ???
 
 ### Derivación del ssGBLUP
@@ -1077,7 +1150,14 @@ image_read(here('Presentacion', 'Imagen', 'EMM_h.png'))
 ---
 class: center
 
-### Materiales y métodos (parciales)
+### Objetivo
+
+<P align="justify">Evaluar el interés de la selección genómica en un solo paso en plantas. Para ello, se evaluó el efecto de la cantidad de individuos genotipados y del número de marcadores en un diseño que combina datos reales de arroz y simulaciones de dos tipos, hacia atrás (ancestros) y hacia delante (descendientes).</p>
+
+---
+class: center
+
+### Materiales y métodos
 
 <P align="justify"><b>Recurso vegetal y datos fenotípicos</b></p>
 
@@ -1181,7 +1261,7 @@ ggplot(data = vec_propios, mapping = aes(x = `1`, y = `2`, color = SNPsubsp, fil
 ---
 class: center
 
-### Materiales y métodos (parciales)
+### Materiales y métodos
 
 <P align="justify"><b>Predicción basada en información de pedigrí e información genómica</b></p>
 
@@ -1233,7 +1313,7 @@ h^{2} = \frac{\sigma^{2}_{g}}{\sigma^{2}_{g} + \sigma^{2}_{e}}
 ---
 class: center
 
-### Materiales y métodos (parciales)
+### Materiales y métodos
 
 <P align="justify"><b>Precisión de la predición mediante simulación ancestral</b></p>
 
@@ -1315,7 +1395,7 @@ data.frame(
 ---
 class: center
 
-### Materiales y métodos (parciales)
+### Materiales y métodos
 
 <P align="justify"><b>Precisión de la predición mediante simulación ancestral</b></p>
 
@@ -1393,7 +1473,7 @@ data.frame(
 ---
 class: center
 
-### Materiales y métodos (parciales)
+### Materiales y métodos
 
 <P align="justify"><b>Precisión de la predición mediante simulación ancestral</b></p>
 
@@ -1477,7 +1557,7 @@ class: center
 
 ```{r refs 1, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 1, end = 4)
+PrintBibliography(bib = mi_Bib, start = 1, end = 5)
 ```
 
 ---
