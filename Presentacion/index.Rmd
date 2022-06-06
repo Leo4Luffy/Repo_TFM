@@ -668,32 +668,32 @@ data.frame(
 ```
 
 ]
-
+<!--
 .panel[.panel-name[Matriz H e inversa de H]
 
 <P align="justify">La estructura de la matriz **H** es:</p>
 
-```{r, echo = FALSE, out.width = "90%", fig.align = 'center', message = FALSE, warning = FALSE}
+```{r, eval = FALSE, echo = FALSE, out.width = "90%", fig.align = 'center', message = FALSE, warning = FALSE}
 
 image_read(here('Presentacion', 'Imagen', 'Matriz_H.png'))
 ```
 
 <P align="justify">Y las ecuaciones del modelo mixto para una evaluación genética de un solo paso son:</p>
 
-```{r, echo = FALSE, out.width = "70%", fig.align = 'center', message = FALSE, warning = FALSE}
+```{r, eval = FALSE, echo = FALSE, out.width = "70%", fig.align = 'center', message = FALSE, warning = FALSE}
 
 image_read(here('Presentacion', 'Imagen', 'EMM_h.png'))
 ```
 
 <P align="justify">La inversa de **H** es más simple que la estructura de **H**:</p>
 
-```{r, echo = FALSE, out.width = "56%", fig.align = 'center', message = FALSE, warning = FALSE}
+```{r, eval = FALSE, echo = FALSE, out.width = "56%", fig.align = 'center', message = FALSE, warning = FALSE}
 
 image_read(here('Presentacion', 'Imagen', 'Matriz_Hinv.png'))
 ```
 
 ]
-
+-->
 .panel[.panel-name[BLUP vs ssGBLUP]
 
 .pull-left[
@@ -1152,7 +1152,7 @@ class: center
 
 ### Objetivo
 
-<P align="justify">Evaluar el interés de la selección genómica en un solo paso en plantas. Para ello, se evaluó el efecto de la cantidad de individuos genotipados y del número de marcadores en un diseño que combina datos reales de arroz y simulaciones de dos tipos, hacia atrás (ancestros) y hacia delante (descendientes).</p>
+<P align="justify">Evaluar el interés de la selección genómica en un solo paso en plantas. Para ello, se evaluó el efecto de la cantidad de individuos genotipados y del número de marcadores en un diseño que combinó datos reales de arroz y simulaciones de dos tipos, hacia atrás (ancestros) y hacia delante (descendientes).</p>
 
 ---
 class: center
@@ -1163,7 +1163,7 @@ class: center
 
 .pull-left[
 
-<P align="justify">Se usaron los conjuntos de datos del [Rice SNP-Seek Database](http://iric.irri.org/), editados en un estudio previo<sup>1</sup>. Adicionalmente, se consieró un MAF inferior a 0.5.</p>
+<P align="justify">Se usaron los conjuntos de datos del [Rice SNP-Seek Database](http://iric.irri.org/), editados en un estudio previo<sup>1</sup>. Adicionalmente, se consideró un MAF inferior a 0.5.</p>
 
 ```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE}
 
@@ -1177,7 +1177,7 @@ tribble(
 
 <br>
 
-<P align="justify">Se eligió la variedad indica y el carácter tiempo de floración.</p>
+<P align="justify">Se eligió la variedad Indica y el carácter tiempo de floración.</p>
 
 ]
 
@@ -1557,7 +1557,16 @@ class: center
 
 ```{r refs 1, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 1, end = 5)
+PrintBibliography(bib = mi_Bib, start = 1, end = 6)
+```
+
+---
+
+### Bibliografía
+
+```{r refs 2, echo=FALSE, results="asis"}
+
+PrintBibliography(bib = mi_Bib, start = 7, end = 7)
 ```
 
 ---
