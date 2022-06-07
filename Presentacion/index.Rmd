@@ -1304,7 +1304,7 @@ G =\frac{XX'}{2 \sum_{j=1}^{nSNP} p_{j} (1 - p_{j})}
 
 <br>
 
-<P align="justify">La heredabilidad en sentido estricto se estimó mediante el método BLUP como:</p>
+<P align="justify">La heredabilidad en sentido estricto se estimó como:</p>
 
 \begin{equation}
 h^{2} = \frac{\sigma^{2}_{g}}{\sigma^{2}_{g} + \sigma^{2}_{e}}
@@ -1533,8 +1533,6 @@ data.frame(
 
 <P align="justify">Se usaron los paquetes `BGLR`<sup>1</sup> y `lme4GS`<sup>2</sup> del `R` para estimar los componentes de varianza y los valores fenotípicos predichos, permitiendo así la predicción mediante procedimientos Bayesianos y REML.</p>
 
-]
-
 <br>
 
 .footnote[
@@ -1543,6 +1541,17 @@ data.frame(
 <P align="justify"><FONT SIZE=2>[2] `r Citet(mi_Bib, "cite:51")`.</FONT></p>
 
 ]
+
+]
+
+---
+class: center
+
+### Materiales y métodos
+
+<P align="justify"><b>Precisión de la predición mediante simulación de descendientes</b></p>
+
+
 
 ---
 class: center
