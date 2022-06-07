@@ -1401,6 +1401,10 @@ class: center
 
 .pull-left[
 
+<P align="justify">Se uso la $cor(y, \hat{y})$ como medida de predictibilidad, en 48 individuos.</p>
+
+<br>
+
 <P align="justify">Se usaron diferentes subconjuntos de datos con la siguientes características:</p>
 
 <P align="justify">a) Distinta cantidad de individuos genotipados.</p>
@@ -1408,12 +1412,12 @@ class: center
 ```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE}
 
 tribble(
-  ~'148', ~'298 ', ~'451'
+  ~'100 + 48 = 148', ~'250 + 48 = 298 ', ~'451'
   ) %>%
   gt()
 ```
 
-<P align="justify">b) Diferentes densidades de marcador.</p>
+<P align="justify">b) Diferentes densidades de marcadores.</p>
 
 ```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE}
 
@@ -1529,10 +1533,6 @@ data.frame(
 
 <P align="justify">Se usaron los paquetes `BGLR`<sup>1</sup> y `lme4GS`<sup>2</sup> del `R` para estimar los componentes de varianza y los valores fenotípicos predichos, permitiendo así la predicción mediante procedimientos Bayesianos y REML.</p>
 
-<br>
-
-<P align="justify">Se uso el coeficiente de correlación entre los valores fenotípicos observados y predichos como medida de predictibilidad (48 individuos mejorados).</p>
-
 ]
 
 <br>
@@ -1566,7 +1566,7 @@ PrintBibliography(bib = mi_Bib, start = 1, end = 6)
 
 ```{r refs 2, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 7, end = 7)
+PrintBibliography(bib = mi_Bib, start = 7, end = 10)
 ```
 
 ---
