@@ -1608,6 +1608,8 @@ tribble(
 
 <p style="font-size: 12px;line-height: 24px;font-weight: normal;color: #848484;padding: 0;margin: 0;"><span style="width: 15px; height: 15px; margin:auto; display: inline-block; border: 1px solid red; vertical-align: middle; border-radius: 2px; background: red "></span><b> 800x1 es el número de descendientes (1) que tendrían cada uno de los 800 individuos de la generación F2 por autofecundación.</b></p>
 
+<P align="justify">Este proceso se replicó diez veces para cada pedigrí.<p>
+
 ---
 class: center
 
@@ -1673,9 +1675,9 @@ ggplot(data = vis_GWAS, aes(x = bp_total, y = -log10(p))) +
 
 .footnote[
 
-<P align="justify"><FONT SIZE=2>[2] `r Citet(mi_Bib, "cite:54")`.</FONT></p>
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:54")`.</FONT></p>
 
-<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:47")`.</FONT></p>
+<P align="justify"><FONT SIZE=2>[2] `r Citet(mi_Bib, "cite:47")`.</FONT></p>
 
 ]
 
