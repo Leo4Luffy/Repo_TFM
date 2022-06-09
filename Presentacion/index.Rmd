@@ -1161,7 +1161,7 @@ class: center
 
 ### Objetivo
 
-<P align="justify">Evaluar el interés de la selección genómica en un solo paso en plantas. Para ello, se evaluó el efecto de la cantidad de individuos genotipados y del número de marcadores en un diseño que combinó datos reales de arroz y simulaciones de dos tipos, hacia atrás (ancestros) y hacia delante (descendientes).</p>
+<P align="justify">Evaluar el interés de la selección genómica en un solo paso en plantas. Para ello, se evaluó el efecto de la cantidad de individuos genotipados y del número de marcadores en un diseño que combinó datos reales de arroz y simulaciones de dos tipos, hacia atrás (ancestral) y hacia delante (descendientes).</p>
 
 ---
 class: center
@@ -1560,9 +1560,68 @@ class: center
 
 <P align="justify"><b>Precisión de la predición mediante simulación de descendientes</b></p>
 
+<P align="justify">Se generaron cuatro pedigríes, cada uno de ellos con esquemas de cruzamiento diferentes partiendo de la población fundadora con 451 individuos.</p>
+
+```{r, echo = FALSE, out.width = "100%", message = FALSE}
+
+tribble(
+  ~' ', ~'Pedigrí 1', ~'Pedigri 2', ~'Pedigrí 3', ~'Pedigrí 4',
+  'F0', '451', '451', '451', '451',
+  'F1', '10', '20', '40', '80',
+  'F2', '800 (10x80)', '800 (20x40)', '800 (40x20)', '800 (80x10)',
+  'F3', '800 (800x1)', '800 (800x1)', '800 (800x1)', '800 (800x1)',
+  'Total', '2.061', '2.071', '2.091', '2.131'
+  ) %>%
+  gt() %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "yellow"),
+      cell_text(weight = "bold")
+      ),
+    locations = cells_body(
+      columns = 'Pedigrí 1',
+      rows = 2)
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "cyan"),
+      cell_text(weight = "bold")
+      ),
+    locations = cells_body(
+      columns = 'Pedigrí 1',
+      rows = 3)
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "red"),
+      cell_text(weight = "bold")
+      ),
+    locations = cells_body(
+      columns = 'Pedigrí 1',
+      rows = 4)
+  )
+```
+
+<p style="font-size: 12px;line-height: 24px;font-weight: normal;color: #848484;padding: 0;margin: 0;"><span style="width: 15px; height: 15px; margin:auto; display: inline-block; border: 1px solid yellow; vertical-align: middle; border-radius: 2px; background: yellow "></span><b> 10 es el número de descendientes que tendrían los 451 individuos de la generación F0 mediante cruzamiento.</b></p>
+
+<p style="font-size: 12px;line-height: 24px;font-weight: normal;color: #848484;padding: 0;margin: 0;"><span style="width: 15px; height: 15px; margin:auto; display: inline-block; border: 1px solid cyan; vertical-align: middle; border-radius: 2px; background: cyan "></span><b> 10x80 es el número de descendientes (80) que tendrían cada uno de los 10 individuos de la generación F1 por autofecundación.</b></p>
+
+<p style="font-size: 12px;line-height: 24px;font-weight: normal;color: #848484;padding: 0;margin: 0;"><span style="width: 15px; height: 15px; margin:auto; display: inline-block; border: 1px solid red; vertical-align: middle; border-radius: 2px; background: red "></span><b> 800x1 es el número de descendientes (1) que tendrían cada uno de los 800 individuos de la generación F2 por autofecundación.</b></p>
+
+---
+class: center
+
+### Materiales y métodos
+
+<P align="justify"><b>Precisión de la predición mediante simulación de descendientes</b></p>
+
 .pull-left[
 
 <P align="justify">Se realizó un estudio de simulación usando el módulo de `Python` `SeqBreed`<sup>1</sup>.</p>
+
+<P align="justify"><b>1. Uso de genotipos de la población fundadora:</b></p>
+
+<P align="justify">Para simular los datos de fenotipo y de genotipo, se usaron los datos con los 100.231 SNP resultantes del control de calidad.</p>
 
 ]
 
