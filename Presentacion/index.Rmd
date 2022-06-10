@@ -598,7 +598,7 @@ data.frame(
 
 .pull-left[
 
-.content-box-red[
+.discusion_2[
 
 <P align="justify">Pueden existir individuos con fenotipos y pseudofenotipos.</p>
 
@@ -606,7 +606,7 @@ data.frame(
 
 <br>
 
-.content-box-yellow[
+.discusion_1[
 
 <P align="justify">Las precisiones de los pseudofenotipos son difíciles de obtener.</p>
 
@@ -616,7 +616,7 @@ data.frame(
 
 .pull-right[
 
-.content-box-yellow[
+.discusion_1[
 
 <P align="justify">La creación de pseudofenotipos puede ser ineficaz si los individuos tienen poca descendencia.</p>
 
@@ -1757,9 +1757,164 @@ tribble(
 ---
 class: center
 
-### Resultados
+### Resultados y discusión
 
+```{r, echo = FALSE, out.width = "68%", fig.align = 'center', message = FALSE}
 
+Cor_ped_1_est <- read_delim(here('Presentacion', 'Imagen', 'Ped1_Bay_Pen.txt'), delim = '\t') %>%
+  mutate(
+    Enfoque = recode(
+      .x = Enfoque,
+      'Penalizado' = 'REML'
+      )
+    ) %>%
+  mutate(
+    Densidad = case_when(
+      Densidad == 0 ~ '0',
+      Densidad == 1 ~ '1.000',
+      Densidad == 10 ~ '10.000',
+      Densidad == 100 ~ '100.000'
+      ),
+    Genotipados = as.factor(Genotipados),
+    Pedigrí = 'Pedigrí 1'
+    )
+
+Cor_ped_2_est <- read_delim(here('Presentacion', 'Imagen', 'Ped2_Bay_Pen.txt'), delim = '\t') %>%
+  mutate(
+    Enfoque = recode(
+      .x = Enfoque,
+      'Penalizado' = 'REML'
+      )
+    ) %>%
+  mutate(
+    Densidad = case_when(
+      Densidad == 0 ~ '0',
+      Densidad == 1 ~ '1.000',
+      Densidad == 10 ~ '10.000',
+      Densidad == 100 ~ '100.000'
+      ),
+    Genotipados = as.factor(Genotipados),
+    Pedigrí = 'Pedigrí 2'
+    )
+
+Cor_ped_3_est <- read_delim(here('Presentacion', 'Imagen', 'Ped3_Bay_Pen.txt'), delim = '\t') %>%
+  mutate(
+    Enfoque = recode(
+      .x = Enfoque,
+      'Penalizado' = 'REML'
+      )
+    ) %>%
+  mutate(
+    Densidad = case_when(
+      Densidad == 0 ~ '0',
+      Densidad == 1 ~ '1.000',
+      Densidad == 10 ~ '10.000',
+      Densidad == 100 ~ '100.000'
+      ),
+    Genotipados = as.factor(Genotipados),
+    Pedigrí = 'Pedigrí 3'
+    )
+
+bind_rows(Cor_ped_1_est, Cor_ped_2_est, Cor_ped_3_est) %>%
+  ggplot(data = .,aes(x = Densidad, y = Correlación, fill = Genotipados, colour = Genotipados)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6, alpha = 0.4) +
+  geom_errorbar(aes(ymin = Correlación - des, ymax = Correlación + des), width = 0.2, position = position_dodge(width = 0.7)) +
+  scale_y_continuous(limits = c(0.0, 1.0)) +
+  facet_grid(vars(Pedigrí), vars(Enfoque)) +
+  labs(y = 'Precisión de la predicción', x = 'Densidad del marcador') +
+  scale_colour_manual(values = c('black', 'yellow', 'cyan', 'red')) +
+  scale_fill_manual(values = c('black', 'yellow', 'cyan', 'red')) +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 12, face = 'bold'),
+    legend.title = element_text(size = 12, face = 'bold'),
+    legend.text = element_text(size = 12),
+    legend.position = 'top',
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 12, colour = 'black', face = 'bold')
+    )
+```
+
+---
+class: center
+
+### Resultados y discusión
+
+.discusion_1[
+
+<P align="justify">¡Hola!, espero estes bien..</p>
+
+]
+
+---
+class: center
+
+### Resultados y discusión
+
+```{r, echo = FALSE, out.width = "68%", fig.align = 'center', message = FALSE}
+
+Cor_F2_est <- read_delim(here('Presentacion', 'Imagen', 'Ped_F2.txt'), delim = '\t') %>%
+  mutate(
+    Densidad = case_when(
+      Densidad == 0 ~ '0',
+      Densidad == 1 ~ '1.000',
+      Densidad == 10 ~ '10.000',
+      Densidad == 100 ~ '100.000'
+      ),
+    Predicción = 'F2',
+    Pedigrí = case_when(
+      Pedigrí == 'Pedigrí_1' ~ 'Pedigrí 1',
+      Pedigrí == 'Pedigrí_2' ~ 'Pedigrí 2',
+      Pedigrí == 'Pedigrí_3' ~ 'Pedigrí 3',
+      Pedigrí == 'Pedigrí_4' ~ 'Pedigrí 4'
+      )
+    )
+
+Cor_F3_est <- read_delim(here('Presentacion', 'Imagen', 'Ped_F3.txt'), delim = '\t') %>%
+  mutate(
+    Densidad = case_when(
+      Densidad == 0 ~ '0',
+      Densidad == 1 ~ '1.000',
+      Densidad == 10 ~ '10.000',
+      Densidad == 100 ~ '100.000'
+      ),
+    Predicción = 'F3',
+    Pedigrí = case_when(
+      Pedigrí == 'Pedigrí_1' ~ 'Pedigrí 1',
+      Pedigrí == 'Pedigrí_2' ~ 'Pedigrí 2',
+      Pedigrí == 'Pedigrí_3' ~ 'Pedigrí 3',
+      Pedigrí == 'Pedigrí_4' ~ 'Pedigrí 4'
+      )
+  )
+
+bind_rows(Cor_F2_est, Cor_F3_est) %>%
+  mutate(Genotipados = factor(Genotipados, levels = c('Ninguno', 'F2', 'F1-F2', 'F0-F1-F2-F3'))) %>%
+  ggplot(data = .,aes(x = Densidad, y = Media, fill = Genotipados, colour = Genotipados)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6, alpha = 0.4) +
+  #geom_jitter(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.8), alpha = 0.4) +
+  geom_errorbar(aes(ymin = Media - Desvio, ymax = Media + Desvio), width = 0.2, position = position_dodge(width = 0.7)) +
+  scale_y_continuous(limits = c(0.0, 1.0)) +
+  facet_grid(vars(Pedigrí), vars(Predicción)) +
+  labs(y = 'Precisión de la predicción', x = 'Densidad del marcador') +
+  scale_colour_manual(values = c('black', 'yellow', 'cyan', 'red')) +
+  scale_fill_manual(values = c('black', 'yellow', 'cyan', 'red')) +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 12, face = 'bold'),
+    legend.title = element_text(size = 12, face = 'bold'),
+    legend.text = element_text(size = 12),
+    legend.position = 'top',
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 12, colour = 'black', face = 'bold')
+    )
+```
+
+---
+class: center
+
+### Resultados y discusión
 
 ---
 
