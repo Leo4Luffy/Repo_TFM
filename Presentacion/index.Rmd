@@ -1841,9 +1841,37 @@ class: center
 
 ### Resultados y discusión
 
+.pull-left[
+
 .discusion_1[
 
-<P align="justify">¡Hola!, espero estes bien..</p>
+<P align="justify">Aunque a mayor cantidad de marcadores mejor será la predicción, se ha demostrado también que por encima de ciertas densidades es difícil mejorar significativamente la precisión de la predicción<sup>1</sup>.</p>
+
+]
+
+]
+
+.pull-right[
+
+<P align="justify">Estudios que han evaluado la posibilidad de usar menos cantidad de marcadores sin afectar la precisión de la predicción genómica:</p>
+
+```{r, echo = FALSE, out.width = "100%", message = FALSE}
+
+tribble(
+  ~'Especie ', ~'Marcadores', ~'Precisión', ~'Referencia',
+  'Arroz', '7.142 ()', ' ', 'Kyselova, Tichý, and Jochová (2021)',
+  'Bovino', '()', '', 'Zhu, Zhang, Niu et al. (2017)',
+  'Camaron', '3.200 ()', '', 'Wang, Yu, Yuan et al. (2017)'
+  ) %>%
+  gt() %>%
+  opt_table_lines()
+```
+
+]
+
+.footnote[
+
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:77")`.</FONT></p>
 
 ]
 
@@ -1936,6 +1964,14 @@ PrintBibliography(bib = mi_Bib, start = 7, end = 12)
 
 ---
 
+### Bibliografía
+
+```{r refs 3, echo=FALSE, results="asis"}
+
+PrintBibliography(bib = mi_Bib, start = 13, end = 15)
+```
+
+---
 class: center, middle, inverse
 
 <span class = "cc">

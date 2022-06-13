@@ -1,24 +1,17 @@
-/* colores */
+/* cajitas de colores */
 
-:root {
-  --baby-blue: #B6CADA;
-  --baby-blue-30: #B6CADA30;
-  --cornhusk: #F4DBB3;
-  --cornhusk-30: #F4DBB330;
-}
-
-/* Custom boxes */
-.discusion_1, .discusion_2 {
-  padding: 5px 5px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
 .discusion_1 {
-  border-left: solid 5px var(--cornhusk);
-  background-color: var(--cornhusk-30);
-}
-.discusion_2{
-  border-left: solid 5px var(--baby-blue);
-  background-color: var(--baby-blue-30);
+  padding: 1em 1em 1em 1em;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  border: 1pt solid #ffff00;
+  background: #ffffff 5px center/3em no-repeat;
 }
 
+.discusion_2{
+  padding: 1em 1em 1em 1em;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  border: 1pt solid #00ffff;
+  background: #ffffff 5px center/3em no-repeat;
+}
