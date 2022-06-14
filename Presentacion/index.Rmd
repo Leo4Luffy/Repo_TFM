@@ -1845,7 +1845,13 @@ class: center
 
 .discusion_1[
 
-<P align="justify">Aunque a mayor cantidad de marcadores mejor será la predicción, se ha demostrado también que por encima de ciertas densidades es difícil mejorar significativamente la precisión de la predicción<sup>1</sup>.</p>
+<P align="justify">Aunque a mayor cantidad de marcadores mejor será la predicción, se ha demostrado también que por encima de ciertas densidades es difícil mejorar significativamente la precisión de la predicción<!--<sup>1</sup>-->.</p>
+
+]
+
+.discusion_2[
+
+<P align="justify">El número de individuos genotipados necesarios para ubicar un punto de rendimiento decreciente suele tener un costo prohibitivamente alto<!--<sup>2</sup>-->.
 
 ]
 
@@ -1858,6 +1864,7 @@ class: center
 tribble(
   ~'Especie ', ~'Densidad de marcador', ~'Referencia',
   'Arroz', '7.142 (73.147)', 'Spindel, Begum, Akdemir et al. (2021)',
+  'Bovino', '3.000 (38.082)', 'Li, Zhang, Wang et al. (2018)',
   'Trigo', '5.000 (17.181)', 'Norman, Taylor, Edwards et al. (2018)',
   'Bovino', '10.000 (667.954)', 'Zhu, Zhang, Niu et al. (2017)',
   'Camaron', '3.200 (23.000)', 'Wang, Yu, Yuan et al. (2017)',
@@ -1873,25 +1880,27 @@ tribble(
 
 ]
 
+<!--
+
 .footnote[
 
 <P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:77")`.</FONT></p>
 
-<!--
+<P align="justify"><FONT SIZE=2>[2] `r Citet(mi_Bib, "cite:32_b")`.</FONT></p>
 
-<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:32_b")`.</FONT></p>
+<P align="justify"><FONT SIZE=2>[3] `r Citet(mi_Bib, "cite:78")`.</FONT></p>
 
-<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:78")`.</FONT></p>
+<P align="justify"><FONT SIZE=2>[4] `r Citet(mi_Bib, "cite:83")`.</FONT></p>
 
-<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:83")`.</FONT></p>
+<P align="justify"><FONT SIZE=2>[5] `r Citet(mi_Bib, "cite:82")`.</FONT></p>
 
-<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:82")`.</FONT></p>
+<P align="justify"><FONT SIZE=2>[6] `r Citet(mi_Bib, "cite:79")`.</FONT></p>
 
-<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:79")`.</FONT></p>
-
--->
+<P align="justify"><FONT SIZE=2>[7] `r Citet(mi_Bib, "cite:85")`.</FONT></p>
 
 ]
+
+-->
 
 ---
 class: center
@@ -1934,6 +1943,25 @@ Cor_F3_est <- read_delim(here('Presentacion', 'Imagen', 'Ped_F3.txt'), delim = '
       )
   )
 
+texto <- data.frame(
+  Densidad = c(0.8, 0.8, 0.8),
+  Media = c(0.74, 0.84, 0.94),
+  Precision = c('0.5-4.0%', '0.9-8.7%', '0.7-9.0%'),
+  Pedigrí = 'Pedigrí 1',
+  Predicción = 'F2',
+  Genotipados = c('Ninguno', 'Ninguno', 'Ninguno')
+  )
+
+lineas <- data.frame(
+  x = c(1.2, 1.2, 1.2),
+  xend = c(2.0, 3.0, 4.0),
+  y = c(0.74, 0.84, 0.94),
+  yend = c(0.74, 0.84, 0.94),
+  Pedigrí = 'Pedigrí 1',
+  Predicción = 'F2',
+  Genotipados = c('Ninguno', 'Ninguno', 'Ninguno')
+  )
+
 bind_rows(Cor_F2_est, Cor_F3_est) %>%
   mutate(Genotipados = factor(Genotipados, levels = c('Ninguno', 'F2', 'F1-F2', 'F0-F1-F2-F3'))) %>%
   ggplot(data = .,aes(x = Densidad, y = Media, fill = Genotipados, colour = Genotipados)) +
@@ -1942,6 +1970,8 @@ bind_rows(Cor_F2_est, Cor_F3_est) %>%
   geom_errorbar(aes(ymin = Media - Desvio, ymax = Media + Desvio), width = 0.2, position = position_dodge(width = 0.7)) +
   scale_y_continuous(limits = c(0.0, 1.0)) +
   facet_grid(vars(Pedigrí), vars(Predicción)) +
+  geom_text(data = texto, aes(label = Precision), size = 2.8, show.legend = FALSE) +
+  geom_segment(data = lineas, aes(x = x, xend = xend, y = y, yend = yend), inherit.aes = FALSE) +
   labs(y = 'Precisión de la predicción', x = 'Densidad del marcador') +
   scale_colour_manual(values = c('black', 'yellow', 'cyan', 'red')) +
   scale_fill_manual(values = c('black', 'yellow', 'cyan', 'red')) +
@@ -1962,6 +1992,61 @@ class: center
 
 ### Resultados y discusión
 
+.pull-left[
+
+.discusion_1[
+
+<P align="justify">El aumento en la precisión de la predicción se debe a que, a diferencia del ssGBLUP, el BLUP asume una relación promedio de cero entre individuos fundadores<sup>1</sup>, e ignora el término del muestreo Mendeliano<sup>2,3</sup>.</p>
+
+]
+
+]
+
+.pull-right[
+
+```{r, echo = FALSE, out.width = "100%", message = FALSE}
+
+tribble(
+  ~'Especie ', ~'BLUP', ~'ssGBLUP', ~'Referencia',
+  'Cítrico', '', '', 'Imai, Kuniga, Yoshioka et al. (2019)',
+  'Árbol', '', '', 'Ratcliffe, El-Dien, Cappa et al. (2017)',
+  'Gallina', '', '', 'Lourenco, Fragomeni, Tsuruta et al. (2015)'
+  ) %>%
+  gt() %>%
+  tab_spanner(
+    label = 'Precisión',
+    columns = c(2, 3)
+  ) %>%
+  opt_table_lines()
+```
+
+]
+
+.footnote[
+
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:71")`.</FONT></p>
+
+<P align="justify"><FONT SIZE=2>[2] `r Citet(mi_Bib, "cite:72")`.</FONT></p>
+
+<P align="justify"><FONT SIZE=2>[3] `r Citet(mi_Bib, "cite:89")`.</FONT></p>
+
+<!--
+
+<P align="justify"><FONT SIZE=2>[4] `r Citet(mi_Bib, "cite:20")`.</FONT></p>
+
+<P align="justify"><FONT SIZE=2>[5] `r Citet(mi_Bib, "cite:72")`.</FONT></p>
+
+<P align="justify"><FONT SIZE=2>[6] `r Citet(mi_Bib, "cite:87")`.</FONT></p>
+
+-->
+
+]
+
+---
+class: center
+
+### Conclusiones
+
 ---
 
 ### Bibliografía
@@ -1977,7 +2062,7 @@ PrintBibliography(bib = mi_Bib, start = 1, end = 6)
 
 ```{r refs 2, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 7, end = 12)
+PrintBibliography(bib = mi_Bib, start = 7, end = 11)
 ```
 
 ---
@@ -1986,7 +2071,7 @@ PrintBibliography(bib = mi_Bib, start = 7, end = 12)
 
 ```{r refs 3, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 13, end = 17)
+PrintBibliography(bib = mi_Bib, start = 12, end = 16)
 ```
 
 ---
@@ -1995,7 +2080,16 @@ PrintBibliography(bib = mi_Bib, start = 13, end = 17)
 
 ```{r refs 4, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 18, end = 18)
+PrintBibliography(bib = mi_Bib, start = 17, end = 22)
+```
+
+---
+
+### Bibliografía
+
+```{r refs 5, echo=FALSE, results="asis"}
+
+PrintBibliography(bib = mi_Bib, start = 23, end = 24)
 ```
 
 ---
