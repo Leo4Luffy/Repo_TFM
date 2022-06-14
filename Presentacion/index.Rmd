@@ -1853,17 +1853,21 @@ class: center
 
 .pull-right[
 
-<P align="justify">Estudios que han evaluado la posibilidad de usar menos cantidad de marcadores sin afectar la precisión de la predicción genómica:</p>
-
 ```{r, echo = FALSE, out.width = "100%", message = FALSE}
 
 tribble(
-  ~'Especie ', ~'Marcadores', ~'Precisión', ~'Referencia',
-  'Arroz', '7.142 ()', ' ', 'Kyselova, Tichý, and Jochová (2021)',
-  'Bovino', '()', '', 'Zhu, Zhang, Niu et al. (2017)',
-  'Camaron', '3.200 ()', '', 'Wang, Yu, Yuan et al. (2017)'
+  ~'Especie ', ~'Densidad de marcador', ~'Referencia',
+  'Arroz', '7.142 (73.147)', 'Spindel, Begum, Akdemir et al. (2021)',
+  'Trigo', '5.000 (17.181)', 'Norman, Taylor, Edwards et al. (2018)',
+  'Bovino', '10.000 (667.954)', 'Zhu, Zhang, Niu et al. (2017)',
+  'Camaron', '3.200 (23.000)', 'Wang, Yu, Yuan et al. (2017)',
+  'Eucalipto', '5.000 (41.304)', 'Tan, Grattapaglia, Salgado-Martins et al. (2017)'
   ) %>%
   gt() %>%
+   tab_footnote(
+    footnote = 'El valor entre paréntesis es la densidad total.',
+    locations = cells_body(columns = 'Densidad de marcador', rows = 1)
+  ) %>%
   opt_table_lines()
 ```
 
@@ -1872,6 +1876,20 @@ tribble(
 .footnote[
 
 <P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:77")`.</FONT></p>
+
+<!--
+
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:32_b")`.</FONT></p>
+
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:78")`.</FONT></p>
+
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:83")`.</FONT></p>
+
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:82")`.</FONT></p>
+
+<P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:79")`.</FONT></p>
+
+-->
 
 ]
 
@@ -1968,7 +1986,16 @@ PrintBibliography(bib = mi_Bib, start = 7, end = 12)
 
 ```{r refs 3, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 13, end = 15)
+PrintBibliography(bib = mi_Bib, start = 13, end = 17)
+```
+
+---
+
+### Bibliografía
+
+```{r refs 4, echo=FALSE, results="asis"}
+
+PrintBibliography(bib = mi_Bib, start = 18, end = 18)
 ```
 
 ---
