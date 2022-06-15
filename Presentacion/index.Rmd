@@ -1580,7 +1580,7 @@ tribble(
   gt() %>%
   tab_style(
     style = list(
-      cell_fill(color = "yellow"),
+      cell_fill(color = "yellow", alpha = 0.4),
       cell_text(weight = "bold")
       ),
     locations = cells_body(
@@ -1589,7 +1589,7 @@ tribble(
   ) %>%
   tab_style(
     style = list(
-      cell_fill(color = "cyan"),
+      cell_fill(color = "cyan", alpha = 0.4),
       cell_text(weight = "bold")
       ),
     locations = cells_body(
@@ -1598,7 +1598,7 @@ tribble(
   ) %>%
   tab_style(
     style = list(
-      cell_fill(color = "red"),
+      cell_fill(color = "red", alpha = 0.4),
       cell_text(weight = "bold")
       ),
     locations = cells_body(
@@ -1845,13 +1845,13 @@ class: center
 
 .discusion_1[
 
-<P align="justify">Aunque a mayor cantidad de marcadores mejor será la predicción, se ha demostrado también que por encima de ciertas densidades es difícil mejorar significativamente la precisión de la predicción<!--<sup>1</sup>-->.</p>
+<P align="justify">Aunque a mayor cantidad de marcadores mejor será la precisión de la predicción<sup>1</sup><!---->, se demostró que por encima de cierta densidad es difícil mejorar la precisión.</p>
 
 ]
 
 .discusion_2[
 
-<P align="justify">El número de individuos genotipados necesarios para ubicar un punto de rendimiento decreciente suele tener un costo prohibitivamente alto<!--<sup>2</sup>-->.
+<P align="justify">Es difícil determinar el número ideal de individuos genotipados debido a que esto suele tener un costo alto<sup>2</sup>.</p>
 
 ]
 
@@ -1863,12 +1863,12 @@ class: center
 
 tribble(
   ~'Especie ', ~'Densidad de marcador', ~'Referencia',
-  'Arroz', '7.142 (73.147)', 'Spindel, Begum, Akdemir et al. (2021)',
   'Bovino', '3.000 (38.082)', 'Li, Zhang, Wang et al. (2018)',
   'Trigo', '5.000 (17.181)', 'Norman, Taylor, Edwards et al. (2018)',
   'Bovino', '10.000 (667.954)', 'Zhu, Zhang, Niu et al. (2017)',
   'Camaron', '3.200 (23.000)', 'Wang, Yu, Yuan et al. (2017)',
-  'Eucalipto', '5.000 (41.304)', 'Tan, Grattapaglia, Salgado-Martins et al. (2017)'
+  'Eucalipto', '5.000 (41.304)', 'Tan, Grattapaglia, Salgado-Martins et al. (2017)',
+  'Arroz', '7.142 (73.147)', 'Spindel, Begum, Akdemir et al. (2015)'
   ) %>%
   gt() %>%
    tab_footnote(
@@ -1880,13 +1880,13 @@ tribble(
 
 ]
 
-<!--
-
 .footnote[
 
 <P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:77")`.</FONT></p>
 
 <P align="justify"><FONT SIZE=2>[2] `r Citet(mi_Bib, "cite:32_b")`.</FONT></p>
+
+<!--
 
 <P align="justify"><FONT SIZE=2>[3] `r Citet(mi_Bib, "cite:78")`.</FONT></p>
 
@@ -1898,9 +1898,13 @@ tribble(
 
 <P align="justify"><FONT SIZE=2>[7] `r Citet(mi_Bib, "cite:85")`.</FONT></p>
 
+-->
+
 ]
 
--->
+???
+
+
 
 ---
 class: center

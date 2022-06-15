@@ -1,7 +1,7 @@
 /* cajitas de colores */
 
 .discusion_1 {
-  padding: 1em 1em 1em 1em;
+  padding: 0.5em 0.5em 0.5em 0.5em;
   margin-bottom: 10px;
   margin-left: 10px;
   border: 1pt solid #ffff00;
@@ -9,7 +9,7 @@
 }
 
 .discusion_2{
-  padding: 1em 1em 1em 1em;
+  padding: 0.5em 0.5em 0.5em 0.5em;
   margin-bottom: 10px;
   margin-left: 10px;
   border: 1pt solid #00ffff;
