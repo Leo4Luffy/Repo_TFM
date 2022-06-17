@@ -1904,7 +1904,49 @@ tribble(
 
 ???
 
+### El desequilibrio de ligamiento
 
+Si los SNPs son solo marcadores ubicados fuera de las regiones génicas, la mayoría de las veces, ¿por qué usarlos? Debido a que pueden estar asociados a QTL o genes, hecho que puede explicarse por un evento llamado desequilibrio de ligamiento (LD).
+
+Se pueden usar SNP para deducir el genotipo de los individuos en cada QTL no observado. Al tener paneles SNP densos (por ejemplo, 50.000 SNP), es más probable que el QTL esté en LD con al menos un SNP. Si el QTL A está ligado al SNP B, dependiendo de la fuerza de esta asociación, una vez que se observe el SNP B, implicará que se hereda junto al QTL A. De esta forma, la selección genómica se basa en el LD entre el SNP y el QTL, y aunque no observamos el QTL, se puede observar una asociación indirecta entre el SNP y el QTL:
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.showtext = TRUE}
+
+data.frame(
+  x = 1.0, y = 2.0
+  ) %>%
+  ggplot() +
+  #geom_blank() +
+  
+  annotate(geom = 'rect', xmin = 1.1, xmax = 1.5, ymin = 1.9, ymax = 1.6, colour = 'yellow', fill = 'yellow', alpha = 0.2) +
+  annotate(geom = 'text', x = 1.3, y = 1.75, label = 'Carácter', size = 8.4, colour = 'black') +
+  
+  geom_segment(x = 1.3, xend = 1.35, y = 1.55, yend = 1.35, linetype = 'twodash', size = 1.4) +
+  annotate(geom = 'text', x = 1.2, y = 1.48, label = 'Asociación', size = 6.4, colour = 'black') +
+  annotate(geom = 'text', x = 1.2, y = 1.43, label = 'observada', size = 6.4, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 1.4, xmax = 1.6, ymin = 1.2, ymax = 1.5, colour = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 1.5, y = 1.35, label = 'SNP', size = 8.4, colour = 'black') +
+  
+  geom_segment(x = 1.62, xend = 1.8, y = 1.32, yend = 1.38, linetype = 'twodash', size = 1.4) +
+  annotate(geom = 'text', x = 1.8, y = 1.33, label = 'LD', size = 6.4, colour = 'black') +
+  
+  annotate(geom = 'rect', xmin = 1.7, xmax = 1.9, ymin = 1.4, ymax = 1.7, colour = 'red', fill = 'red', alpha = 0.2) +
+  annotate(geom = 'text', x = 1.8, y = 1.55, label = 'QTL', size = 8.4, colour = 'black') +
+  
+  geom_segment(x = 1.8, xend = 1.52, y = 1.72, yend = 1.78, linetype = 'twodash', size = 1.4) +
+  annotate(geom = 'text', x = 1.70, y = 1.78, label = 'Asociación real', size = 6.4, colour = 'black') +
+  annotate(geom = 'text', x = 1.90, y = 1.73, label = 'no observada', size = 6.4, colour = 'black') +
+    
+  scale_x_continuous(limits = c(1.0, 2.0)) +
+  scale_y_continuous(limits = c(1.0, 2.0)) +
+  
+  theme_bw() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 11, face = 'bold'))
+```
 
 ---
 class: center
@@ -1998,31 +2040,35 @@ class: center
 
 .pull-left[
 
-.discusion_1[
-
-<P align="justify">El aumento en la precisión de la predicción se debe a que, a diferencia del ssGBLUP, el BLUP asume una relación promedio de cero entre individuos fundadores<sup>1</sup>, e ignora el término del muestreo Mendeliano<sup>2,3</sup>.</p>
-
-]
-
-]
-
-.pull-right[
-
 ```{r, echo = FALSE, out.width = "100%", message = FALSE}
 
 tribble(
   ~'Especie ', ~'BLUP', ~'ssGBLUP', ~'Referencia',
-  'Cítrico', '', '', 'Imai, Kuniga, Yoshioka et al. (2019)',
-  'Árbol', '', '', 'Ratcliffe, El-Dien, Cappa et al. (2017)',
-  'Gallina', '', '', 'Lourenco, Fragomeni, Tsuruta et al. (2015)'
+  'Cítrico', '5.0%', '5.4%', 'Imai, Kuniga, Yoshioka et al. (2019)',
+  'Árbol', '4.7%', '5.0-5.4%', 'Ratcliffe, El-Dien, Cappa et al. (2017)',
+  'Gallina', '2.2%', '4.3%', 'Lourenco, Fragomeni, Tsuruta et al. (2015)'
   ) %>%
   gt() %>%
+   tab_footnote(
+    footnote = 'En 25-50-75-100% de individuos genotipados.',
+    locations = cells_body(columns = 'ssGBLUP', rows = 2)
+  ) %>%
   tab_spanner(
     label = 'Precisión',
     columns = c(2, 3)
   ) %>%
   opt_table_lines()
 ```
+
+]
+
+.pull-right[
+
+.discusion_1[
+
+<P align="justify">El aumento en la precisión de la predicción se debe a que, a diferencia del ssGBLUP, el BLUP asume una relación promedio de cero entre individuos fundadores<sup>1</sup>, e ignora el término del muestreo Mendeliano<sup>2,3</sup>.</p>
+
+]
 
 ]
 
