@@ -2097,6 +2097,10 @@ class: center
 
 ### Conclusiones
 
++ <P align="justify">El uso combinado de información genómica y de pedigrí en la mejora genética del arroz, mejora la predicción genómica.</p>
+
++ <P align="justify">Se obtuvo una buena precisión de la predicción genómica utilizando densidades bajas de marcadores; esto permitirá que la selección genómica para el carácter tiempo de floración en arroz, mediante el ssGBLUP, pueda realizarse con información de genotipos a bajo costo.</p>
+
 ---
 
 ### Bibliografía
