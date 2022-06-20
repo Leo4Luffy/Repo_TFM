@@ -2096,6 +2096,113 @@ tribble(
 
 ]
 
+???
+
+### El término de muestreo Mendeliano
+
+<P align="justify">El valor genético de un individuo tiene tres componentes: (i) el valor genético del padre, (ii) el valor genético de la madre y, (iii) el término del muestreo Mendeliano. El valor genético del padre y el valor genético de la madre hacen referencia a que cada individuo recibe la mitad de sus genes de su padre y la otra mitad de su madre. Sin embargo, el padre y la madre no transmiten los mismos genes a su descendecia, sino que esto en un factor de azar, llamado también como **término del muestreo Mendeliano**. Por tanto, el término del muestreo Mendeliano indica el factor de azar en la distribución de la mitad del material genético de cada progenitor a su descendencia.</p>
+
+```{r, echo = FALSE, out.width = "70%", fig.align = 'center', fig.showtext = TRUE, warning = FALSE}
+
+Puntos <- data.frame(x = c(0.65, 0.25, 1.75, 0.75, 1.75), y = c(1.75, 1.4, 1.4, 1.05, 1.05))
+Cuadros <- data.frame(x = c(1.35, 0.75, 1.25, 0.25, 1.25), y = c(1.75, 1.4, 1.4, 1.05, 1.05))
+
+data.frame(x = c(3.1, 3.9, 3.5, 2.8, 4.2), y = c(1.0, 1.0, 0.2, 0.2, 0.2)) %>%
+  
+  ggplot(aes(x0 = x, y0 = y, r = 0.4)) +
+  
+  annotate(geom = 'rect', xmin = 0.4, xmax = 2.0, ymin = 1.9, ymax = 1.2, colour = 'black', fill = 'white', size = 0.4, linetype = 'dashed') +
+  
+  geom_point(aes(x = x, y = y), data = Puntos, size = 17.6, shape = 21, color = 'black', fill = 'white', alpha = 0.5) +
+  geom_point(aes(x = x, y = y), data = Cuadros, size = 17.6, shape = 22, color = 'black', fill = 'white', alpha = 0.5) +
+  
+  annotate(geom = 'segment', x = 0.85, xend = 1.15, y = 1.75, yend = 1.75, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 1.0, xend = 1.0, y = 1.75, yend = 1.6, colour = 'black', size = 0.8, linetype = 'solid') +
+  
+  annotate(geom = 'segment', x = 0.25, xend = 1.75, y = 1.6, yend = 1.6, colour = 'black', size = 0.8, linetype = 'solid') +
+  
+  annotate(geom = 'segment', x = 0.25, xend = 0.25, y = 1.6, yend = 1.5, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 0.75, xend = 0.75, y = 1.6, yend = 1.5, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 1.25, xend = 1.25, y = 1.6, yend = 1.5, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 1.75, xend = 1.75, y = 1.6, yend = 1.5, colour = 'black', size = 0.8, linetype = 'solid') +
+  
+  annotate(geom = 'segment', x = 1.75, xend = 1.75, y = 1.3, yend = 1.15, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 1.25, xend = 1.25, y = 1.3, yend = 1.15, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 0.75, xend = 0.75, y = 1.3, yend = 1.15, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 0.25, xend = 0.25, y = 1.3, yend = 1.15, colour = 'black', size = 0.8, linetype = 'solid') +
+  
+  annotate(geom = 'text', x = 0.65, y = 1.75, label = '1', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.35, y = 1.75, label = '2', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 0.25, y = 1.4, label = '3', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 0.75, y = 1.4, label = '4', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.25, y = 1.4, label = '5', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.75, y = 1.4, label = '6', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 0.25, y = 1.05, label = '7', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 0.75, y = 1.05, label = '8', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.25, y = 1.05, label = '9', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 1.75, y = 1.05, label = '10', family = 'gochi', size = 7.2, colour = 'black') +
+  
+  #annotate(geom = 'rect', xmin = 3.05, xmax = 4.95, ymin = 0.05, ymax = 1.95, colour = 'black', fill = 'white', size = 0.2, linetype = 'solid') +
+  
+  #annotate(geom = 'segment', x = 1.95, xend = 3.05, y = 1.25, yend = 0.05, colour = 'black', size = 0.2, linetype = 'dashed') +
+  #annotate(geom = 'segment', x = 0.55, xend = 3.35, y = 1.95, yend = 1.95, colour = 'black', size = 0.2, linetype = 'dashed') +
+  
+  geom_circle(aes(x0 = x, y0 = y, r = 0.25), colour = 'yellow', fill = 'yellow', alpha = 0.2, size = 0.4) +
+  
+  annotate(geom = 'segment', x = 3.03, xend = 3.17, y = 1.05, yend = 1.05, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 3.03, xend = 3.17, y = 0.95, yend = 0.95, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'text', x = 3.1, y = 1.1, label = 'A1', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 3.1, y = 0.9, label = 'A2', family = 'gochi', size = 7.2, colour = 'black') +
+  
+  annotate(geom = 'segment', x = 3.83, xend = 3.97, y = 1.05, yend = 1.05, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 3.83, xend = 3.97, y = 0.95, yend = 0.95, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'text', x = 3.9, y = 1.1, label = 'A1', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 3.9, y = 0.9, label = 'A2', family = 'gochi', size = 7.2, colour = 'black') +
+  
+  annotate(geom = 'segment', x = 3.43, xend = 3.57, y = 0.25, yend = 0.25, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 3.43, xend = 3.57, y = 0.15, yend = 0.15, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'text', x = 3.5, y = 0.3, label = 'A1', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 3.5, y = 0.1, label = 'A1', family = 'gochi', size = 7.2, colour = 'black') +
+  
+  annotate(geom = 'segment', x = 2.73, xend = 2.87, y = 0.25, yend = 0.25, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 2.73, xend = 2.87, y = 0.15, yend = 0.15, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'text', x = 2.8, y = 0.3, label = 'A1', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 2.8, y = 0.1, label = 'A1', family = 'gochi', size = 7.2, colour = 'black') +
+  
+  annotate(geom = 'segment', x = 4.13, xend = 4.27, y = 0.25, yend = 0.25, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'segment', x = 4.13, xend = 4.27, y = 0.15, yend = 0.15, colour = 'black', size = 0.8, linetype = 'solid') +
+  annotate(geom = 'text', x = 4.2, y = 0.3, label = 'A2', family = 'gochi', size = 7.2, colour = 'black') +
+  annotate(geom = 'text', x = 4.2, y = 0.1, label = 'A2', family = 'gochi', size = 7.2, colour = 'black') +
+  
+  annotate(geom = 'text', x = 3.5, y = 1.0, label = 'X', size = 5.2, colour = 'black') +
+  geom_curve(x = 3.5, xend = 3.5, y = 0.8, yend = 0.55, arrow = arrow(length = unit(0.1, 'inch')), size = 1.2, color = 'black', curvature = 0.0, linetype = 'dashed') +
+  
+  #annotate(geom = 'rect', xmin = 2.95, xmax = 3.45, ymin = -0.3, ymax = -0.1, colour = 'black', fill = 'white', size = 0.2, linetype = 'solid') +
+  annotate(geom = 'text', x = 3.1, y = -0.2, label = TeX('$f_{4 5} = 1.0$'), size = 7.5) +
+  
+  #annotate(geom = 'rect', xmin = 3.55, xmax = 4.05, ymin = -0.3, ymax = -0.1, colour = 'black', fill = 'white', size = 0.2, linetype = 'solid') +
+  annotate(geom = 'text', x = 3.9, y = -0.2, label = TeX('$f_{5 6} = 0.0$'), size = 7.5) +
+  
+  scale_x_continuous(limits = c(0.0, 4.45)) +
+  scale_y_continuous(limits = c(-0.3, 1.9)) +
+  
+  theme_bw() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank())
+```
+
+<P align="justify">La siguiente figura representa las fuentes de información utilizadas (áreas sombreadas) y sus proporciones antes y después de la selección (es decir, la selección reduce la varianza entre familias) cuando se utiliza el BLUP y la predicción del genoma completo (GWP) para predecir el valor genético estimado de un recién nacido sin registro fenotípico. AS es el valor genético del padre, AD es el valor genético de la madre y aj es el término de muestreo mendeliano.<p>
+
+```{r, echo = FALSE, out.width = "80%", fig.align = 'center', message = FALSE, warning = FALSE}
+
+image_read(here('Presentacion', 'Imagen', 'muestreo_Mendeliano.png'))
+```
+
+<P align="justify">Figura adaptada de [Daetwyler, Villanueva, Bijma, and Woolliams(2007)](https://pubmed.ncbi.nlm.nih.gov/18076474/).</p>
+
+<P align="justify">La información sobre antepasados ​​y parientes colaterales aumenta la precisión al agregar directamente precisión en los dos primeros de estos componentes. La precisión del término de muestreo Mendeliano se puede aumentar utilizando el registro fenotípico de un individuo o la información de la progenie. En la práctica, la mayoría de los esquemas de selección BLUP aumentan la precisión al capturar información adicional sobre los antepasados ​​y los parientes colaterales, porque la información sobre la descendencia a menudo no está disponible en el momento de la selección. Por el contrario, GWP utiliza más el término del muestreo Mendeliano.</p>
+
 ---
 class: center
 
