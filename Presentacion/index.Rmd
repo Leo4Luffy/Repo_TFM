@@ -705,6 +705,8 @@ image_read(here('Presentacion', 'Imagen', 'Matriz_Hinv.png'))
 -->
 .panel[.panel-name[BLUP vs ssGBLUP]
 
+<P align="justify">El ssGBLUP es un método de uso rutinario para la selección genómica, donde ha demostrado que produce una predicción más precisa en comparación a los métodos BLUP y GBLUP<sup>2</sup>.</p>
+
 .pull-left[
 
 ```{r, echo = FALSE, out.width = "100%", fig.align = 'center', fig.showtext = TRUE, warning = FALSE, message = FALSE}
@@ -819,7 +821,7 @@ mA <- tribble(
 
 mA <- melt(mA)
 
-ggplot(data = mA, aes(x = value, after_stat(density))) +
+hist_mA <- ggplot(data = mA, aes(x = value, after_stat(density))) +
   geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2, bins = 8) +
   labs(x = 'relación', y = ' ') +
   theme_bw() +
@@ -1039,7 +1041,7 @@ mH <- tribble(
 
 mH <- melt(mH)
 
-ggplot(data = mH, aes(x = value, after_stat(density))) +
+hist_mH <- ggplot(data = mH, aes(x = value, after_stat(density))) +
   geom_histogram(colour = 'cyan', fill = 'cyan', alpha = 0.2, bins = 8) +
   labs(x = 'relación', y = ' ') +
   theme_bw() +
@@ -1060,6 +1062,8 @@ ggplot(data = mH, aes(x = value, after_stat(density))) +
 .footnote[
 
 <P align="justify"><FONT SIZE=2>[1] `r Citet(mi_Bib, "cite:14")`.</FONT></p>
+
+<P align="justify"><FONT SIZE=2>[2] `r Citet(mi_Bib, "cite:18")`.</FONT></p>
 
 ]
 
@@ -2134,7 +2138,7 @@ PrintBibliography(bib = mi_Bib, start = 12, end = 16)
 
 ```{r refs 4, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 17, end = 22)
+PrintBibliography(bib = mi_Bib, start = 17, end = 21)
 ```
 
 ---
@@ -2143,7 +2147,7 @@ PrintBibliography(bib = mi_Bib, start = 17, end = 22)
 
 ```{r refs 5, echo=FALSE, results="asis"}
 
-PrintBibliography(bib = mi_Bib, start = 23, end = 24)
+PrintBibliography(bib = mi_Bib, start = 22, end = 25)
 ```
 
 ---
