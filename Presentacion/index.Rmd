@@ -1740,7 +1740,7 @@ tribble(
 ```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE}
 
 tribble(
-  ~'1.000', ~'10.000 ', ~'100.000'
+  ~'0', ~'1.000', ~'10.000 ', ~'100.000'
   ) %>%
   gt() %>%
   opt_table_lines()
@@ -1839,6 +1839,12 @@ bind_rows(Cor_ped_1_est, Cor_ped_2_est, Cor_ped_3_est) %>%
     strip.text = element_text(size = 12, colour = 'black', face = 'bold')
     )
 ```
+
+???
+
+### REML y métodos Bayesianos
+
+<P align="justify">Para la estimación de los componentes de varianza y la predicción de los valores genéticos utilizando el BLUP (o GBLUP o ssGBLUP) se pueden emplear métodos REML y Bayesianos. Los métodos **REML** usan **algoritmos iterativos para encontrar el máximo de pobablidad**. Los métodos **Bayesianos** usan la Cadena de Markov Monte Carlo (MCMC) y **tomar muestras sucesivamente de las distribuciones condicionales de todos los parámetros de un modelo para generar una muestra aleatoria de la distribución posterior marginal**, que es el obketivo de la inferencia Bayesiana.</p>
 
 ---
 class: center
