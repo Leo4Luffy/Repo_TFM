@@ -2,12 +2,12 @@
 layout: default
 ---
 
-# Evaluación de la selección genómica de un solo paso en arroz
-> Trabajo de fin de máster desarrollado para obtener el grado de máster en mejora genética.
+# Evaluación de la selección genómica de un solo paso: una aplicación en arroz
+> Trabajo de fin de máster desarrollado para obtener el grado de máster en mejora genética y biotecnología de la reproducción.
 >
 > [UPV/UAB/IAMZ-CIHEAM](http://www.mastermejorageneticaanimal.es/)
 >
-> Miércoles, Junio 01, 2022  
+> Viernes, Julio 01, 2022  
 
 ---
 
@@ -18,8 +18,6 @@ layout: default
 ### :octocat: [Tutorial básico con `SeqBreed`](https://leo4luffy.github.io/Repo_TFM/TFM_resultados/docs/)
 
 ---
-
-## Resumen
 
 ## Estudiante
 
