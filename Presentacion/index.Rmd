@@ -18,7 +18,7 @@ class: center
 
 # Paquetes usados ----
 
-pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, tidyverse, latex2exp, showtext, ggforce, magick, pedigreemm, reshape2, gt) # Aquí (https://pkg.garrickadenbuie.com/xaringanExtra/#/) y aquí (https://github.com/gadenbuie/xaringanExtra) explican las muchas opciones de usar el paquete xaringanExtra.
+pacman::p_load(metathis, xaringanExtra, fontawesome, RefManageR, here, tidyverse, latex2exp, showtext, ggforce, magick, pedigreemm, reshape2, gt, patchwork) # Aquí (https://pkg.garrickadenbuie.com/xaringanExtra/#/) y aquí (https://github.com/gadenbuie/xaringanExtra) explican las muchas opciones de usar el paquete xaringanExtra.
 font_add_google('Gochi Hand', 'gochi')
 showtext_auto()
 
@@ -1846,7 +1846,202 @@ bind_rows(Cor_ped_1_est, Cor_ped_2_est, Cor_ped_3_est) %>%
 
 ### REML y métodos Bayesianos
 
-<P align="justify">Para la estimación de los componentes de varianza y la predicción de los valores genéticos utilizando el BLUP (o GBLUP o ssGBLUP) se pueden emplear métodos REML y Bayesianos. Los métodos **REML** usan **algoritmos iterativos para encontrar el máximo de pobablidad**. Los métodos **Bayesianos** usan la Cadena de Markov Monte Carlo (MCMC) y **tomar muestras sucesivamente de las distribuciones condicionales de todos los parámetros de un modelo para generar una muestra aleatoria de la distribución posterior marginal**, que es el obketivo de la inferencia Bayesiana.</p>
+<P align="justify">Para la estimación de los componentes de varianza y la predicción de los valores genéticos utilizando el BLUP (o GBLUP o ssGBLUP) se pueden emplear métodos REML y Bayesianos. <!--Los métodos **REML** usan **algoritmos iterativos para encontrar el máximo de pobablidad**. Los métodos **Bayesianos** usan la Cadena de Markov Monte Carlo (MCMC) y **tomar muestras sucesivamente de las distribuciones condicionales de todos los parámetros de un modelo para generar una muestra aleatoria de la distribución posterior marginal**, que es el obketivo de la inferencia Bayesiana.--></p>
+
+<P align="justify">En el **REML** se obtiene un **estimador puntual que representa el valor con probabilidad máxima**. En los análisis de este estudio, la estima de heredabilidad (mediante el BLUP) usando REML en los tres pedigríes simulados de forma ancestral sería:</p>
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', warning = FALSE, message=FALSE}
+
+tribble(
+  ~'Parámetro', ~'Pedigrí_a', ~'Pedigrí_b', ~'Pedigrí_c',
+  'Varianza aditiva', 0.47, 0.50, 0.56,
+  'Varianza ambiental', 0.12, 0.13, 0.11,
+  'Heredabilidad', 0.80, 0.79, 0.84
+  ) %>%
+  gt() %>%
+  cols_label(
+    Pedigrí_a = 'Ped. 1',
+    Pedigrí_b = 'Ped. 2',
+    Pedigrí_c = 'Ped. 3'
+  ) %>%
+  tab_spanner(
+    label = 'REML',
+    columns = c(2, 3, 4)
+    ) %>%
+  tab_footnote(
+    footnote = 'Ped. 1 indica Pedigrí 1',
+    locations = cells_column_labels(
+      columns = 'Pedigrí_a'
+    )
+  )
+```
+
+<P align="justify">Por otro lado, los métodos **Bayesianos** usan la Cadena de Markov Monte Carlo (MCMC) y **tomar muestras sucesivamente de las distribuciones condicionales de todos los parámetros de un modelo para generar una muestra aleatoria de la distribución posterior marginal**, que es el objetivo de la inferencia Bayesiana. En los análisis de este estudio, dicha distribución posterior marginal sería:</p>
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message=FALSE, warning = FALSE}
+
+# Pedigrí 1 (Bayesiano) ----
+
+varU_ped_1 <- read_delim(here('Presentacion', 'Imagen', 'varU_ped1.txt'), delim = '\t') %>%
+  mutate(varU = (value...1 + value...2 + value...3 + value...4 + value...5 + value...6 + value...7 + value...8 + value...9 + value...10)/10)
+
+varE_ped_1 <- read_delim(here('Presentacion', 'Imagen', 'varE_ped1.txt'), delim = '\t') %>%
+  mutate(varE = (value...1 + value...2 + value...3 + value...4 + value...5 + value...6 + value...7 + value...8 + value...9 + value...10)/10)
+
+h2_ped_1 <- read_delim(here('Presentacion', 'Imagen', 'h2_ped1.txt'), delim = '\t') %>%
+  mutate(h2 = (value...1 + value...2 + value...3 + value...4 + value...5 + value...6 + value...7 + value...8 + value...9 + value...10)/10)
+
+varU_ped1 <- ggplot(data = varU_ped_1, aes(x = varU)) +
+  geom_density(color = 'yellow', fill = 'yellow', alpha = 0.2) +
+  annotate(geom = 'text', x = 0.48, y = 15, label = TeX('$|0.36; 0.51|$'), size = 3.2) +
+  #annotate(geom = 'text', x = 0.48, y = 13, label = TeX('$\\bar{x} = 0.43$'), size = 4.8) +
+  labs(title = 'Pedigrí 1 - Var(a)', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+varE_ped1 <- ggplot(data = varE_ped_1, aes(x = varE)) +
+  geom_density(color = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 0.20, y = 25, label = TeX('$|0.13; 0.23|$'), size = 3.2) +
+  #annotate(geom = 'text', x = 0.20, y = 23, label = TeX('$\\bar{x} = 0.16$'), size = 4.8) +
+  labs(title = 'Pedigrí 1 - Var(e)', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+h2_ped1 <- ggplot(data = h2_ped_1, aes(x = h2)) +
+  geom_density(color = 'red', fill = 'red', alpha = 0.4) +
+  annotate(geom = 'text', x = 0.65, y = 15, label = TeX('$|0.62; 0.79|$'), size = 3.2) +
+  #annotate(geom = 'text', x = 0.77, y = 13, label = TeX('$\\bar{x} = 0.72$'), size = 4.8) +
+  labs(title = 'Pedigrí 1 - h2', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+# Pedigrí 2 (Bayesiano) ----
+
+varU_ped_2 <- read_delim(here('Presentacion', 'Imagen', 'varU_ped2.txt'), delim = '\t') %>%
+  mutate(varU = (value...1 + value...2 + value...3 + value...4 + value...5 + value...6 + value...7 + value...8 + value...9 + value...10)/10)
+
+varE_ped_2 <- read_delim(here('Presentacion', 'Imagen', 'varE_ped2.txt'), delim = '\t') %>%
+  mutate(varE = (value...1 + value...2 + value...3 + value...4 + value...5 + value...6 + value...7 + value...8 + value...9 + value...10)/10)
+
+h2_ped_2 <- read_delim(here('Presentacion', 'Imagen', 'h2_ped2.txt'), delim = '\t') %>%
+  mutate(h2 = (value...1 + value...2 + value...3 + value...4 + value...5 + value...6 + value...7 + value...8 + value...9 + value...10)/10)
+
+varU_ped2 <- ggplot(data = varU_ped_2, aes(x = varU)) +
+  geom_density(color = 'yellow', fill = 'yellow', alpha = 0.2) +
+  annotate(geom = 'text', x = 0.43, y = 14, label = TeX('$|0.40; 0.58|$'), size = 3.2) +
+  #annotate(geom = 'text', x = 0.48, y = 13, label = TeX('$\\bar{x} = 0.50$'), size = 4.8) +
+  labs(title = 'Pedigrí 2 - Var(a)', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+varE_ped2 <- ggplot(data = varE_ped_2, aes(x = varE)) +
+  geom_density(color = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 0.17, y = 24, label = TeX('$|0.10; 0.19|$'), size = 3.2) +
+  #annotate(geom = 'text', x = 0.20, y = 23, label = TeX('$\\bar{x} = 0.14$'), size = 4.8) +
+  labs(title = 'Pedigrí 2 - Var(e)', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+h2_ped2 <- ggplot(data = h2_ped_2, aes(x = h2)) +
+  geom_density(color = 'red', fill = 'red', alpha = 0.4) +
+  annotate(geom = 'text', x = 0.72, y = 14, label = TeX('$|0.69; 0.85|$'), size = 3.2) +
+  #annotate(geom = 'text', x = 0.77, y = 13, label = TeX('$\\bar{x} = 0.78$'), size = 4.8) +
+  labs(title = 'Pedigrí 2 - h2', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+# Pedigrí 3 (Bayesiano) ----
+
+varU_ped_3 <- read_delim(here('Presentacion', 'Imagen', 'varU_ped3.txt'), delim = '\t') %>%
+  mutate(varU = (value...1 + value...2 + value...3 + value...4 + value...5 + value...6 + value...7 + value...8 + value...9 + value...10)/10)
+
+varE_ped_3 <- read_delim(here('Presentacion', 'Imagen', 'varE_ped3.txt'), delim = '\t') %>%
+  mutate(varE = (value...1 + value...2 + value...3 + value...4 + value...5 + value...6 + value...7 + value...8 + value...9 + value...10)/10)
+
+h2_ped_3 <- read_delim(here('Presentacion', 'Imagen', 'h2_ped3.txt'), delim = '\t') %>%
+  mutate(h2 = (value...1 + value...2 + value...3 + value...4 + value...5 + value...6 + value...7 + value...8 + value...9 + value...10)/10)
+
+varU_ped3 <- ggplot(data = varU_ped_3, aes(x = varU)) +
+  geom_density(color = 'yellow', fill = 'yellow', alpha = 0.2) +
+  annotate(geom = 'text', x = 0.475, y = 14, label = TeX('$|0.35; 0.65|$'), size = 3.2) +
+  #annotate(geom = 'text', x = 0.48, y = 13, label = TeX('$\\bar{x} = 0.56$'), size = 4.8) +
+  labs(title = 'Pedigrí 3 - Var(a)', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+varE_ped3 <- ggplot(data = varE_ped_3, aes(x = varE)) +
+  geom_density(color = 'cyan', fill = 'cyan', alpha = 0.2) +
+  annotate(geom = 'text', x = 0.14, y = 24, label = TeX('$|0.08; 0.16|$'), size = 3.2) +
+  #annotate(geom = 'text', x = 0.20, y = 23, label = TeX('$\\bar{x} = 0.11$'), size = 4.8) +
+  labs(title = 'Pedigrí 3 - Var(e)', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 9, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+h2_ped3 <- ggplot(data = h2_ped_3, aes(x = h2)) +
+  geom_density(color = 'red', fill = 'red', alpha = 0.4) +
+  annotate(geom = 'text', x = 0.786, y = 14, label = TeX('$|0.76; 0.89|$'), size = 3.2) +
+  #annotate(geom = 'text', x = 0.77, y = 13, label = TeX('$\\bar{x} = 0.83$'), size = 4.8) +
+  labs(title = 'Pedigrí 3 - h2', x = 'Valor estimado', y = ' ') +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 10, face = 'bold'),
+    axis.title.x = element_text(size = 10, face = 'bold'),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 10, face = 'bold')
+    )
+
+(varU_ped1 | varE_ped1 | h2_ped1) / (varU_ped2 | varE_ped2 | h2_ped2) / (varU_ped3 | varE_ped3 | h2_ped3)
+```
+
 
 ---
 class: center
@@ -1918,8 +2113,8 @@ bind_rows(Cor_F2_est, Cor_F3_est) %>%
   geom_errorbar(aes(ymin = Media - Desvio, ymax = Media + Desvio), width = 0.2, position = position_dodge(width = 0.7)) +
   scale_y_continuous(limits = c(0.0, 1.0)) +
   facet_grid(vars(Pedigrí), vars(Predicción)) +
-  geom_text(data = texto, aes(label = Precision), size = 2.8, show.legend = FALSE) +
-  geom_segment(data = lineas, aes(x = x, xend = xend, y = y, yend = yend), inherit.aes = FALSE) +
+  #geom_text(data = texto, aes(label = Precision), size = 2.8, show.legend = FALSE) +
+  #geom_segment(data = lineas, aes(x = x, xend = xend, y = y, yend = yend), inherit.aes = FALSE) +
   labs(y = 'Precisión de la predicción', x = 'Densidad del marcador') +
   scale_colour_manual(values = c('black', 'yellow', 'cyan', 'red')) +
   scale_fill_manual(values = c('black', 'yellow', 'cyan', 'red')) +
@@ -1933,6 +2128,123 @@ bind_rows(Cor_F2_est, Cor_F3_est) %>%
     strip.background = element_rect(colour = 'black', fill = 'white'),
     strip.text = element_text(size = 12, colour = 'black', face = 'bold')
     )
+```
+
+---
+class: center
+
+### Resultados y discusión
+
+<P align="justify"><b>Precisión de la predicción mediante simulación de descendientes</b></p>
+
+.pull-left[
+
+```{r, echo = FALSE, out.width = "100%", fig.align = 'center', message = FALSE}
+
+Cor_F2_est <- read_delim(here('Presentacion', 'Imagen', 'Ped_F2.txt'), delim = '\t') %>%
+  mutate(
+    Densidad = case_when(
+      Densidad == 0 ~ '0',
+      Densidad == 1 ~ '1.000',
+      Densidad == 10 ~ '10.000',
+      Densidad == 100 ~ '100.000'
+      ),
+    Predicción = 'F2',
+    Pedigrí = case_when(
+      Pedigrí == 'Pedigrí_1' ~ 'Pedigrí 1',
+      Pedigrí == 'Pedigrí_2' ~ 'Pedigrí 2',
+      Pedigrí == 'Pedigrí_3' ~ 'Pedigrí 3',
+      Pedigrí == 'Pedigrí_4' ~ 'Pedigrí 4'
+      )
+    )
+
+Cor_F2_est %>%
+  filter(Pedigrí == 'Pedigrí 1') %>%
+  mutate(Genotipados = factor(Genotipados, levels = c('Ninguno', 'F2', 'F1-F2', 'F0-F1-F2-F3'))) %>%
+  ggplot(data = .,aes(x = Densidad, y = Media, fill = Genotipados, colour = Genotipados)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6, alpha = 0.4) +
+  geom_errorbar(aes(ymin = Media - Desvio, ymax = Media + Desvio), width = 0.2, position = position_dodge(width = 0.7)) +
+  scale_y_continuous(limits = c(0.0, 1.0)) +
+  labs(title = 'Pedigrí 1 - Validación en F2', y = 'Precisión de la predicción', x = 'Densidad del marcador') +
+  scale_colour_manual(values = c('black', 'yellow', 'cyan', 'red')) +
+  scale_fill_manual(values = c('black', 'yellow', 'cyan', 'red')) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 20, face = 'bold'),
+    axis.text = element_text(size = 20),
+    axis.title = element_text(size = 20, face = 'bold'),
+    legend.title = element_text(size = 20, face = 'bold'),
+    legend.text = element_text(size = 12),
+    legend.position = 'bottom',
+    strip.background = element_rect(colour = 'black', fill = 'white'),
+    strip.text = element_text(size = 20, colour = 'black', face = 'bold')
+    )
+```
+
+]
+
+.pull-right[
+
+.discusion_1[
+
+<P align="justify">Ganancia en precisión de 0 a 1.000 marcadores: <b>0.4 - 4.0%</b></p>
+
+]
+
+<HR>
+
+.discusion_2[
+
+<P align="justify">Ganancia en precisión de 0 a 10.000 marcadores: <b>0.9 - 8.7%</b></p>
+
+]
+
+<HR>
+
+.discusion_1[
+
+<P align="justify">Ganancia en precisión de 0 a 100.000 marcadores: <b>0.7 - 9.0%</b></p>
+
+]
+
+]
+
+???
+
+### Ganancias en precisión
+
+```{r, echo = FALSE, out.width = "100%", message = FALSE, warning = FALSE}
+
+tribble(
+  ~'Genotipados ', ~'Precisión',
+  'Ninguno', 0.577,
+  'F2', 0.580,
+  'F1-F2', 0.582,
+  'F0-F1-F2-F3', 0.597,
+  'F2', 0.582,
+  'F1-F2', 0.583,
+  'F0-F1-F2-F3', 0.627,
+  'F2', 0.581,
+  'F1-F2', 0.583,
+  'F0-F1-F2-F3', 0.629
+  ) %>%
+  gt() %>%
+  tab_row_group(
+    group = 'Densidad del marcador de 100.000',
+    rows = 8:10
+  ) %>%
+  tab_row_group(
+    group = 'Densidad del marcador de 10.000',
+    rows = 5:7
+  ) %>%
+  tab_row_group(
+    group = 'Densidad del marcador de 1.000',
+    rows = 2:4
+  ) %>%
+  #tab_options(
+    #table.font.size = 'small'
+  #) %>%
+  opt_table_lines()
 ```
 
 ---
@@ -2218,7 +2530,7 @@ class: center
 
 ### Conclusiones
 
-+ <P align="justify">El uso combinado de información genómica y de pedigrí en la mejora genética del arroz, mejora la predicción genómica.</p>
++ <P align="justify">El uso combinado de información genómica y de pedigrí en la mejora genética del arroz, mejora la precisión de la predicción genómica.</p>
 
 + <P align="justify">Se obtuvo una buena precisión de la predicción genómica utilizando densidades bajas de marcadores; esto permitirá que la selección genómica para el carácter tiempo de floración en arroz, mediante el ssGBLUP, pueda realizarse con información de genotipos a bajo costo.</p>
 
