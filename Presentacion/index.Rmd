@@ -1,5 +1,5 @@
 ---
-title: "Evaluación de la selección genómica de un solo paso en arroz"
+title: "Evaluación de la selección genómica de un solo paso: una aplicación en arroz"
 output:
   xaringan::moon_reader:
     css: [default, css/cc-fonts.css, css/Cajitas.css]
